@@ -1,0 +1,300 @@
+7/25/2023 3:16:00 PM: All Categories Selected
+7/25/2023 3:16:56 PM: All Categories Selected
+7/25/2023 3:17:29 PM: All Categories Selected/7/25/2023 3:17:29 PM
+7/25/2023 3:19:04 PM: All Categories Selected
+7/25/2023 4:20:00 PM: All Categories Selected
+7/25/2023 4:20:11 PM: Category Added Successfully With id = 2d23ccf8-01dd-41a4-07d8-08db8d097e00
+7/27/2023 8:44:17 AM: All Categories Selected
+7/27/2023 8:44:25 AM: All Products Selected
+7/27/2023 8:51:17 AM: All Categories Selected
+7/27/2023 8:53:25 AM: All Categories Selected
+7/27/2023 8:55:18 AM: All Categories Selected
+7/27/2023 9:55:50 AM: All Categories Selected
+7/27/2023 9:56:06 AM: All Categories Selected
+7/27/2023 9:56:08 AM: All Categories Selected
+7/27/2023 9:56:10 AM: All Categories Selected
+7/27/2023 9:56:50 AM: Category Added Successfully With id = c6fabdb2-2fdd-452e-dc2f-08db8e664436
+7/27/2023 9:56:55 AM: All Categories Selected
+7/27/2023 9:57:10 AM: Select Category With id = 44cbff76-bea6-4cf9-19cb-08db8cf74302
+7/27/2023 10:02:30 AM: Category Updated Successfully with id = 44cbff76-bea6-4cf9-19cb-08db8cf74302
+7/27/2023 12:27:29 PM: Error mapping types.
+
+Mapping types:
+CreateProduct -> Product
+Core.Models.Dto.Request.Create.CreateProduct -> Core.Models.Entities.Product
+
+Type Map configuration:
+CreateProduct -> Product
+Core.Models.Dto.Request.Create.CreateProduct -> Core.Models.Entities.Product
+
+Destination Member:
+CategoryId
+
+7/27/2023 12:27:45 PM: Error mapping types.
+
+Mapping types:
+CreateProduct -> Product
+Core.Models.Dto.Request.Create.CreateProduct -> Core.Models.Entities.Product
+
+Type Map configuration:
+CreateProduct -> Product
+Core.Models.Dto.Request.Create.CreateProduct -> Core.Models.Entities.Product
+
+Destination Member:
+CategoryId
+
+7/27/2023 12:27:56 PM: All Categories Selected
+7/27/2023 12:28:19 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/27/2023 12:30:49 PM: All Products Selected
+7/27/2023 12:31:05 PM: Category dont exist with id = 2d23ccf8-01dd-41a4-07d8-08db8d097e07
+7/27/2023 3:15:04 PM: User Added With id c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 3:15:09 PM: All Users Selected
+7/27/2023 3:15:28 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:15:45 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:19:27 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:21:21 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:22:12 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:23:04 PM: Category dont exist with id = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+7/27/2023 3:23:57 PM: All Users Selected
+7/27/2023 3:24:09 PM: Select User byId = c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 3:24:22 PM: User updated with id = c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 3:24:26 PM: Select User byId = c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 3:24:51 PM: Select User byId = c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 3:24:51 PM: User not found with id = c9bc4436-929e-42e1-0e50-08db8e92b739
+7/27/2023 4:06:58 PM: All Products Selected
+7/27/2023 4:07:07 PM: All Categories Selected
+7/27/2023 4:12:17 PM: All Products Selected
+7/27/2023 4:12:28 PM: All Categories Selected
+7/27/2023 4:12:42 PM: Product Added With id c1769624-ceb8-4d16-6be3-08db8e9ac77e
+7/27/2023 4:13:21 PM: Product Added With id c6533f98-c7b6-4552-6be4-08db8e9ac77e
+7/27/2023 4:14:02 PM: Product Added With id a67a53ac-9186-44b7-6be5-08db8e9ac77e
+7/27/2023 4:15:32 PM: All Categories Selected
+7/27/2023 4:16:00 PM: Product Added With id 881f0cd6-1f23-4252-6be6-08db8e9ac77e
+7/27/2023 4:16:12 PM: All Products Selected
+7/27/2023 4:18:32 PM: All Categories Selected
+7/27/2023 4:18:52 PM: Product Added With id 856324f0-6e84-49bc-6be7-08db8e9ac77e
+7/27/2023 4:43:42 PM: All Products Selected
+7/27/2023 4:44:32 PM: Select all products with categoryId = 44cbff76-bea6-4cf9-19cb-08db8cf74302
+7/27/2023 4:44:52 PM: Select all products with categoryId = 44cbff76-bea6-4cf9-19cb-08db8cf74302
+7/29/2023 11:50:32 PM: All Products Selected
+7/29/2023 11:52:09 PM: product not found with id = 2d23ccf8-01dd-41a4-07d8-08db8d097e00
+7/29/2023 11:52:22 PM: Product Updated Successfully with id = 881f0cd6-1f23-4252-6be6-08db8e9ac77e
+7/29/2023 11:52:38 PM: Select Product With id = 881f0cd6-1f23-4252-6be6-08db8e9ac77e
+7/29/2023 11:53:57 PM: Product Updated Successfully with id = 881f0cd6-1f23-4252-6be6-08db8e9ac77e
+7/29/2023 11:54:04 PM: Select Product With id = 881f0cd6-1f23-4252-6be6-08db8e9ac77e
+7/30/2023 12:24:07 AM: All Categories Selected
+7/30/2023 12:24:33 AM: All Categories Selected
+7/30/2023 3:44:25 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 3:44:31 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 3:45:03 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 3:46:02 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 3:53:02 PM: All Patients Selected
+7/30/2023 3:53:16 PM: Patient Added With id 5
+7/30/2023 4:27:40 PM: All Images Selected
+7/30/2023 5:02:09 PM: Patient Added With id 7
+7/30/2023 5:04:16 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 5:07:45 PM: An error occurred while saving the entity changes. See the inner exception for details.
+7/30/2023 5:08:32 PM: Patient Added With id 10
+7/30/2023 5:12:15 PM: All Images Selected
+7/30/2023 5:13:11 PM: All Images Selected
+7/30/2023 5:13:17 PM: All Images Selected
+7/30/2023 5:13:32 PM: Select Image byId = 1
+7/30/2023 5:14:54 PM: Image updated with id = 1
+7/30/2023 5:15:07 PM: Image updated with id = 1
+7/30/2023 6:10:51 PM: All Patients Selected
+7/30/2023 6:11:04 PM: All Patients selected where ArrivalDate = 7/30/2023 11:53:05 AM
+7/30/2023 6:11:21 PM: All Patients selected where ArrivalDate = 7/30/2023 12:00:00 AM
+7/30/2023 6:14:20 PM: All Patients Selected
+7/30/2023 6:14:29 PM: All Patients selected where ArrivalDate = 7/30/2023 12:00:00 AM
+7/30/2023 6:14:49 PM: All Patients selected where ArrivalDate = 7/30/2023 2:14:30 PM
+7/30/2023 6:15:12 PM: All Patients selected where ArrivalDate = 7/30/2023 2:14:30 PM
+7/30/2023 6:16:16 PM: All Patients Selected
+7/30/2023 6:16:27 PM: All Patients selected where ArrivalDate = 7/30/2023 11:53:05 AM
+7/30/2023 6:17:02 PM: Patient Added With id 11
+7/30/2023 6:17:17 PM: All Patients selected where ArrivalDate = 7/30/2022 2:16:53 PM
+7/30/2023 6:17:28 PM: All Patients selected where ArrivalDate = 7/30/2022 12:00:00 AM
+7/30/2023 6:17:34 PM: All Patients selected where ArrivalDate = 7/30/2022 12:00:00 AM
+7/30/2023 6:17:35 PM: All Patients selected where ArrivalDate = 7/30/2022 12:00:00 AM
+7/30/2023 6:20:21 PM: All Patients selected where ArrivalDate = 12/22/2022 12:00:00 AM
+7/30/2023 8:08:04 PM: New user added successfully with id= 1
+7/30/2023 8:09:22 PM: New user added successfully with id= 2
+7/30/2023 8:12:46 PM: New user added successfully with id= 3
+7/30/2023 8:13:40 PM: User Is Exist with Username semral
+7/30/2023 8:22:01 PM: User not found with username = semral && password = semral123
+7/30/2023 8:22:01 PM: Username or password is wrong
+7/30/2023 8:22:12 PM: New user added successfully with username= string
+7/30/2023 8:23:35 PM: The LINQ expression 'DbSet<User>()
+    .Where(u => u.UserName.Equals(__loginUser_UserName_0) && BCrypt.EnhancedHashPassword(u.Password).Equals(__loginUser_Password_1) && (int)u.Role == (int)__loginUser_Role_2)' could not be translated. Additional information: Translation of method 'BCrypt.Net.BCrypt.EnhancedHashPassword' failed. If this method can be mapped to your custom function, see https://go.microsoft.com/fwlink/?linkid=2132413 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+7/30/2023 8:23:40 PM: The LINQ expression 'DbSet<User>()
+    .Where(u => u.UserName.Equals(__loginUser_UserName_0) && BCrypt.EnhancedHashPassword(u.Password).Equals(__loginUser_Password_1) && (int)u.Role == (int)__loginUser_Role_2)' could not be translated. Additional information: Translation of method 'BCrypt.Net.BCrypt.EnhancedHashPassword' failed. If this method can be mapped to your custom function, see https://go.microsoft.com/fwlink/?linkid=2132413 for more information. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+7/30/2023 8:29:08 PM: User not found with username = string && password = string
+7/30/2023 8:29:08 PM: Username or password is wrong
+7/30/2023 8:30:28 PM: New user added successfully with username= string
+7/30/2023 8:30:36 PM: User not found with username = string && password = string
+7/30/2023 8:30:36 PM: Username or password is wrong
+7/30/2023 8:49:53 PM: Cannot access a disposed context instance. A common cause of this error is disposing a context instance that was resolved from dependency injection and then later trying to use the same context instance elsewhere in your application. This may occur if you are calling 'Dispose' on the context instance, or wrapping it in a using statement. If you are using dependency injection, you should let the dependency injection container take care of disposing context instances.
+Object name: 'DbEntity'.
+7/30/2023 8:49:53 PM: Cannot access a disposed context instance. A common cause of this error is disposing a context instance that was resolved from dependency injection and then later trying to use the same context instance elsewhere in your application. This may occur if you are calling 'Dispose' on the context instance, or wrapping it in a using statement. If you are using dependency injection, you should let the dependency injection container take care of disposing context instances.
+Object name: 'DbEntity'.
+7/30/2023 8:51:19 PM: User Is Exist with Username reseption
+7/30/2023 9:01:02 PM: You dont have authorization
+7/31/2023 9:24:54 AM: All Users Selected
+7/31/2023 9:26:10 AM: Object reference not set to an instance of an object.
+7/31/2023 9:28:34 AM: User Not Found
+7/31/2023 11:14:52 AM: User Not Found
+7/31/2023 11:15:03 AM: All Users Selected
+7/31/2023 11:15:18 AM: You don't have authorization
+7/31/2023 11:15:27 AM: You don't have authorization
+7/31/2023 11:16:33 AM: User Not Found
+7/31/2023 11:16:42 AM: All Users Selected
+7/31/2023 11:16:55 AM: User not found with username = reseption && password = reseption123
+7/31/2023 11:16:55 AM: Username or password is wrong
+7/31/2023 11:17:18 AM: An error occurred while saving the entity changes. See the inner exception for details.
+7/31/2023 11:17:18 AM: An error occurred while saving the entity changes. See the inner exception for details.
+7/31/2023 11:42:23 AM: An error occurred while saving the entity changes. See the inner exception for details.
+7/31/2023 11:43:00 AM: An error occurred while saving the entity changes. See the inner exception for details.
+7/31/2023 11:44:01 AM: New user added successfully with username= yusif
+7/31/2023 12:13:35 PM: New user added successfully with username= string
+7/31/2023 12:15:00 PM: New user added successfully with username= string
+7/31/2023 12:15:39 PM: New user added successfully with username= string
+7/31/2023 12:46:12 PM: IDX10206: Unable to validate audience. The 'audiences' parameter is empty.
+7/31/2023 12:46:36 PM: New user added successfully with username= string
+7/31/2023 12:54:30 PM: User not found with username = string && password = $2a$11$rXB.5veaJ6Tg4PsUxEDL3eZJs8yAalbjLvzbnZotRXY2dszJ.YhWO
+7/31/2023 12:54:41 PM: Username or password is wrong
+7/31/2023 2:20:56 PM: IDX12741: JWT: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]' must have three segments (JWS) or five segments (JWE).
+7/31/2023 4:03:02 PM: The method or operation is not implemented.
+7/31/2023 4:04:48 PM: The method or operation is not implemented.
+7/31/2023 4:05:27 PM: Add new payment for yusif amount is 12
+7/31/2023 4:05:58 PM: Add new payment for yusif amount is 85
+7/31/2023 4:06:14 PM: Patients  payment sum can't be greater than total Amount!
+7/31/2023 4:45:00 PM: All payments selected where patientId = 1
+7/31/2023 4:45:38 PM: All payments selected where patientId = 5
+7/31/2023 4:46:14 PM: Patients  payment sum can't be greater than total Amount!
+7/31/2023 4:47:06 PM: Patient don't exist with Id = 55
+7/31/2023 4:47:21 PM: Add new payment for ali amount is 55
+7/31/2023 4:55:09 PM: All Payments Selected
+7/31/2023 4:55:16 PM: All Payments Selected
+7/31/2023 4:55:23 PM: All Payments Selected
+7/31/2023 5:00:28 PM: All Payments Selected
+7/31/2023 5:02:29 PM: All Payments Selected
+8/2/2023 9:06:20 AM: All Patients Selected
+8/2/2023 9:06:43 AM: All Patients Selected
+8/2/2023 9:06:52 AM: All Patients Selected
+8/2/2023 9:07:57 AM: All Patients Selected
+8/2/2023 9:20:33 AM: Doctor succesfully added with name = string and username = string
+8/2/2023 9:21:08 AM: All Patients Selected
+8/2/2023 9:21:19 AM: All Dcotors Selected
+8/2/2023 9:21:19 AM: All Dcotors Selected
+8/2/2023 10:57:06 AM: New user added successfully with username= admin
+8/2/2023 10:57:58 AM: New user added successfully with username= receptionist
+8/2/2023 10:58:25 AM: All Dcotors Selected
+8/2/2023 10:58:41 AM: New Patient Added With id 1
+8/2/2023 10:58:41 AM: Patients with id = 1 images added succesfully
+8/2/2023 10:58:56 AM: All Patients Selected
+8/2/2023 10:59:06 AM: Add new payment for string amount is 15
+8/2/2023 10:59:38 AM: All Dcotors Selected
+8/2/2023 11:00:36 AM: New Image added succesfully
+8/2/2023 11:00:45 AM: All Patients Selected
+8/2/2023 11:00:49 AM: All Patients Selected
+8/2/2023 11:01:04 AM: All Images Selected
+8/2/2023 11:01:18 AM: All Patients Selected
+8/2/2023 11:02:36 AM: All payments selected where patientId = 1
+8/2/2023 11:03:16 AM: All Patients Selected
+8/2/2023 11:04:54 AM: All Patients Selected
+8/2/2023 11:09:32 AM: All Dcotors Selected
+8/2/2023 11:09:40 AM: All Dcotors Selected
+8/2/2023 11:11:56 AM: All Dcotors Selected
+8/2/2023 11:12:04 AM: All Dcotors Selected
+8/2/2023 11:12:40 AM: All Dcotors Selected
+8/2/2023 11:16:10 AM: All Dcotors Selected
+8/2/2023 11:16:13 AM: All Dcotors Selected
+8/2/2023 11:17:25 AM: All Dcotors Selected
+8/2/2023 11:17:26 AM: All Dcotors Selected
+8/2/2023 11:18:28 AM: All Dcotors Selected
+8/2/2023 11:18:43 AM: All Dcotors Selected
+8/2/2023 11:18:53 AM: All Dcotors Selected
+8/2/2023 11:20:25 AM: All Dcotors Selected
+8/2/2023 11:21:37 AM: All Dcotors Selected
+8/2/2023 11:22:40 AM: All Dcotors Selected
+8/2/2023 11:23:05 AM: All Dcotors Selected
+8/2/2023 11:23:24 AM: All Dcotors Selected
+8/2/2023 11:24:48 AM: All Dcotors Selected
+8/2/2023 11:26:53 AM: All Dcotors Selected
+8/2/2023 11:27:35 AM: All Dcotors Selected
+8/2/2023 11:28:19 AM: All Dcotors Selected
+8/2/2023 11:29:13 AM: All Dcotors Selected
+8/2/2023 11:29:41 AM: All Dcotors Selected
+8/2/2023 11:30:28 AM: All Dcotors Selected
+8/2/2023 11:30:29 AM: All Dcotors Selected
+8/2/2023 11:30:48 AM: All Dcotors Selected
+8/2/2023 11:35:27 AM: All Dcotors Selected
+8/2/2023 11:36:21 AM: Doctor succesfully added with name = dsad and username = stdasdring
+8/2/2023 11:36:25 AM: Doctor succesfully added with name = dsad and username = asda
+8/2/2023 11:36:31 AM: Doctor succesfully added with name = dsada and username = dsaa
+8/2/2023 11:36:35 AM: Doctor succesfully added with name = zzz and username = dszzzaa
+8/2/2023 11:36:41 AM: Doctor succesfully added with name = treger and username = gdgdfgdf
+8/2/2023 11:36:45 AM: Doctor succesfully added with name = weferfew and username = fwefwe
+8/2/2023 11:36:46 AM: Doctor is exist with name= weferfew and surname = fwefwe
+8/2/2023 11:37:06 AM: Doctor succesfully added with name = f33d and username = ffff
+8/2/2023 11:37:09 AM: Doctor succesfully added with name = dsfsd and username = ffffdfsdf
+8/2/2023 11:37:11 AM: Doctor succesfully added with name = dsfsd and username = fds
+8/2/2023 11:37:14 AM: Doctor succesfully added with name = fsdf and username = fds
+8/2/2023 11:37:16 AM: Doctor succesfully added with name = fsdgf and username = fgfgdfds
+8/2/2023 11:37:21 AM: All Dcotors Selected
+8/2/2023 11:40:02 AM: All Dcotors Selected
+8/2/2023 11:41:04 AM: All Dcotors Selected
+8/2/2023 11:41:59 AM: All Dcotors Selected
+8/2/2023 11:43:23 AM: All Dcotors Selected
+8/2/2023 11:45:00 AM: All Dcotors Selected
+8/2/2023 11:47:27 AM: All Dcotors Selected
+8/2/2023 11:48:06 AM: All Dcotors Selected
+8/2/2023 11:50:13 AM: All Dcotors Selected
+8/2/2023 11:50:20 AM: All Dcotors Selected
+8/2/2023 11:58:22 AM: All Dcotors Selected
+8/2/2023 12:06:29 PM: All Dcotors Selected
+8/2/2023 12:06:33 PM: All Dcotors Selected
+8/2/2023 12:06:35 PM: All Dcotors Selected
+8/2/2023 12:07:24 PM: All Dcotors Selected
+8/2/2023 12:07:35 PM: All Dcotors Selected
+8/2/2023 12:09:49 PM: All Dcotors Selected
+8/2/2023 12:09:51 PM: All Dcotors Selected
+8/2/2023 12:10:07 PM: All Dcotors Selected
+8/2/2023 2:25:02 PM: New Patient Added With id 2
+8/2/2023 2:25:02 PM: Patients with id = 2 images added succesfully
+8/2/2023 2:25:21 PM: New Patient Added With id 3
+8/2/2023 2:25:21 PM: Patients with id = 3 images added succesfully
+8/2/2023 2:25:36 PM: Patients selected where PaymentDate greater than 5/2/2023 10:24:46 AM and less than 8/2/2023 10:25:27 AM
+8/2/2023 2:26:17 PM: Patients selected where PaymentDate greater than 5/2/2022 10:24:46 AM and less than 8/2/2022 10:25:27 AM
+8/2/2023 2:26:25 PM: Patients selected where PaymentDate greater than  and less than 8/2/2022 10:25:27 AM
+8/2/2023 2:26:36 PM: All Patients selected.
+8/2/2023 2:54:29 PM: All Dcotors Selected
+8/2/2023 2:54:36 PM: All Dcotors Selected
+8/2/2023 2:55:12 PM: All Dcotors Selected
+8/2/2023 2:55:19 PM: All Dcotors Selected
+8/2/2023 2:56:29 PM: All Dcotors Selected
+8/2/2023 2:57:47 PM: All Dcotors Selected
+8/2/2023 2:58:02 PM: All Dcotors Selected
+8/2/2023 2:58:07 PM: All Dcotors Selected
+8/2/2023 2:58:08 PM: All Dcotors Selected
+8/2/2023 2:58:15 PM: All Dcotors Selected
+8/2/2023 2:58:29 PM: All Dcotors Selected
+8/2/2023 2:58:31 PM: All Dcotors Selected
+8/2/2023 2:58:46 PM: All Dcotors Selected
+8/2/2023 2:58:49 PM: All Dcotors Selected
+8/2/2023 2:58:52 PM: All Dcotors Selected
+8/2/2023 2:58:53 PM: All Dcotors Selected
+8/2/2023 2:58:56 PM: All Dcotors Selected
+8/2/2023 2:59:03 PM: All Dcotors Selected
+8/2/2023 2:59:06 PM: All Dcotors Selected
+8/2/2023 2:59:08 PM: All Dcotors Selected
+8/2/2023 3:01:35 PM: All Dcotors Selected
+8/2/2023 3:02:13 PM: All Dcotors Selected
+8/2/2023 3:02:25 PM: All Dcotors Selected
+8/2/2023 3:05:37 PM: All Dcotors Selected
+8/2/2023 3:05:41 PM: All Dcotors Selected
+8/2/2023 3:05:46 PM: All Dcotors Selected
+8/2/2023 3:05:51 PM: All Dcotors Selected
+8/2/2023 3:06:21 PM: All Dcotors Selected
+8/2/2023 3:08:18 PM: All Patients Selected
+8/2/2023 3:12:44 PM: Patients selected where PaymentDate greater than 7/2/2023 11:12:44 AM and less than 8/2/2023 11:12:44 AM
+8/2/2023 3:15:36 PM: Patients selected where PaymentDate greater than 7/2/2023 11:15:35 AM and less than 8/2/2023 11:15:35 AM
