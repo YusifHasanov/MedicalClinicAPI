@@ -38,7 +38,7 @@ namespace API.Controllers
         public IActionResult GetAllByDateInterval([FromBody]DateIntervalRequest interval )
         {
             try
-            {
+                {
                 return Ok(_unitOfWorkService.PatientService.GetPatientsByDateInterval(interval).ToList());
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace API.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePatient updatePatient)
-        {
+            {
             try
             {
                 var response = await _unitOfWorkService.PatientService.UpdateAsync(id, updatePatient);
