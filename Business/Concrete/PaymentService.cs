@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
@@ -8,6 +9,7 @@ using DataAccess.Concrete;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
+using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,12 +20,12 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class PaymentService : BaseService<Payment, UpdatePayment, CreatePayment>, IPaymentService
+    public class PaymentService : BaseService<Payment, UpdatePayment, CreatePayment, PaymentResponse>, IPaymentService
     {
         public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
         }
-        
+
         public override async Task<Payment> AddAsync(CreatePayment entity)
         {
             try
@@ -72,14 +74,15 @@ namespace Business.Concrete
             }
         }
 
-        public override IQueryable<Payment> GetAll()
+        public override IQueryable<PaymentResponse> GetAll()
         {
             try
             {
-                var result = _unitOfWorkRepository.PaymentRepository.GetAll();
+                var result = _unitOfWorkRepository.PaymentRepository.GetAll()
+                    .Include(payment => payment.Patient)
+                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
                 _logService.Log($"All Payments Selected");
-                if (result == null)
-                    throw new NotFoundException("Payment not found");
+
                 return result;
             }
             catch (Exception ex)
@@ -89,12 +92,15 @@ namespace Business.Concrete
             }
         }
 
-        public override Payment GetById(int id)
+        public override PaymentResponse GetById(int id)
         {
             try
             {
                 _logService.Log($"Select Payment byId = {id}");
-                return IsExist(id);
+                IsExist(id);
+                var payment =_unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
+                var paymentResponse = _mapper.Map<PaymentResponse>(payment);
+                return paymentResponse;
             }
             catch (Exception ex)
             {
@@ -103,17 +109,27 @@ namespace Business.Concrete
             }
         }
 
-        public IQueryable<Payment> GetPaymentsByDateInterval(DateIntervalRequest interval)
+        public IQueryable<PaymentResponse> GetPaymentsByDateInterval(DateIntervalRequest interval)
         {
             try
             {
-                bool isNull = interval.ToDate == null;
-                IQueryable<Payment> payments = isNull switch
+                bool isNull = interval.ToDate == null || interval.FromDate == null;
+                var fromDate = interval.FromDate.Value.Date;
+                var toDate = interval.ToDate.Value.Date.AddDays(1);
+
+                IQueryable<PaymentResponse> payments = isNull switch
                 {
                     false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
-                                payment.PaymentDate >= interval.FromDate && payment.PaymentDate <= interval.ToDate),
-                    true => _unitOfWorkRepository.PaymentRepository.GetAll(),
-                }; 
+                     payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)  
+                    .Include(payment => payment.Patient)
+                    .ThenInclude(patient => patient.Doctor)
+                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
+
+                    true => _unitOfWorkRepository.PaymentRepository.GetAll()
+                    .Include(payment => payment.Patient)
+                    .ThenInclude(patient => patient.Doctor)
+                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
+                }; ;
 
                 _logService.Log(isNull
                     ? "All Payments selected."
@@ -128,12 +144,15 @@ namespace Business.Concrete
             }
         }
 
-        public IQueryable<Payment> GetPaymentsByPatientId(int patientId)
+        public IQueryable<PaymentResponse> GetPaymentsByPatientId(int patientId)
         {
             try
             {
-                IQueryable<Payment> payments = _unitOfWorkRepository.PaymentRepository
-                    .GetAll(payment => payment.PatientId == patientId);
+                IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
+                    .GetAll(payment => payment.PatientId == patientId)
+                        .Include(payment => payment.Patient)
+                    .ThenInclude(patient => patient.Doctor)
+                      .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
                 _logService.Log($"All payments selected where patientId = {patientId}");
                 return payments;
             }
@@ -152,7 +171,7 @@ namespace Business.Concrete
 
         public async override Task SaveChangesAsync()
         {
-          await  _unitOfWorkRepository.PaymentRepository.SaveChangesAsync();
+            await _unitOfWorkRepository.PaymentRepository.SaveChangesAsync();
         }
 
         public async override Task<Payment> UpdateAsync(int id, UpdatePayment entity)
@@ -171,18 +190,18 @@ namespace Business.Concrete
                     foundPayment.Amount = entity.Amount;
                 }
 
-                decimal sumOfAmount = allPayments.Sum(payment => payment.Amount) ;
+                decimal sumOfAmount = allPayments.Sum(payment => payment.Amount);
 
-                if(patient.TotalAmount < sumOfAmount)
+                if (patient.TotalAmount < sumOfAmount)
                 {
                     throw new Exception("Patients  payment sum can't be greater than total Amount!");
                 }
 
                 entity.Id = id;
                 var payment = _mapper.Map(entity, dbPayment);
-                  
+
                 _unitOfWorkRepository.PaymentRepository.Update(payment);
-                await SaveChangesAsync();  
+                await SaveChangesAsync();
                 return payment;
             }
             catch (Exception ex)

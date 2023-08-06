@@ -1,6 +1,7 @@
 using Core.DataAccess;
 using DataAccess.Abstract;
 using Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace DataAccess.Concrete
     {
         public PatientRepository(DbEntity dbEntity) : base(dbEntity)
         {
+        }
+
+        public Patient GetPatientWithImage(int id)
+        {
+            return dbEntity.Patients.Include(patien => patien.Images)
+                .FirstOrDefault(patient => patient.Id == id);
         }
     }
 }

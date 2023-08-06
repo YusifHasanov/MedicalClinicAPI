@@ -11,16 +11,17 @@ using Core.Utils.Constants;
 
 namespace Business.Abstract
 {
-    public abstract class BaseService<T, U, C> : IService<T, U, C>
+    public abstract class BaseService<T, U, C, R> : IService<T, U, C, R>
     where T : BaseEntity, new()
         where U : BaseDto, new()
         where C : BaseDto, new()
+        where R : BaseDto, new()
     {
         protected readonly IUnitOfWorkRepository _unitOfWorkRepository;
         protected readonly IMapper _mapper;
         protected readonly ILogService _logService;
         protected readonly Globals _globals;
-  
+
 
         public BaseService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals)
         {
@@ -29,12 +30,11 @@ namespace Business.Abstract
             _logService = logService;
             _globals = globals;
         }
- 
 
         public abstract Task<T> AddAsync(C entity);
-        public abstract Task<T> DeleteAsync(int id); 
-        public abstract IQueryable<T> GetAll();
-        public abstract T GetById(int id);
+        public abstract Task<T> DeleteAsync(int id);
+        public abstract IQueryable<R> GetAll();
+        public abstract R GetById(int id);
         public abstract T IsExist(int id);
         public abstract Task SaveChangesAsync();
         public abstract Task<T> UpdateAsync(int id, U entity);

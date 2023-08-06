@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IUserService:IService<User,UpdateUser,CreateUser>
+    public interface IUserService:IService<User,UpdateUser,CreateUser,UserResponse>
     {
         Task<AuthResponse> Login(LoginUser loginUser);
         User GetUserByAccessToken(string accessToken);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entities.Entities
@@ -22,6 +23,7 @@ namespace Entities.Entities
         public ICollection<Image> Images { get; set; }  
         public ICollection<Payment> Payments { get; set; } 
         public int DoctorId { get; set; }
+ 
         public Doctor Doctor { get; set; }
     }
 }

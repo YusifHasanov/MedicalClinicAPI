@@ -9,5 +9,6 @@ namespace DataAccess.Abstract
 {
     public interface IPaymentRepository:IRepository<Payment>
     {
+        public Payment GetPaymnetWithPatientAndDoctor(int id);
     }
 }

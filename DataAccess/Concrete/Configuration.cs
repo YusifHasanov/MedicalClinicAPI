@@ -49,13 +49,13 @@ namespace DataAccess.Concrete
                   .HasAnnotation("MinValue", 0)
                   .HasColumnType("decimal(18, 2)");
 
-
+            modelBuilder.Entity<Patient>()
+                .Ignore(p => p.Doctor);
 
             #endregion
 
             #region Image
-            modelBuilder.Entity<Image>()
-              .Ignore(i => i.Patient);
+      
 
             modelBuilder.Entity<Image>()
                 .Property(i => i.ImageTitle)
@@ -72,9 +72,8 @@ namespace DataAccess.Concrete
                .Property(p => p.Amount)
                .HasAnnotation("MinValue", 0)
                .HasColumnType("decimal(18, 2)");
-
-            modelBuilder.Entity<Payment>()
-               .Ignore(i => i.Patient);
+            //modelBuilder.Entity<Payment>()
+            //    .Ignore(payment => payment.Patient);
             #endregion 
 
             #region User
@@ -99,7 +98,8 @@ namespace DataAccess.Concrete
             modelBuilder.Entity<Doctor>()
                 .Property(d => d.Surname).IsRequired(true);
 
- 
+            modelBuilder.Entity<Doctor>()
+                .Ignore(doctor => doctor.Patients);
 
             modelBuilder.Entity<Doctor>()
           .HasMany(p => p.Patients)

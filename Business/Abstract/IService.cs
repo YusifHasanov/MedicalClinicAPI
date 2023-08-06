@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IService<T,U,C> 
+    public interface IService<T,U,C,R> 
         where T : BaseEntity, new()  
         where U : BaseDto, new()
         where C : BaseDto, new()
+        where R : BaseDto, new()
 
     { 
-        public IQueryable<T> GetAll(); 
-        public T GetById(int id); 
+        public IQueryable<R> GetAll(); 
+        public R GetById(int id); 
         public Task<T> DeleteAsync(int id);
         public T IsExist(int id);
         public Task SaveChangesAsync();

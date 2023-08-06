@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DbEntity))]
-    [Migration("20230802051929_mig-2")]
-    partial class mig2
+    [Migration("20230805192318_remove-ignores")]
+    partial class removeignores
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -204,11 +204,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Image", b =>
                 {
-                    b.HasOne("Entities.Entities.Patient", null)
+                    b.HasOne("Entities.Entities.Patient", "Patient")
                         .WithMany("Images")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Patient", b =>
@@ -224,11 +226,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Payment", b =>
                 {
-                    b.HasOne("Entities.Entities.Patient", null)
+                    b.HasOne("Entities.Entities.Patient", "Patient")
                         .WithMany("Payments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Doctor", b =>

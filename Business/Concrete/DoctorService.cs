@@ -1,11 +1,14 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
 using DataAccess.Abstract;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
+using Entities.Dto.Response;
 using Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class DoctorService : BaseService<Doctor, UpdateDoctor, CreateDoctor>, IDoctorService
+    public class DoctorService : BaseService<Doctor, UpdateDoctor, CreateDoctor, DoctorResponse>, IDoctorService
     {
         public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
@@ -34,9 +37,9 @@ namespace Business.Concrete
 
                 await _unitOfWorkRepository.DoctorRepository.AddAsync(newDoctor);
                 await SaveChangesAsync();
-                
+
                 _logService.Log($"Doctor succesfully added with name = {newDoctor.Name} and username = {newDoctor.Surname}");
-                
+
                 return newDoctor;
 
             }
@@ -64,11 +67,15 @@ namespace Business.Concrete
             }
         }
 
-        public override IQueryable<Doctor> GetAll()
+        public override IQueryable<DoctorResponse> GetAll()
         {
             try
             {
-                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll();
+                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll()
+                    .Include(doctor => doctor.Patients) 
+                    .ThenInclude(patient=>patient.Payments)
+                    .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
+
                 _logService.Log($"All Dcotors Selected");
                 return allDoctors;
             }
@@ -79,13 +86,15 @@ namespace Business.Concrete
             }
         }
 
-        public override Doctor GetById(int id)
+        public override DoctorResponse GetById(int id)
         {
             try
             {
-                var exist = IsExist(id);
+                _ = IsExist(id);
+                var result= _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
+                var response = _mapper.Map<DoctorResponse>(result);
                 _logService.Log($"Select Dcotor byId = {id}");
-                return exist;
+                return response;
             }
             catch (Exception ex)
             {

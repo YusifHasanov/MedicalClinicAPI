@@ -5,6 +5,7 @@ using Core.Utils.Exceptions;
 using DataAccess.Abstract;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
+using Entities.Dto.Response;
 using Entities.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class ImageService : BaseService<Image, UpdateImage, CreateImage>, IImageService
+    public class ImageService : BaseService<Image, UpdateImage, CreateImage,ImageResponse>, IImageService
     {
         public ImageService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
@@ -54,14 +55,15 @@ namespace Business.Concrete
             }
         }
 
-        public override IQueryable<Image> GetAll()
+        public override IQueryable<ImageResponse> GetAll()
         {
             try
             {
                 var result = _unitOfWorkRepository.ImageRepository.GetAll();
+                var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
                 _logService.Log($"All Images Selected");
              
-                return result;
+                return allImagesResponse;
             }
             catch (Exception ex)
             {
@@ -70,12 +72,15 @@ namespace Business.Concrete
             }
         }
 
-        public override Image GetById(int id)
+        public override ImageResponse GetById(int id)
         {
             try
             {
                 _logService.Log($"Select Image byId = {id}");
-                return IsExist(id);
+                _= IsExist(id);
+                var image = _unitOfWorkRepository.ImageRepository.GetById(id);
+                var response  = _mapper.Map<ImageResponse>(image);
+                return response;
             }
             catch (Exception ex)
             {

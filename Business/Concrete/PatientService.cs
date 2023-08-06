@@ -1,22 +1,26 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
 using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
+using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class PatientService : BaseService<Patient, UpdatePatient, CreatePatient>, IPatientService
+    public class PatientService : BaseService<Patient, UpdatePatient, CreatePatient, PatientResponse>, IPatientService
     {
         public PatientService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
@@ -71,18 +75,17 @@ namespace Business.Concrete
                 _logService.Log(ex.Message);
                 throw;
             }
-        } 
+        }
 
-        public override IQueryable<Patient> GetAll()
+        public override IQueryable<PatientResponse> GetAll()
         {
             try
             {
-                
-           
-                var result = _unitOfWorkRepository.PatientRepository
-            .GetAll()
-            .Include(p => p.Images);
-                _logService.Log($"All Patients Selected"); 
+                var result = _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
+                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
+
+                _logService.Log($"All Patients Selected");
+
                 return result;
             }
             catch (Exception ex)
@@ -92,14 +95,16 @@ namespace Business.Concrete
             }
         }
 
-        public override Patient GetById(int id)
+        public override PatientResponse GetById(int id)
         {
             try
-            { 
-                var exist = IsExist(id);
-                
+            {
+                _ = IsExist(id);
+
                 _logService.Log($"Select Patient byId = {id}");
-                return exist;
+                var patient = _unitOfWorkRepository.PatientRepository.GetPatientWithImage(id);
+                var response = _mapper.Map<PatientResponse>(patient);
+                return response;
             }
             catch (Exception ex)
             {
@@ -108,12 +113,15 @@ namespace Business.Concrete
             }
         }
 
-        public IQueryable<Patient> GetPatientsByDate(DateTime date)
+        public IQueryable<PatientResponse> GetPatientsByDate(DateTime date)
         {
             try
             {
                 var patients = _unitOfWorkRepository.PatientRepository
-                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date));
+                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date))
+                    .Include(patient => patient.Images)
+                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
+
                 _logService.Log($"All Patients selected where ArrivalDate = {date}");
                 return patients;
             }
@@ -124,18 +132,22 @@ namespace Business.Concrete
             }
         }
 
-        public IQueryable<Patient> GetPatientsByDateInterval(DateIntervalRequest interval)
+        public IQueryable<PatientResponse> GetPatientsByDateInterval(DateIntervalRequest interval)
         {
             try
             {
-                bool isNull = interval.ToDate == null ;
-                IQueryable<Patient> patients = isNull switch
+                bool isNull = interval.ToDate == null || interval.FromDate == null;
+                var fromDate = interval.FromDate.Value.Date;  
+                var toDate = interval.ToDate.Value.Date.AddDays(1);
+                IQueryable<PatientResponse> patients = isNull switch
                 {
-                    false => _unitOfWorkRepository
-                    .PatientRepository.GetAll(patient =>
-                    patient.ArrivalDate >= interval.FromDate && patient.ArrivalDate <= interval.ToDate)
-                    .Include(patient => patient.Images),
-                    true => _unitOfWorkRepository.PatientRepository.GetAll().Include(p=>p.Images),
+                    false => _unitOfWorkRepository.PatientRepository.GetAll(patient =>
+                             patient.ArrivalDate.Date >= fromDate && patient.ArrivalDate.Date < toDate)
+                            .Include(patient => patient.Images)
+                            .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
+
+                    true => _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
+                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
                 };
 
                 _logService.Log(isNull

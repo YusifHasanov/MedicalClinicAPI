@@ -46,8 +46,7 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
+         
 
         [HttpGet("{date:DateTime}")]
         public IActionResult Get(DateTime date)

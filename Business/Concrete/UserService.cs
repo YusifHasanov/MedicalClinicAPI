@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class UserService : BaseService<User, UpdateUser, CreateUser>, IUserService
+    public class UserService : BaseService<User, UpdateUser, CreateUser,UserResponse>, IUserService
     {
         public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
@@ -156,14 +156,15 @@ namespace Business.Concrete
                 throw;
             }
         }
-        public override IQueryable<User> GetAll()
+        public override IQueryable<UserResponse> GetAll()
         {
             try
             {
                 var result = _unitOfWorkRepository.UserRepository.GetAll();
+                var usersResponse = _mapper.Map<IQueryable<UserResponse>>(result);
                 _logService.Log($"All Users Selected");
 
-                return result;
+                return usersResponse;
             }
             catch (Exception ex)
             {
@@ -172,12 +173,14 @@ namespace Business.Concrete
             }
         }
 
-        public override User GetById(int id)
+        public override UserResponse GetById(int id)
         {
             try
             {
                 _logService.Log($"Select User byId = {id}");
-                return IsExist(id);
+                var user =  IsExist(id);
+                var userResponse = _mapper.Map<UserResponse>(user);
+                return userResponse;
             }
             catch (Exception ex)
             {

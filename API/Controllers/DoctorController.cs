@@ -1,8 +1,11 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
 using Core.Utils.Exceptions;
+using DataAccess.Abstract;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
+using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +18,13 @@ namespace API.Controllers
     public class DoctorController : ControllerBase
     {
         private readonly IUnitOfWorkService _unitOfWorkService;
-
-        public DoctorController(IUnitOfWorkService unitOfWorkService)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+        public DoctorController(IUnitOfWorkService unitOfWorkService,IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
             _unitOfWorkService = unitOfWorkService;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,8 +46,9 @@ namespace API.Controllers
         {
             try
             {
-                var result = _unitOfWorkService.DoctorService.GetById(id);
-                return Ok(result);
+                var response = _unitOfWorkService.DoctorService.GetById(id);
+
+                return Ok(response);
             }
             catch (NotFoundException ex)
             {

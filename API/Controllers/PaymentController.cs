@@ -49,7 +49,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("/patient/{id:int}")]
+        [HttpGet("byPatientId/{id:int}")]
         public IActionResult GetAllPaymentsByPatientId(int id)
         {
             try

@@ -8,7 +8,7 @@ namespace Core.DataAccess
 {
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
-        private readonly DbEntity dbEntity;
+        protected readonly DbEntity dbEntity;
 
         public GenericRepository(DbEntity dbEntity)
         {

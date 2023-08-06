@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DbEntity))]
-    [Migration("20230802051849_mig-1")]
-    partial class mig1
+    [Migration("20230805150514_CreateDb")]
+    partial class CreateDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,7 +216,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Entities.Entities.Doctor", "Doctor")
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctor");

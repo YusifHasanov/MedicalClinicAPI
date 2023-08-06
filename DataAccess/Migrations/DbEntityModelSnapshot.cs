@@ -201,11 +201,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Image", b =>
                 {
-                    b.HasOne("Entities.Entities.Patient", null)
+                    b.HasOne("Entities.Entities.Patient", "Patient")
                         .WithMany("Images")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Patient", b =>
@@ -221,11 +223,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Payment", b =>
                 {
-                    b.HasOne("Entities.Entities.Patient", null)
+                    b.HasOne("Entities.Entities.Patient", "Patient")
                         .WithMany("Payments")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Doctor", b =>

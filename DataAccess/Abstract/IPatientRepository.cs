@@ -9,5 +9,6 @@ namespace DataAccess.Abstract
 {
     public interface IPatientRepository : IRepository<Patient>
     {
+        public Patient GetPatientWithImage(int id);
     }
 }
