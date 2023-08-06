@@ -15,7 +15,7 @@ namespace Business.Abstract
     {
         Task<AuthResponse> Login(LoginUser loginUser);
         User GetUserByAccessToken(string accessToken);
-        Task<User> RefreshAccessTokenAsync(RefreshTokenDto refreshToken);
+        Task<AuthResponse> RefreshAccessTokenAsync(RefreshTokenDto refreshToken);
 
 
     }

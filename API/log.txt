@@ -1383,3 +1383,307 @@ Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions+IncludableQuery
 8/6/2023 12:03:22 PM: Patients selected where PaymentDate greater than 7/6/2023 8:01:59 AM and less than 9/6/2023 8:01:59 AM
 8/6/2023 12:03:26 PM: Payments selected where PaymentDate greater than 7/6/2023 8:01:59 AM and less than 9/6/2023 8:01:59 AM
 8/6/2023 12:03:36 PM: All Dcotors Selected
+8/6/2023 10:39:24 PM: All payments selected where patientId = 0
+8/6/2023 10:39:25 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 10:39:29 PM: All payments selected where patientId = 0
+8/6/2023 10:39:29 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 10:39:38 PM: Patients selected where PaymentDate greater than 7/6/2023 6:39:29 PM and less than 9/6/2023 6:39:29 PM
+8/6/2023 10:39:49 PM: Patients selected where PaymentDate greater than 7/6/2023 6:39:29 PM and less than 9/6/2023 6:39:29 PM
+8/6/2023 10:55:45 PM: Patients selected where PaymentDate greater than 7/6/2023 6:55:29 PM and less than 9/6/2023 6:55:29 PM
+8/6/2023 10:55:48 PM: All Dcotors Selected
+8/6/2023 10:55:48 PM: All payments selected where patientId = 1
+8/6/2023 10:55:48 PM: Select Patient byId = 1
+8/6/2023 10:56:19 PM: Patient updated with id = 1
+8/6/2023 10:56:19 PM: Patients selected where PaymentDate greater than 7/6/2023 6:55:29 PM and less than 9/6/2023 6:55:29 PM
+8/6/2023 10:56:20 PM: Select Patient byId = 1
+8/6/2023 10:56:42 PM: Patient updated with id = 1
+8/6/2023 10:56:43 PM: Patients selected where PaymentDate greater than 7/6/2023 6:55:29 PM and less than 9/6/2023 6:55:29 PM
+8/6/2023 10:56:44 PM: Select Patient byId = 1
+8/6/2023 10:56:47 PM: Patients selected where PaymentDate greater than 7/6/2023 6:56:47 PM and less than 9/6/2023 6:56:47 PM
+8/6/2023 10:56:47 PM: All payments selected where patientId = 0
+8/6/2023 10:56:48 PM: All payments selected where patientId = 1
+8/6/2023 10:56:48 PM: All Dcotors Selected
+8/6/2023 10:56:48 PM: Select Patient byId = 1
+8/6/2023 10:57:32 PM: Patient updated with id = 1
+8/6/2023 10:57:38 PM: Patients selected where PaymentDate greater than 7/6/2023 6:56:47 PM and less than 9/6/2023 6:56:47 PM
+8/6/2023 10:58:39 PM: All payments selected where patientId = 0
+8/6/2023 10:58:39 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 10:58:42 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:54 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:55 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:55 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:56 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:56 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:38 PM and less than 9/6/2023 6:58:38 PM
+8/6/2023 10:58:58 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:57 PM and less than 9/6/2023 6:58:57 PM
+8/6/2023 10:58:58 PM: All payments selected where patientId = 0
+8/6/2023 10:59:00 PM: Patients selected where PaymentDate greater than 7/6/2023 6:58:57 PM and less than 9/6/2023 6:58:57 PM
+8/6/2023 10:59:01 PM: All payments selected where patientId = 0
+8/6/2023 10:59:01 PM: Patients selected where PaymentDate greater than 7/6/2023 6:59:01 PM and less than 9/6/2023 6:59:01 PM
+8/6/2023 10:59:29 PM: Patients selected where PaymentDate greater than 7/6/2023 6:59:29 PM and less than 9/6/2023 6:59:29 PM
+8/6/2023 10:59:29 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 10:59:31 PM: All payments selected where patientId = 1
+8/6/2023 10:59:31 PM: All Dcotors Selected
+8/6/2023 10:59:31 PM: Select Patient byId = 1
+8/6/2023 10:59:35 PM: Patient updated with id = 1
+8/6/2023 10:59:35 PM: Patients selected where PaymentDate greater than 7/6/2023 6:59:29 PM and less than 9/6/2023 6:59:29 PM
+8/6/2023 10:59:38 PM: Select Patient byId = 1
+8/6/2023 11:02:12 PM: All payments selected where patientId = 0
+8/6/2023 11:02:12 PM: Patients selected where PaymentDate greater than 7/6/2023 7:02:07 PM and less than 9/6/2023 7:02:07 PM
+8/6/2023 11:02:12 PM: Patient updated with id = 1
+8/6/2023 11:02:15 PM: All Dcotors Selected
+8/6/2023 11:02:15 PM: Select Patient byId = 1
+8/6/2023 11:02:15 PM: All payments selected where patientId = 1
+8/6/2023 11:02:21 PM: Patients selected where PaymentDate greater than 7/6/2023 7:02:07 PM and less than 9/6/2023 7:02:07 PM
+8/6/2023 11:02:36 PM: Select Patient byId = 1
+8/6/2023 11:03:05 PM: Patients selected where PaymentDate greater than 7/6/2023 7:02:07 PM and less than 9/6/2023 7:02:07 PM
+8/6/2023 11:03:06 PM: Select Patient byId = 1
+8/6/2023 11:03:11 PM: Patients selected where PaymentDate greater than 7/6/2023 7:03:11 PM and less than 9/6/2023 7:03:11 PM
+8/6/2023 11:03:11 PM: All payments selected where patientId = 0
+8/6/2023 11:03:13 PM: All payments selected where patientId = 1
+8/6/2023 11:03:13 PM: Select Patient byId = 1
+8/6/2023 11:03:16 PM: Patients selected where PaymentDate greater than 7/6/2023 7:03:11 PM and less than 9/6/2023 7:03:11 PM
+8/6/2023 11:03:28 PM: All Dcotors Selected
+8/6/2023 11:03:28 PM: Select Patient byId = 1
+8/6/2023 11:03:31 PM: Patients selected where PaymentDate greater than 7/6/2023 7:03:11 PM and less than 9/6/2023 7:03:11 PM
+8/6/2023 11:04:19 PM: Select Patient byId = 1
+8/6/2023 11:04:26 PM: Patients selected where PaymentDate greater than 7/6/2023 7:03:11 PM and less than 9/6/2023 7:03:11 PM
+8/6/2023 11:04:27 PM: Select Patient byId = 1
+8/6/2023 11:06:01 PM: All payments selected where patientId = 0
+8/6/2023 11:06:01 PM: Patients selected where PaymentDate greater than 7/6/2023 7:06:01 PM and less than 9/6/2023 7:06:01 PM
+8/6/2023 11:06:08 PM: All Dcotors Selected
+8/6/2023 11:06:08 PM: All payments selected where patientId = 1
+8/6/2023 11:06:08 PM: Select Patient byId = 1
+8/6/2023 11:06:46 PM: Patients selected where PaymentDate greater than 7/6/2023 7:06:45 PM and less than 9/6/2023 7:06:45 PM
+8/6/2023 11:06:46 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:06:48 PM: All Dcotors Selected
+8/6/2023 11:06:48 PM: All payments selected where patientId = 1
+8/6/2023 11:06:48 PM: Select Patient byId = 1
+8/6/2023 11:07:47 PM: Patient updated with id = 1
+8/6/2023 11:07:47 PM: Patients selected where PaymentDate greater than 7/6/2023 7:06:45 PM and less than 9/6/2023 7:06:45 PM
+8/6/2023 11:07:54 PM: Select Patient byId = 1
+8/6/2023 11:08:41 PM: All payments selected where patientId = 0
+8/6/2023 11:08:41 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:09:06 PM: Patients selected where PaymentDate greater than 7/6/2023 7:08:40 PM and less than 9/6/2023 7:08:40 PM
+8/6/2023 11:11:27 PM: Patients selected where PaymentDate greater than 7/6/2023 7:08:40 PM and less than 9/6/2023 7:08:40 PM
+8/6/2023 11:11:33 PM: Patients selected where PaymentDate greater than 7/6/2023 7:11:33 PM and less than 9/6/2023 7:11:33 PM
+8/6/2023 11:11:33 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:12:11 PM: All payments selected where patientId = 0
+8/6/2023 11:12:13 PM: All Dcotors Selected
+8/6/2023 11:12:13 PM: All payments selected where patientId = 2
+8/6/2023 11:12:13 PM: Select Patient byId = 2
+8/6/2023 11:20:39 PM: Patients selected where PaymentDate greater than 7/6/2023 7:20:38 PM and less than 9/6/2023 7:20:38 PM
+8/6/2023 11:20:39 PM: All payments selected where patientId = 0
+8/6/2023 11:20:43 PM: All payments selected where patientId = 0
+8/6/2023 11:20:43 PM: Patients selected where PaymentDate greater than 7/6/2023 7:20:38 PM and less than 9/6/2023 7:20:38 PM
+8/6/2023 11:20:56 PM: All payments selected where patientId = 0
+8/6/2023 11:20:56 PM: Patients selected where PaymentDate greater than 7/6/2023 7:20:56 PM and less than 9/6/2023 7:20:56 PM
+8/6/2023 11:20:57 PM: All payments selected where patientId = 0
+8/6/2023 11:20:57 PM: Patients selected where PaymentDate greater than 7/6/2023 7:20:57 PM and less than 9/6/2023 7:20:57 PM
+8/6/2023 11:20:57 PM: All payments selected where patientId = 0
+8/6/2023 11:20:57 PM: Patients selected where PaymentDate greater than 7/6/2023 7:20:57 PM and less than 9/6/2023 7:20:57 PM
+8/6/2023 11:21:50 PM: All payments selected where patientId = 0
+8/6/2023 11:21:50 PM: Patients selected where PaymentDate greater than 7/6/2023 7:21:50 PM and less than 9/6/2023 7:21:50 PM
+8/6/2023 11:23:15 PM: All payments selected where patientId = 0
+8/6/2023 11:23:15 PM: Patients selected where PaymentDate greater than 7/6/2023 7:23:15 PM and less than 9/6/2023 7:23:15 PM
+8/6/2023 11:24:44 PM: All payments selected where patientId = 0
+8/6/2023 11:24:44 PM: Patients selected where PaymentDate greater than 7/6/2023 7:24:44 PM and less than 9/6/2023 7:24:44 PM
+8/6/2023 11:25:24 PM: All payments selected where patientId = 0
+8/6/2023 11:25:24 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:25:26 PM: All payments selected where patientId = 0
+8/6/2023 11:25:26 PM: Patients selected where PaymentDate greater than 7/6/2023 7:25:25 PM and less than 9/6/2023 7:25:25 PM
+8/6/2023 11:26:42 PM: All payments selected where patientId = 0
+8/6/2023 11:26:42 PM: Patients selected where PaymentDate greater than 7/6/2023 7:26:42 PM and less than 9/6/2023 7:26:42 PM
+8/6/2023 11:27:09 PM: All payments selected where patientId = 0
+8/6/2023 11:27:09 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:27:11 PM: All payments selected where patientId = 0
+8/6/2023 11:27:11 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:27:21 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:27:22 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:27:23 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:27:23 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:27:23 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:28:54 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:28:56 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:28:57 PM: Patients selected where PaymentDate greater than 7/6/2023 7:27:10 PM and less than 9/6/2023 7:27:10 PM
+8/6/2023 11:29:00 PM: Patients selected where PaymentDate greater than 7/6/2023 7:29:00 PM and less than 9/6/2023 7:29:00 PM
+8/6/2023 11:29:00 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:29:38 PM: Patients selected where PaymentDate greater than 7/6/2023 7:29:00 PM and less than 9/6/2023 7:29:00 PM
+8/6/2023 11:31:41 PM: All payments selected where patientId = 0
+8/6/2023 11:31:55 PM: Patients selected where PaymentDate greater than 7/6/2023 7:29:00 PM and less than 9/6/2023 7:29:00 PM
+8/6/2023 11:32:12 PM: All payments selected where patientId = 0
+8/6/2023 11:32:12 PM: Patients selected where PaymentDate greater than 7/6/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:32:26 PM: Patients selected where PaymentDate greater than 7/6/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:33:44 PM: All Dcotors Selected
+8/6/2023 11:33:44 PM: All payments selected where patientId = 1
+8/6/2023 11:33:44 PM: Select Patient byId = 1
+8/6/2023 11:33:50 PM: Patient updated with id = 1
+8/6/2023 11:33:50 PM: Patients selected where PaymentDate greater than 7/6/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:34:33 PM: Select Patient byId = 1
+8/6/2023 11:34:38 PM: All payments selected where patientId = 2
+8/6/2023 11:34:40 PM: All payments selected where patientId = 3
+8/6/2023 11:34:43 PM: Payments selected where PaymentDate greater than 7/6/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:34:49 PM: Payments selected where PaymentDate greater than 7/2/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:35:01 PM: Patients selected where PaymentDate greater than 7/2/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:35:07 PM: All payments selected where patientId = 0
+8/6/2023 11:36:02 PM: Payments selected where PaymentDate greater than 7/2/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:36:13 PM: All Dcotors Selected
+8/6/2023 11:38:45 PM: Patients selected where PaymentDate greater than 7/2/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:40:26 PM: Patients selected where PaymentDate greater than 7/2/2023 7:32:11 PM and less than 9/6/2023 7:32:11 PM
+8/6/2023 11:40:26 PM: All payments selected where patientId = 0
+8/6/2023 11:41:36 PM: Patients selected where PaymentDate greater than 7/6/2023 7:41:22 PM and less than 9/6/2023 7:41:22 PM
+8/6/2023 11:41:36 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:46:23 PM: All payments selected where patientId = 0
+8/6/2023 11:46:23 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/6/2023 11:46:27 PM: Patients selected where PaymentDate greater than 7/6/2023 7:46:23 PM and less than 9/6/2023 7:46:23 PM
+8/6/2023 11:54:46 PM: Patients selected where PaymentDate greater than 7/6/2023 7:54:45 PM and less than 9/6/2023 7:54:45 PM
+8/6/2023 11:54:46 PM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:06:42 AM: User Not Found
+8/7/2023 12:06:44 AM: New user added successfully with username= yusif
+8/7/2023 12:08:21 AM: User Not Found
+8/7/2023 12:12:27 AM: All payments selected where patientId = 0
+8/7/2023 12:12:27 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:12:34 AM: All payments selected where patientId = 0
+8/7/2023 12:12:34 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:12:39 AM: All payments selected where patientId = 0
+8/7/2023 12:12:39 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:38 PM and less than 9/6/2023 8:12:38 PM
+8/7/2023 12:12:42 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:41 PM and less than 9/6/2023 8:12:41 PM
+8/7/2023 12:12:42 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:12:45 AM: All payments selected where patientId = 0
+8/7/2023 12:12:45 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:44 PM and less than 9/6/2023 8:12:44 PM
+8/7/2023 12:12:49 AM: All payments selected where patientId = 0
+8/7/2023 12:12:49 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:48 PM and less than 9/6/2023 8:12:48 PM
+8/7/2023 12:12:54 AM: All payments selected where patientId = 0
+8/7/2023 12:12:54 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:53 PM and less than 9/6/2023 8:12:53 PM
+8/7/2023 12:12:58 AM: All payments selected where patientId = 0
+8/7/2023 12:12:58 AM: Patients selected where PaymentDate greater than 7/6/2023 8:12:57 PM and less than 9/6/2023 8:12:57 PM
+8/7/2023 12:13:01 AM: All payments selected where patientId = 0
+8/7/2023 12:13:01 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:13:14 AM: All payments selected where patientId = 0
+8/7/2023 12:13:14 AM: Patients selected where PaymentDate greater than 7/6/2023 8:13:13 PM and less than 9/6/2023 8:13:13 PM
+8/7/2023 12:13:17 AM: All payments selected where patientId = 0
+8/7/2023 12:13:17 AM: Patients selected where PaymentDate greater than 7/6/2023 8:13:16 PM and less than 9/6/2023 8:13:16 PM
+8/7/2023 12:13:22 AM: All payments selected where patientId = 0
+8/7/2023 12:13:22 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 12:14:59 AM: All payments selected where patientId = 0
+8/7/2023 12:14:59 AM: Patients selected where PaymentDate greater than 7/6/2023 8:14:58 PM and less than 9/6/2023 8:14:58 PM
+8/7/2023 12:27:23 AM: User not found with username = yusif && password = yusif2113
+8/7/2023 12:27:24 AM: Username or password is wrong
+8/7/2023 12:48:25 AM: User not found with username = yusif && password = yusfi123
+8/7/2023 12:48:25 AM: Username or password is wrong
+8/7/2023 12:48:26 AM: User not found with username = yusif && password = yusfi123
+8/7/2023 12:48:26 AM: Username or password is wrong
+8/7/2023 12:49:18 AM: Patients selected where PaymentDate greater than 7/6/2023 8:47:38 PM and less than 9/6/2023 8:47:38 PM
+8/7/2023 12:49:18 AM: All payments selected where patientId = 0
+8/7/2023 12:50:19 AM: All payments selected where patientId = 0
+8/7/2023 12:50:19 AM: Patients selected where PaymentDate greater than 7/6/2023 8:50:04 PM and less than 9/6/2023 8:50:04 PM
+8/7/2023 12:52:52 AM: User not found with username = yusif && password = yusfi123
+8/7/2023 12:52:52 AM: Username or password is wrong
+8/7/2023 12:52:55 AM: User not found with username = yusif && password = yusfi123
+8/7/2023 12:52:55 AM: Username or password is wrong
+8/7/2023 12:53:42 AM: User Not Found
+8/7/2023 12:54:16 AM: User Not Found
+8/7/2023 1:08:24 AM: All payments selected where patientId = 0
+8/7/2023 1:08:24 AM: Patients selected where PaymentDate greater than 7/6/2023 9:08:12 PM and less than 9/6/2023 9:08:12 PM
+8/7/2023 1:10:14 AM: Patients selected where PaymentDate greater than 7/6/2023 9:08:12 PM and less than 9/6/2023 9:08:12 PM
+8/7/2023 1:10:16 AM: All Dcotors Selected
+8/7/2023 1:10:16 AM: Payments selected where PaymentDate greater than 7/6/2023 9:08:12 PM and less than 9/6/2023 9:08:12 PM
+8/7/2023 1:13:28 AM: Patients selected where PaymentDate greater than 7/6/2023 9:10:53 PM and less than 9/6/2023 9:10:53 PM
+8/7/2023 1:13:28 AM: All payments selected where patientId = 0
+8/7/2023 1:13:59 AM: Payments selected where PaymentDate greater than 7/6/2023 9:10:53 PM and less than 9/6/2023 9:10:53 PM
+8/7/2023 1:14:50 AM: Patients selected where PaymentDate greater than 7/6/2023 9:10:53 PM and less than 9/6/2023 9:10:53 PM
+8/7/2023 1:15:44 AM: All payments selected where patientId = 0
+8/7/2023 1:15:44 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 1:15:48 AM: Patients selected where PaymentDate greater than 7/6/2023 9:15:38 PM and less than 9/6/2023 9:15:38 PM
+8/7/2023 1:20:48 AM: Patients selected where PaymentDate greater than 7/6/2023 9:20:47 PM and less than 9/6/2023 9:20:47 PM
+8/7/2023 1:20:48 AM: All payments selected where patientId = 0
+8/7/2023 1:21:00 AM: Patients selected where PaymentDate greater than 7/6/2023 9:21:00 PM and less than 9/6/2023 9:21:00 PM
+8/7/2023 1:21:00 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 1:21:05 AM: All payments selected where patientId = 0
+8/7/2023 1:21:05 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 1:21:08 AM: Patients selected where PaymentDate greater than 7/6/2023 9:21:05 PM and less than 9/6/2023 9:21:05 PM
+8/7/2023 1:21:31 AM: All payments selected where patientId = 0
+8/7/2023 1:21:31 AM: Patients selected where PaymentDate greater than 7/6/2023 9:21:30 PM and less than 9/6/2023 9:21:30 PM
+8/7/2023 1:23:19 AM: All payments selected where patientId = 0
+8/7/2023 1:23:19 AM: Patients selected where PaymentDate greater than 7/6/2023 9:23:18 PM and less than 9/6/2023 9:23:18 PM
+8/7/2023 1:23:25 AM: All payments selected where patientId = 0
+8/7/2023 1:23:25 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 1:51:38 AM: Patients selected where PaymentDate greater than 7/6/2023 9:50:25 PM and less than 9/6/2023 9:50:25 PM
+8/7/2023 1:51:38 AM: All payments selected where patientId = 0
+8/7/2023 1:51:43 AM: All payments selected where patientId = 0
+8/7/2023 1:51:43 AM: Patients selected where PaymentDate greater than 7/6/2023 9:51:43 PM and less than 9/6/2023 9:51:43 PM
+8/7/2023 1:52:12 AM: All payments selected where patientId = 0
+8/7/2023 1:52:12 AM: Patients selected where PaymentDate greater than 7/6/2023 9:52:04 PM and less than 9/6/2023 9:52:04 PM
+8/7/2023 1:52:21 AM: All payments selected where patientId = 0
+8/7/2023 1:52:21 AM: Patients selected where PaymentDate greater than 7/6/2023 9:52:17 PM and less than 9/6/2023 9:52:17 PM
+8/7/2023 2:08:44 AM: All payments selected where patientId = 0
+8/7/2023 2:08:44 AM: Patients selected where PaymentDate greater than 7/6/2023 10:07:42 PM and less than 9/6/2023 10:07:42 PM
+8/7/2023 2:09:03 AM: Patients selected where PaymentDate greater than 7/6/2023 10:09:02 PM and less than 9/6/2023 10:09:02 PM
+8/7/2023 2:09:03 AM: All payments selected where patientId = 0
+8/7/2023 2:09:07 AM: All payments selected where patientId = 0
+8/7/2023 2:09:07 AM: Patients selected where PaymentDate greater than 7/6/2023 10:09:07 PM and less than 9/6/2023 10:09:07 PM
+8/7/2023 2:14:25 AM: Patients selected where PaymentDate greater than 7/6/2023 10:14:24 PM and less than 9/6/2023 10:14:24 PM
+8/7/2023 2:14:25 AM: All payments selected where patientId = 0
+8/7/2023 2:15:13 AM: All Dcotors Selected
+8/7/2023 2:15:13 AM: All payments selected where patientId = 1
+8/7/2023 2:15:13 AM: Select Patient byId = 1
+8/7/2023 2:15:16 AM: Patient updated with id = 1
+8/7/2023 2:15:16 AM: Patients selected where PaymentDate greater than 7/6/2023 10:14:24 PM and less than 9/6/2023 10:14:24 PM
+8/7/2023 2:15:27 AM: All payments selected where patientId = 2
+8/7/2023 2:15:27 AM: Select Patient byId = 2
+8/7/2023 2:15:53 AM: Patient updated with id = 2
+8/7/2023 2:15:53 AM: Patients selected where PaymentDate greater than 7/6/2023 10:14:24 PM and less than 9/6/2023 10:14:24 PM
+8/7/2023 2:15:57 AM: Patients selected where PaymentDate greater than 7/6/2023 10:15:56 PM and less than 9/6/2023 10:15:56 PM
+8/7/2023 2:15:57 AM: All payments selected where patientId = 0
+8/7/2023 2:16:00 AM: All payments selected where patientId = 2
+8/7/2023 2:16:00 AM: All Dcotors Selected
+8/7/2023 2:16:00 AM: Select Patient byId = 2
+8/7/2023 2:16:04 AM: Patient updated with id = 2
+8/7/2023 2:16:04 AM: Patients selected where PaymentDate greater than 7/6/2023 10:15:56 PM and less than 9/6/2023 10:15:56 PM
+8/7/2023 2:21:02 AM: Patients selected where PaymentDate greater than 7/6/2023 10:21:02 PM and less than 9/6/2023 10:21:02 PM
+8/7/2023 2:26:00 AM: Patients selected where PaymentDate greater than 7/6/2023 10:25:59 PM and less than 9/6/2023 10:25:59 PM
+8/7/2023 2:26:02 AM: Payments selected where PaymentDate greater than 7/6/2023 10:25:59 PM and less than 9/6/2023 10:25:59 PM
+8/7/2023 2:26:02 AM: All payments selected where patientId = 0
+8/7/2023 2:26:38 AM: All payments selected where patientId = 0
+8/7/2023 2:26:38 AM: Patients selected where PaymentDate greater than 7/6/2023 10:26:38 PM and less than 9/6/2023 10:26:38 PM
+8/7/2023 2:26:43 AM: All payments selected where patientId = 0
+8/7/2023 2:26:43 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:26:53 AM: All payments selected where patientId = 0
+8/7/2023 2:26:53 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:27:19 AM: Patients selected where PaymentDate greater than 7/6/2023 10:27:18 PM and less than 9/6/2023 10:27:18 PM
+8/7/2023 2:27:19 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:27:28 AM: All payments selected where patientId = 0
+8/7/2023 2:27:29 AM: All payments selected where patientId = 0
+8/7/2023 2:27:29 AM: Patients selected where PaymentDate greater than 7/6/2023 10:27:29 PM and less than 9/6/2023 10:27:29 PM
+8/7/2023 2:27:31 AM: All payments selected where patientId = 0
+8/7/2023 2:27:31 AM: Patients selected where PaymentDate greater than 7/6/2023 10:27:30 PM and less than 9/6/2023 10:27:30 PM
+8/7/2023 2:27:33 AM: All payments selected where patientId = 0
+8/7/2023 2:27:33 AM: Patients selected where PaymentDate greater than 7/6/2023 10:27:32 PM and less than 9/6/2023 10:27:32 PM
+8/7/2023 2:27:39 AM: All payments selected where patientId = 0
+8/7/2023 2:27:39 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:27:55 AM: Patients selected where PaymentDate greater than 7/6/2023 10:27:38 PM and less than 9/6/2023 10:27:38 PM
+8/7/2023 2:28:45 AM: Patients selected where PaymentDate greater than 7/6/2023 10:28:45 PM and less than 9/6/2023 10:28:45 PM
+8/7/2023 2:28:45 AM: All payments selected where patientId = 0
+8/7/2023 2:28:54 AM: All payments selected where patientId = 0
+8/7/2023 2:28:54 AM: Patients selected where PaymentDate greater than 7/6/2023 10:28:53 PM and less than 9/6/2023 10:28:53 PM
+8/7/2023 2:29:41 AM: All payments selected where patientId = 0
+8/7/2023 2:29:41 AM: Patients selected where PaymentDate greater than 7/6/2023 10:29:40 PM and less than 9/6/2023 10:29:40 PM
+8/7/2023 2:29:51 AM: Patients selected where PaymentDate greater than 7/6/2023 10:29:51 PM and less than 9/6/2023 10:29:51 PM
+8/7/2023 2:29:51 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:29:58 AM: Patients selected where PaymentDate greater than 7/6/2023 10:29:57 PM and less than 9/6/2023 10:29:57 PM
+8/7/2023 2:29:58 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:30:37 AM: All payments selected where patientId = 0
+8/7/2023 2:31:56 AM: Patients selected where PaymentDate greater than 7/6/2023 10:31:55 PM and less than 9/6/2023 10:31:55 PM
+8/7/2023 2:31:56 AM: All payments selected where patientId = 0
+8/7/2023 2:32:02 AM: Patients selected where PaymentDate greater than 7/6/2023 10:32:01 PM and less than 9/6/2023 10:32:01 PM
+8/7/2023 2:32:02 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:32:55 AM: All payments selected where patientId = 0
+8/7/2023 2:33:36 AM: All payments selected where patientId = 0
+8/7/2023 2:33:36 AM: Patients selected where PaymentDate greater than 7/6/2023 10:33:35 PM and less than 9/6/2023 10:33:35 PM
+8/7/2023 2:33:40 AM: All payments selected where patientId = 0
+8/7/2023 2:33:40 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:33:49 AM: Patients selected where PaymentDate greater than 7/6/2023 10:33:48 PM and less than 9/6/2023 10:33:48 PM
+8/7/2023 2:33:49 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/7/2023 2:33:56 AM: Patients selected where PaymentDate greater than 7/6/2023 10:33:48 PM and less than 9/6/2023 10:33:48 PM
+8/7/2023 2:34:02 AM: All payments selected where patientId = 0
+8/7/2023 2:35:47 AM: Payments selected where PaymentDate greater than 7/6/2023 10:33:48 PM and less than 9/6/2023 10:33:48 PM
+8/7/2023 2:35:49 AM: All Dcotors Selected

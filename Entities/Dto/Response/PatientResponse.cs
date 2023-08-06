@@ -15,7 +15,8 @@ namespace Entities.Dto.Response
         public string Diagnosis { get; set; }
         public DateTime ArrivalDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public string Works { get; set; }
+        public string Works { get; set; } 
+        public bool IsCame { get; set; }
         public decimal PayedAmount { get; set; }
         public int DoctorId { get; set; }
     }

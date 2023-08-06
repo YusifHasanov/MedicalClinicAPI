@@ -52,10 +52,12 @@ namespace DataAccess.Concrete
             modelBuilder.Entity<Patient>()
                 .Ignore(p => p.Doctor);
 
+ 
+
             #endregion
 
             #region Image
-      
+
 
             modelBuilder.Entity<Image>()
                 .Property(i => i.ImageTitle)

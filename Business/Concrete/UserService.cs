@@ -61,7 +61,8 @@ namespace Business.Concrete
             {
                 var authUser = _unitOfWorkRepository.UserRepository
                     .GetOne(user => user.UserName.Equals(loginUser.UserName)
-                    && user.Role.Equals(loginUser.Role));
+                    /*&& user.Role.Equals(loginUser.Role)*/);
+
                 if (authUser == null)
                 {
                     throw new NotFoundException("User Not Found");
@@ -75,7 +76,7 @@ namespace Business.Concrete
 
                 AuthResponse response = new()
                 {
-                    AccessToken = accessToken
+                    AccessToken = accessToken  
                 };
                 return response;
 
@@ -231,7 +232,7 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<User> RefreshAccessTokenAsync(RefreshTokenDto token)
+        public async Task<AuthResponse> RefreshAccessTokenAsync(RefreshTokenDto token)
         {
             try
             {
@@ -269,7 +270,12 @@ namespace Business.Concrete
                     await SaveChangesAsync();
 
                 }
-                return user;
+
+                AuthResponse response = new()
+                {
+                    AccessToken = user.AccessToken 
+                };  
+                return response;
             }
             catch (Exception ex)
             {

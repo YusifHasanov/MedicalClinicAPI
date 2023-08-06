@@ -50,7 +50,7 @@ namespace API.Controllers
 
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginUser login)
         {
             try
@@ -79,7 +79,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("/refresh")]
+        [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto tokenDto)
         {
             try

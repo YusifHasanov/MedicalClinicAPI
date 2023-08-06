@@ -13,7 +13,8 @@ namespace Entities.Dto.Request.Update
         public string Surname { get; set; }
         public string Diagnosis { get; set; }
         public DateTime ArrivalDate { get; set; }
-        public decimal TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; } 
+        public bool IsCame { get; set; }
         public int DoctorId { get; set; }
         public string Works { get; set; }
     }
