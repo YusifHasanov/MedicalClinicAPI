@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
@@ -59,8 +60,9 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.ImageRepository.GetAll();
-                var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
+                var allImagesResponse = _unitOfWorkRepository.ImageRepository.GetAll()
+                    .ProjectTo<ImageResponse>(_mapper.ConfigurationProvider);
+                //var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
                 _logService.Log($"All Images Selected");
              
                 return allImagesResponse;

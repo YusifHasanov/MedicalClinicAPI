@@ -15,6 +15,6 @@ namespace Entities.Dto.Request.Create
         public decimal TotalAmount { get; set; }
         public string Works { get; set; }
         public int DoctorId { get; set; }
-        public ICollection<byte[]> ImageDatas { get; set; }
+        public ICollection<string> ImageDatas { get; set; }
     }
 }

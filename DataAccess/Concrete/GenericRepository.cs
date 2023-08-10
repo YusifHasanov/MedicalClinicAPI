@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
 
-namespace Core.DataAccess
+namespace DataAccess.Concrete
 {
-    public class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
+    public abstract class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
         protected readonly DbEntity dbEntity;
 
@@ -21,9 +21,9 @@ namespace Core.DataAccess
             await Table.AddAsync(entity);
         }
 
-        public   void Delete(int id)
+        public void Delete(int id)
         {
-             Table.Where(e=>e.Id==id).ExecuteDelete();
+            Table.Where(e => e.Id == id).ExecuteDelete();
         }
 
         public void Delete(T entity)
@@ -42,7 +42,7 @@ namespace Core.DataAccess
         }
 
         public T GetById(int id)
-        { 
+        {
             return Table.Find(id);
         }
 
@@ -64,9 +64,9 @@ namespace Core.DataAccess
 
         public async Task Dispose()
         {
-           await dbEntity.DisposeAsync();
+            await dbEntity.DisposeAsync();
         }
 
-        
+
     }
 }

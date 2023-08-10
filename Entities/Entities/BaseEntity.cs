@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Entities.Entities
 
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         public int Id { get; set; }
         public DateTime CreateDate { get; set; }

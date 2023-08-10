@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    ports:
+       - "8080:8080"  
+        
+     
+  SQL-server:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: fakePassww0rd
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+ 
+
+      

@@ -58,11 +58,6 @@ namespace DataAccess.Concrete
 
             #region Image
 
-
-            modelBuilder.Entity<Image>()
-                .Property(i => i.ImageTitle)
-                .IsRequired(false);
-
             modelBuilder.Entity<Image>()
                 .Property(i => i.ImageData)
                 .HasColumnType("varbinary(max)");

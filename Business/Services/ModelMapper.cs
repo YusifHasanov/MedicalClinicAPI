@@ -24,7 +24,7 @@ namespace Business.Services
             CreateMap<CreatePatient, Patient>();
             CreateMap<UpdatePatient, Patient>();
             CreateMap<Patient, PatientResponse>()
-          .ForMember(dest => dest.PayedAmount, opt => opt.MapFrom(src => src.Payments.Sum(payment => payment.Amount)));
+            .ForMember(dest => dest.PayedAmount, opt => opt.MapFrom(src => src.Payments.Sum(payment => payment.Amount)));
 
             CreateMap<CreateUser, User>();
             CreateMap<UpdateUser, User>();
@@ -44,7 +44,7 @@ namespace Business.Services
             CreateMap<Doctor, DoctorResponse>()
                 .ForMember(dest => dest.TotalPayment, opt => opt
                 .MapFrom( src => src.Patients.SelectMany(patient => patient.Payments)
-                    .Sum(payment => payment.Amount)));
+                .Sum(payment => payment.Amount)));
 
         }
     }

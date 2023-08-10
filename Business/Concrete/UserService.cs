@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Azure.Core;
 using Business.Abstract;
 using Core.Utils;
@@ -161,11 +162,11 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.UserRepository.GetAll();
-                var usersResponse = _mapper.Map<IQueryable<UserResponse>>(result);
+                var result = _unitOfWorkRepository.UserRepository.GetAll()
+                    .ProjectTo<UserResponse>(_mapper.ConfigurationProvider); 
                 _logService.Log($"All Users Selected");
 
-                return usersResponse;
+                return result;
             }
             catch (Exception ex)
             {

@@ -13,7 +13,9 @@ using Entities.Dto.Request.Create;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
 
 using System.Text;
@@ -27,7 +29,7 @@ namespace Core.Utils
         static IConfiguration _configuration = new ConfigurationBuilder()
                  //.SetBasePath("")  
                  .AddJsonFile("appsettings.json").Build();
-         
+
         public static void AddServices(this IServiceCollection services)
         {
 
@@ -35,12 +37,23 @@ namespace Core.Utils
             services.AddControllers(options => options.Filters.Add<FluentValidationFilter>())
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<CreatePatientValidator>())
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
+
+            //services.AddDataProtection()
+            //        .PersistKeysToFileSystem(new DirectoryInfo(@".\AppData"))
+            //        //.ProtectKeysWithCertificate("thumbprint")
+            //        .SetDefaultKeyLifetime(TimeSpan.FromDays(7))
+            //        .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
+            //        {
+            //            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+            //            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            //        });
+
             services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
             services.AddAutoMapper(typeof(ModelMapper));
             services.AddSingleton<ILogService, LogService>();
 
             services.AddSingleton<Globals, Globals>();
-   
+
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
 
@@ -58,6 +71,7 @@ namespace Core.Utils
 
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
             services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
+             
 
             services.AddAuthentication(options =>
             {

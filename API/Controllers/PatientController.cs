@@ -20,6 +20,11 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
+        [HttpGet("test")]
+        public IActionResult Test()
+        {  
+                return Ok(); 
+        }
 
         [HttpGet]
         public IActionResult GetAll()

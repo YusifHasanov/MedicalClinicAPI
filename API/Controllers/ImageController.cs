@@ -29,8 +29,7 @@ namespace API.Controllers
                 var imageBytes = System.IO.File.ReadAllBytes("D:\\Projects\\VisualStudioProjects\\ecommerce\\Server\\Entities\\house.png");
                 CreateImage imgg = new()
                 {
-                    ImageData = imageBytes,
-                    ImageTitle = "first",
+                    ImageData = imageBytes, 
                     PatientId = 5
                 };
 

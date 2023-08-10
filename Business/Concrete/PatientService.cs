@@ -43,7 +43,7 @@ namespace Business.Concrete
                         {
                             PatientId = newPatient.Id,
                             //ImageData = System.IO.File.ReadAllBytes("D:\\Projects\\VisualStudioProjects\\ecommerce\\Server\\Entities\\house.png")
-                            ImageData = image
+                            ImageData =image
                         };
                         await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
                     }

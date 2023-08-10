@@ -1,4 +1,3 @@
-using Core.DataAccess;
 using DataAccess.Abstract;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +15,9 @@ namespace DataAccess.Concrete
         {
         }
 
-        public Patient GetPatientWithImage(int id)
-        {
-            return dbEntity.Patients.Include(patien => patien.Images)
+        public Patient GetPatientWithImage(int id) =>
+            dbEntity.Patients.Include(patien => patien.Images)
                 .FirstOrDefault(patient => patient.Id == id);
-        }
+         
     }
 }
