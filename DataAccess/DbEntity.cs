@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace DataAccess
 {
@@ -29,7 +30,7 @@ namespace DataAccess
             optionsBuilder.UseSqlServer(_globals.SqlServer, builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-            });
+            }).LogTo(Console.WriteLine);
             base.OnConfiguring(optionsBuilder);
         }
         

@@ -10,13 +10,13 @@ services:
        - "8080:8080"  
         
      
-  SQL-server:
-    image: mcr.microsoft.com/mssql/server
-    environment:
-      SA_PASSWORD: fakePassww0rd
-      ACCEPT_EULA: Y
-    ports:
-      - "1433:1433"
+  #DESKTOP-77B8NCD:
+  #  image: mcr.microsoft.com/mssql/server
+  #  environment:
+  #    SA_PASSWORD: 1234567789
+  #    ACCEPT_EULA: Y
+  #  ports:
+  #    - "1433:1433"
  
 
       

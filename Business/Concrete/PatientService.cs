@@ -33,7 +33,7 @@ namespace Business.Concrete
 
                 var newPatient = _mapper.Map<Patient>(entity);
                 await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
-                await SaveChangesAsync();
+                //await SaveChangesAsync();
                 _logService.Log($"New Patient Added With id {newPatient.Id}");
                 if (entity.ImageDatas?.Count >= 0)
                 {
@@ -81,7 +81,7 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
+                var result = _unitOfWorkRepository.PatientRepository.GetAll(true).Include(p => p.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
                 _logService.Log($"All Patients Selected");
@@ -118,7 +118,7 @@ namespace Business.Concrete
             try
             {
                 var patients = _unitOfWorkRepository.PatientRepository
-                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date))
+                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date),true)
                     .Include(patient => patient.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 

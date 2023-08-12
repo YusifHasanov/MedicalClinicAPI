@@ -2470,3 +2470,14 @@ token: '[PII of type 'System.IdentityModel.Tokens.Jwt.JwtSecurityToken' is hidde
 8/9/2023 7:51:18 PM: Patients selected where PaymentDate greater than 7/9/2023 3:47:38 PM and less than 9/9/2023 3:47:38 PM
 8/9/2023 7:53:40 PM: All payments selected where patientId = 9
 8/9/2023 7:53:40 PM: Select Patient byId = 9
+8/10/2023 4:37:48 PM: Doctor is exist with name= yusif and surname = hasanov
+8/10/2023 4:37:53 PM: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+CreateDoctor -> Doctor
+Entities.Dto.Request.Create.CreateDoctor -> Entities.Entities.Doctor
+8/10/2023 4:39:19 PM: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+CreateDoctor -> Doctor
+Entities.Dto.Request.Create.CreateDoctor -> Entities.Entities.Doctor

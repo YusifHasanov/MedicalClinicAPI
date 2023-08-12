@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
-
+using Serilog;
 using System.Text;
 
 
@@ -30,15 +30,15 @@ namespace Core.Utils
                  //.SetBasePath("")  
                  .AddJsonFile("appsettings.json").Build();
 
-        public static void AddServices(this IServiceCollection services)
+        public static void AddServices(this WebApplicationBuilder builder)
         {
 
-            services.AddDbContext<DbEntity>();
-            services.AddControllers(options => options.Filters.Add<FluentValidationFilter>())
+            builder.Services.AddDbContext<DbEntity>();
+            builder.Services.AddControllers(options => options.Filters.Add<FluentValidationFilter>())
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<CreatePatientValidator>())
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
-            //services.AddDataProtection()
+            //builder.Services.AddDataProtection()
             //        .PersistKeysToFileSystem(new DirectoryInfo(@".\AppData"))
             //        //.ProtectKeysWithCertificate("thumbprint")
             //        .SetDefaultKeyLifetime(TimeSpan.FromDays(7))
@@ -48,32 +48,35 @@ namespace Core.Utils
             //            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
             //        });
 
-            services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
-            services.AddAutoMapper(typeof(ModelMapper));
-            services.AddSingleton<ILogService, LogService>();
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 
-            services.AddSingleton<Globals, Globals>();
 
-            services.AddScoped<IPatientRepository, PatientRepository>();
-            services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
+            builder.Services.AddAutoMapper(typeof(ModelMapper));
+            builder.Services.AddSingleton<ILogService, LogService>();
 
-            services.AddScoped<IImageRepository, ImageRepository>();
-            services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddSingleton<Globals, Globals>();
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
-            services.AddScoped<IPaymentRepository, PaymentRepository>();
-            services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IImageRepository, ImageRepository>();
+            builder.Services.AddScoped<IImageService, ImageService>();
 
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
-            services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
-             
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
 
-            services.AddAuthentication(options =>
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+
+            builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+            builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
+
+
+            builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -92,7 +95,7 @@ namespace Core.Utils
               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"] ?? ""))
           };
       });
-            services.AddCors(options =>
+            builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "MedicalCors", policy =>
                 {

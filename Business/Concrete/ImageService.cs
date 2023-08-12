@@ -60,7 +60,7 @@ namespace Business.Concrete
         {
             try
             {
-                var allImagesResponse = _unitOfWorkRepository.ImageRepository.GetAll()
+                var allImagesResponse = _unitOfWorkRepository.ImageRepository.GetAll(true)
                     .ProjectTo<ImageResponse>(_mapper.ConfigurationProvider);
                 //var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
                 _logService.Log($"All Images Selected");

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dto
+namespace Core.Entities
 {
-    public enum Role
+    public class BaseDto
+      
     {
-        Admin,
-        Recepsionist
+        
     }
 }

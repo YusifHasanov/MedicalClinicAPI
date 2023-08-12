@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataAccess.Concrete
 {
     public class UnitOfWorkRepository : IUnitOfWorkRepository
-    { 
+    {
         public UnitOfWorkRepository(
             IImageRepository imageRepository,
             IPatientRepository patientRepository,
@@ -24,18 +24,33 @@ namespace DataAccess.Concrete
             PaymentRepository = paymentRepository;
             DoctorRepository = doctorRepository;
         }
+        //private readonly DbEntity dbEntity;
+
+        public IImageRepository ImageRepository {  get; private set; }
+
+        public IPatientRepository PatientRepository { get; private set; }
+
+        public IUserRepository UserRepository { get; private set; }
+
+        public IPaymentRepository PaymentRepository { get; private set; }
+
+        public IDoctorRepository DoctorRepository { get; private set; }
+
+        //public UnitOfWorkRepository(DbEntity dbentity)
+        //{
+        //    this.dbEntity = dbentity;
+        //}
 
 
 
 
- 
-        public IPatientRepository PatientRepository { get; }
+        //public IPatientRepository PatientRepository  => new PatientRepository(dbEntity);
 
-        public IImageRepository ImageRepository { get; }
+        //public IImageRepository ImageRepository => new ImageRepository(dbEntity);
 
-        public IUserRepository UserRepository { get; }
-        public IPaymentRepository PaymentRepository { get; }
+        //public IUserRepository UserRepository   => new UserRepository(dbEntity);
+        //public IPaymentRepository PaymentRepository => new PaymentRepository(dbEntity);
 
-        public IDoctorRepository DoctorRepository { get; }
+        //public IDoctorRepository DoctorRepository  => new DoctorRepository(dbEntity);
     }
 }

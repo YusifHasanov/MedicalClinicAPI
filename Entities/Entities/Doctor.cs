@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-
+using Core.Entities;
 namespace Entities.Entities
 {
     public class Doctor : BaseEntity
     {
         public Doctor()
         {
-            Patients = new HashSet<Patient>();
+            DoctorPatients = new HashSet<DoctorPatient>();
         }
         public string Name { get; set; }
         public string Surname { get; set; }
  
-        public ICollection<Patient> Patients { get; set; }
+        public ICollection<DoctorPatient> DoctorPatients { get; set; }
     }
 }

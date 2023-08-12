@@ -1,14 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dto
+namespace Entities.Entities
 {
-    public class BaseDto
-      
+    public enum PregnancyStatus
     {
-        
+        Pregnant,
+        NonPregnant
     }
 }

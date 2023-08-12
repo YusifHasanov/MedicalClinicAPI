@@ -1,10 +1,10 @@
-using Entities.Entities;
-using DataAccess;
+
+using Core.DataAccess;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
 
-namespace DataAccess.Concrete
+namespace  DataAccess.Concrete
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
@@ -35,12 +35,20 @@ namespace DataAccess.Concrete
         {
             return Table.Where(filter);
         }
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter, bool noTrack)
+        {
+            return Table.Where(filter).AsNoTracking();
+        }
 
         public IQueryable<T> GetAll()
         {
             return Table;
         }
-
+     
+        public IQueryable<T> GetAll(bool noTrack)
+        {
+            return Table.AsNoTracking();
+        }
         public T GetById(int id)
         {
             return Table.Find(id);
@@ -67,6 +75,6 @@ namespace DataAccess.Concrete
             await dbEntity.DisposeAsync();
         }
 
-
+        
     }
 }

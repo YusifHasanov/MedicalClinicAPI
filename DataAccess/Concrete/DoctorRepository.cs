@@ -17,10 +17,11 @@ namespace DataAccess.Concrete
 
         public Doctor GetDoctorWithPatientsPayments(int id)
         {
-            return dbEntity.Doctors
-                .Include(d => d.Patients)
-                .ThenInclude(patient => patient.Payments) 
-                .FirstOrDefault(d => d.Id == id);
+            //return dbEntity.Doctors
+            //    .Include(d => d.Patients)
+            //    .ThenInclude(patient => patient.Payments) 
+            //    .FirstOrDefault(d => d.Id == id);
+            return new();
                  
         }
     }

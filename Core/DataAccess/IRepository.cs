@@ -1,5 +1,5 @@
- 
-using Entities.Entities;
+
+using Core.Entities; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace Core.DataAccess
 {
     public interface IRepository<T> where T : BaseEntity, new()
     {
@@ -15,6 +15,8 @@ namespace DataAccess
 
         public IQueryable<T> GetAll(Expression<Func<T, bool>> filter);
         public IQueryable<T> GetAll();
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter ,bool noTrack);
+        public IQueryable<T> GetAll(bool noTrack);
         public T  GetOne (Expression<Func<T, bool>> filter);
         public T GetById(int id);
 

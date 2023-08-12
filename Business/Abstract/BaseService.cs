@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities.Dto;
 using Core.Utils.Constants;
+using Core.Entities;
+ 
 
 namespace Business.Abstract
 {

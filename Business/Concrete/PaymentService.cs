@@ -15,7 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
@@ -78,7 +80,7 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.PaymentRepository.GetAll()
+                var result = _unitOfWorkRepository.PaymentRepository.GetAll(true)
                     .Include(payment => payment.Patient)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
                 _logService.Log($"All Payments Selected");
@@ -98,7 +100,7 @@ namespace Business.Concrete
             {
                 _logService.Log($"Select Payment byId = {id}");
                 IsExist(id);
-                var payment =_unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
+                var payment = _unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
                 var paymentResponse = _mapper.Map<PaymentResponse>(payment);
                 return paymentResponse;
             }
@@ -120,16 +122,19 @@ namespace Business.Concrete
                 IQueryable<PaymentResponse> payments = isNull switch
                 {
                     false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
-                     payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)  
+                     payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)
                     .Include(payment => payment.Patient)
-                    .ThenInclude(patient => patient.Doctor)
+                    .ThenInclude(patient => patient.DoctorPatients)
+                    .ThenInclude(doctorPatient => doctorPatient.Doctor)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
 
                     true => _unitOfWorkRepository.PaymentRepository.GetAll()
                     .Include(payment => payment.Patient)
-                    .ThenInclude(patient => patient.Doctor)
+                    .ThenInclude(patient => patient.DoctorPatients)
+                    .ThenInclude(doctorPatient => doctorPatient.Doctor)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
-                }; ;
+                  
+                };  
 
                 _logService.Log(isNull
                     ? "All Payments selected."
@@ -149,10 +154,12 @@ namespace Business.Concrete
             try
             {
                 IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
-                    .GetAll(payment => payment.PatientId == patientId)
+                        .GetAll(payment => payment.PatientId == patientId)
                         .Include(payment => payment.Patient)
-                    .ThenInclude(patient => patient.Doctor)
-                      .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
+                        .ThenInclude(patient => patient.DoctorPatients)
+                        .ThenInclude(doctorPatients => doctorPatients.Doctor)
+                        .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
+
                 _logService.Log($"All payments selected where patientId = {patientId}");
                 return payments;
             }

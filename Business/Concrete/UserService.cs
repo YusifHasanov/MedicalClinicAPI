@@ -8,7 +8,6 @@ using Core.Utils.Exceptions;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
-using Entities.Dto;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
@@ -162,7 +161,7 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.UserRepository.GetAll()
+                var result = _unitOfWorkRepository.UserRepository.GetAll(true)
                     .ProjectTo<UserResponse>(_mapper.ConfigurationProvider); 
                 _logService.Log($"All Users Selected");
 

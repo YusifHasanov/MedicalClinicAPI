@@ -35,15 +35,15 @@ namespace Business.Services
             CreateMap<Payment, PaymentResponse>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
                 .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Patient.Surname))
-                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Patient.Doctor.Name))
-                .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Patient.Doctor.Surname));
+                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Patient.DoctorPatients.Select(d => d.Doctor.Name)))
+                .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Patient.DoctorPatients.Select(d => d.Doctor.Surname)));
 
 
             CreateMap<CreateDoctor, Doctor>();
             CreateMap<UpdateDoctor, Doctor>();
             CreateMap<Doctor, DoctorResponse>()
                 .ForMember(dest => dest.TotalPayment, opt => opt
-                .MapFrom( src => src.Patients.SelectMany(patient => patient.Payments)
+                .MapFrom(src => src.DoctorPatients.SelectMany(dp => dp.Patient.Payments)
                 .Sum(payment => payment.Amount)));
 
         }
