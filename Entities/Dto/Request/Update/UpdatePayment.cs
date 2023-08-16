@@ -10,8 +10,8 @@ namespace Entities.Dto.Request.Update
     public class UpdatePayment: BaseDto
     {
         public int Id { get; set; }
-        public decimal Amount { get; set; }
-        public int PatientId { get; set; }
+        public decimal PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; }
+        public int TherapyId { get; set; }
     }
 }

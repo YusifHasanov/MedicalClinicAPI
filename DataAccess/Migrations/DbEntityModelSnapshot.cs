@@ -49,29 +49,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DoctorPatient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("DoctorPatient");
-                });
-
             modelBuilder.Entity("Entities.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -86,6 +63,9 @@ namespace DataAccess.Migrations
                     b.Property<byte[]>("ImageData")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("ImageDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
@@ -109,93 +89,64 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Adress")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime>("ArrivalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Bleeding")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DelayedSurgeries")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Diagnosis")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("DrugAllergy")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<byte>("Gender")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("GeneralStateOfHealth")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("InjuryProblem")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<int>("IsCame")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(55)
                         .HasColumnType("nvarchar(55)");
 
-                    b.Property<int>("PregnancyStatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<byte>("PregnancyStatus")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("ReactionToAnesthesia")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(55)
                         .HasColumnType("nvarchar(55)");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18, 2)")
-                        .HasAnnotation("MinValue", 0);
-
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("WorkDone")
-                        .IsRequired()
-                        .HasMaxLength(2500)
-                        .HasColumnType("nvarchar(2500)");
-
-                    b.Property<string>("WorkToBeDone")
-                        .IsRequired()
-                        .HasMaxLength(2500)
-                        .HasColumnType("nvarchar(2500)");
 
                     b.HasKey("Id");
 
@@ -210,25 +161,25 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18, 2)")
-                        .HasAnnotation("MinValue", 0);
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PaymentAmount")
+                        .HasColumnType("decimal(18, 2)")
+                        .HasAnnotation("MinValue", 0);
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TherapyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("TherapyId");
 
                     b.ToTable("Payments");
                 });
@@ -241,17 +192,70 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PatientId");
 
                     b.ToTable("PhoneNumber");
+                });
+
+            modelBuilder.Entity("Entities.Entities.Therapy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("IsCame")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PaymentAmount")
+                        .HasColumnType("decimal(18, 2)")
+                        .HasAnnotation("MinValue", 0);
+
+                    b.Property<DateTime>("TherapyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkDone")
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
+
+                    b.Property<string>("WorkToBeDone")
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Therapy");
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>
@@ -273,10 +277,8 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<byte>("Role")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -293,25 +295,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DoctorPatient", b =>
-                {
-                    b.HasOne("Entities.Entities.Doctor", "Doctor")
-                        .WithMany("DoctorPatients")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Entities.Patient", "Patient")
-                        .WithMany("DoctorPatients")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("Entities.Entities.Image", b =>
                 {
                     b.HasOne("Entities.Entities.Patient", "Patient")
@@ -325,13 +308,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Payment", b =>
                 {
-                    b.HasOne("Entities.Entities.Patient", "Patient")
+                    b.HasOne("Entities.Entities.Therapy", "Therapy")
                         .WithMany("Payments")
-                        .HasForeignKey("PatientId")
+                        .HasForeignKey("TherapyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Patient");
+                    b.Navigation("Therapy");
                 });
 
             modelBuilder.Entity("Entities.Entities.PhoneNumber", b =>
@@ -345,20 +328,42 @@ namespace DataAccess.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Entities.Entities.Therapy", b =>
+                {
+                    b.HasOne("Entities.Entities.Doctor", "Doctor")
+                        .WithMany("Therapies")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Entities.Patient", "Patient")
+                        .WithMany("Therapies")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Entities.Entities.Doctor", b =>
                 {
-                    b.Navigation("DoctorPatients");
+                    b.Navigation("Therapies");
                 });
 
             modelBuilder.Entity("Entities.Entities.Patient", b =>
                 {
-                    b.Navigation("DoctorPatients");
-
                     b.Navigation("Images");
 
-                    b.Navigation("Payments");
-
                     b.Navigation("PhoneNumbers");
+
+                    b.Navigation("Therapies");
+                });
+
+            modelBuilder.Entity("Entities.Entities.Therapy", b =>
+                {
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,6 +11,7 @@ namespace Entities.Entities
     public class Image:BaseEntity
     {
 
+        public DateTime ImageDate { get; set; }
         public string ImageData { get; set; }
         public int PatientId { get; set; }
         public Patient Patient { get; set; }

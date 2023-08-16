@@ -11,7 +11,8 @@ namespace Entities.Dto.Response
     public class PaymentResponse:BaseDto
     {
         public int Id { get; set; }
-        public decimal Amount { get; set; }
+        public decimal PaymentAmount { get; set; }
+        public int TherapyId { get; set; }
         public string PatientName { get; set; }
         public string PatientSurname { get; set; }
         public string PatientId { get; set; }

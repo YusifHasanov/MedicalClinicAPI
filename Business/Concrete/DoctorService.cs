@@ -71,10 +71,7 @@ namespace Business.Concrete
         {
             try
             {
-                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll(true)
-                    .Include(doctor => doctor.DoctorPatients)
-                    .ThenInclude(patients=>patients.Patient)
-                    .ThenInclude(patient => patient.Payments)
+                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll() 
                     .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
 
                 _logService.Log($"All Dcotors Selected");

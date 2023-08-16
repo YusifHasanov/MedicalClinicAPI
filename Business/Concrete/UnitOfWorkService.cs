@@ -14,13 +14,15 @@ namespace Business.Concrete
             IPatientService patientService,
             IUserService userService,
             IPaymentService paymentService,
-            IDoctorService doctorService
+            IDoctorService doctorService,
+            ITherapyService therapyService
             ) { 
             ImageService = imageService;
             PatientService = patientService;
             UserService = userService;
             PaymentService = paymentService;
             DoctorService = doctorService;
+            TherapyService = therapyService;
         } 
 
    
@@ -32,5 +34,7 @@ namespace Business.Concrete
         public IPaymentService PaymentService { get; }
 
         public IDoctorService DoctorService { get; }
+
+        public ITherapyService TherapyService { get; }
     }
 }

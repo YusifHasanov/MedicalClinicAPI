@@ -15,6 +15,9 @@ namespace DataAccess.Abstract
         public IUserRepository UserRepository { get; }
         public IPaymentRepository PaymentRepository { get; }
         public IDoctorRepository DoctorRepository { get; }
+        public ITherapyRepository TherapyRepository { get; }
+        public INotificationRepository NotificationRepository { get;  }
+        public IPhoneNumberRepository PhoneNumberRepository { get; }
     }
 
 }

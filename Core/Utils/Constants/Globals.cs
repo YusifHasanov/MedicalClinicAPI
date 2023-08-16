@@ -22,6 +22,7 @@ namespace Core.Utils.Constants
         public string SqlServer { get; }
         public string EmailRegexPattern { get; } = @"^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$";
         public string PasswordRegexPattern { get; } = @"^(?=.*\\d).{8,}$";
+        public string PhoneNumberRegex { get; } = @"^(\+[0-9]{9})$";
         public string Issuer { get; }
         public string Audience { get; }
         public string SecretKey { get; }

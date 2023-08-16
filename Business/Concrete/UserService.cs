@@ -13,6 +13,7 @@ using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
+using Entities.Entities.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -26,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class UserService : BaseService<User, UpdateUser, CreateUser,UserResponse>, IUserService
+    public class UserService : BaseService<User, UpdateUser, CreateUser, UserResponse>, IUserService
     {
         public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
         {
@@ -39,7 +40,7 @@ namespace Business.Concrete
                 var newUser = _mapper.Map<User>(entity);
                 var existUser = _unitOfWorkRepository.UserRepository.GetOne(user => user.UserName.Equals(newUser.UserName));
                 if (existUser != null)
-                    throw new Exception($"User Is Exist with Username {newUser.UserName}"); 
+                    throw new Exception($"User Is Exist with Username {newUser.UserName}");
 
                 newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
                 var accessToken = GenerateJwtAccessToken(newUser);
@@ -76,7 +77,7 @@ namespace Business.Concrete
 
                 AuthResponse response = new()
                 {
-                    AccessToken = accessToken  
+                    AccessToken = accessToken
                 };
                 return response;
 
@@ -94,15 +95,16 @@ namespace Business.Concrete
 
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Authentication, user.Password.ToString()),
-            new Claim(ClaimTypes.Name, user.UserName)
+            new Claim("password", user.Password.ToString()),
+            new Claim("name", user.UserName),
+            new Claim("role", user.Role.ToString())
         };
 
             var token = new JwtSecurityToken(
                 issuer: _globals.Issuer,
                 audience: _globals.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(10),
+                expires: DateTime.Now.AddHours(12),
                 signingCredentials: credentials
             ); ;
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -121,7 +123,7 @@ namespace Business.Concrete
                 throw;
             }
         }
-        private void ValidateUserAuthorization(User authUser,bool checkRole = true)
+        private void ValidateUserAuthorization(User authUser, bool checkRole = true)
         {
             if (authUser == null)
             {
@@ -161,8 +163,8 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.UserRepository.GetAll(true)
-                    .ProjectTo<UserResponse>(_mapper.ConfigurationProvider); 
+                var result = _unitOfWorkRepository.UserRepository.GetAll()
+                    .ProjectTo<UserResponse>(_mapper.ConfigurationProvider);
                 _logService.Log($"All Users Selected");
 
                 return result;
@@ -179,7 +181,7 @@ namespace Business.Concrete
             try
             {
                 _logService.Log($"Select User byId = {id}");
-                var user =  IsExist(id);
+                var user = IsExist(id);
                 var userResponse = _mapper.Map<UserResponse>(user);
                 return userResponse;
             }
@@ -244,21 +246,25 @@ namespace Business.Concrete
                     ValidateAudience = true,
                     ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer =   _globals.Issuer, 
+                    ValidIssuer = _globals.Issuer,
                     ValidAudience = _globals.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_globals.SecretKey)),
                 };
-      
+
                 SecurityToken validatedToken;
                 var principal = tokenHandler.ValidateToken(token.AccessToken, tokenValidationParameters, out validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
-            
-                string username = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value ?? "";
-                string password = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Authentication)?.Value ?? "";
+
+                string username = jwtToken.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? "";
+                string password = jwtToken.Claims.FirstOrDefault(x => x.Type == "password")?.Value ?? "";
 
                 User user = _unitOfWorkRepository.UserRepository
-                    .GetOne(user => user.UserName.Equals(username) && user.AccessToken.Equals(token.AccessToken));
+                    .GetOne(user =>
+                        user.UserName.Equals(username) &&
+                        user.AccessToken.Equals(token.AccessToken)  );
+
                 ValidateUserAuthorization(user, false);
+
                 if (!user.Password.Equals(password))
                 {
                     throw new UnauthorizedException("Password is wrong");
@@ -273,8 +279,8 @@ namespace Business.Concrete
 
                 AuthResponse response = new()
                 {
-                    AccessToken = user.AccessToken 
-                };  
+                    AccessToken = user.AccessToken
+                };
                 return response;
             }
             catch (Exception ex)

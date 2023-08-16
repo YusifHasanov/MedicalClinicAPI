@@ -21,10 +21,14 @@ namespace Business.Services
             CreateMap<Image, ImageResponse>();
 
 
-            CreateMap<CreatePatient, Patient>();
+            CreateMap<CreatePatient, Patient>()
+                .ForMember(dest => dest.PhoneNumbers, opt => opt.Ignore())
+                .ForMember(dest => dest.Images, opt => opt.Ignore())
+                .ForMember(dest => dest.Therapies, opt => opt.Ignore());
             CreateMap<UpdatePatient, Patient>();
-            CreateMap<Patient, PatientResponse>()
-            .ForMember(dest => dest.PayedAmount, opt => opt.MapFrom(src => src.Payments.Sum(payment => payment.Amount)));
+            CreateMap<Patient, PatientResponse>();
+            //.ForMember(p=>p.DoctorName,opt=>opt.MapFrom(src=>src.Do)
+             
 
             CreateMap<CreateUser, User>();
             CreateMap<UpdateUser, User>();
@@ -33,18 +37,27 @@ namespace Business.Services
             CreateMap<CreatePayment, Payment>();
             CreateMap<UpdatePayment, Payment>();
             CreateMap<Payment, PaymentResponse>()
-                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
-                .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Patient.Surname))
-                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Patient.DoctorPatients.Select(d => d.Doctor.Name)))
-                .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Patient.DoctorPatients.Select(d => d.Doctor.Surname)));
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Therapy.Patient.Name))
+                .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Therapy.Patient.Surname));
+
 
 
             CreateMap<CreateDoctor, Doctor>();
             CreateMap<UpdateDoctor, Doctor>();
-            CreateMap<Doctor, DoctorResponse>()
-                .ForMember(dest => dest.TotalPayment, opt => opt
-                .MapFrom(src => src.DoctorPatients.SelectMany(dp => dp.Patient.Payments)
-                .Sum(payment => payment.Amount)));
+            CreateMap<Doctor, DoctorResponse>();
+
+
+
+            CreateMap<CreateTherapy, Therapy>();
+            //CreateMap<UpdateTherapy, Therapy>();
+            CreateMap<Therapy, TherapyResponse>()
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
+                .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Patient.Surname))
+                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.Name))
+                .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Doctor.Surname))
+                .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments));
+               
+                
 
         }
     }

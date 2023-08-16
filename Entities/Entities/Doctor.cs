@@ -10,12 +10,12 @@ namespace Entities.Entities
     public class Doctor : BaseEntity
     {
         public Doctor()
-        {
-            DoctorPatients = new HashSet<DoctorPatient>();
+        { 
+            Therapies = new HashSet<Therapy>();
         }
         public string Name { get; set; }
         public string Surname { get; set; }
  
-        public ICollection<DoctorPatient> DoctorPatients { get; set; }
+        public ICollection<Therapy> Therapies { get; set; }  
     }
 }

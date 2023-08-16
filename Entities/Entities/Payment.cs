@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Entities.Entities
 {
-    public class Payment:BaseEntity
+    public  class Payment:BaseEntity
     {
-        public decimal Amount { get; set; } 
-        public int PatientId { get; set; }
+        public decimal PaymentAmount { get; set; } 
         public DateTime PaymentDate { get; set; }
- 
-        public Patient Patient { get; set; }
+        public int TherapyId { get; set; }
+        public Therapy Therapy { get; set; }
     }
 }

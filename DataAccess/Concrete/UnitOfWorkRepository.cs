@@ -15,7 +15,10 @@ namespace DataAccess.Concrete
             IPatientRepository patientRepository,
             IUserRepository userRepository,
             IPaymentRepository paymentRepository,
-            IDoctorRepository doctorRepository
+            IDoctorRepository doctorRepository,
+            ITherapyRepository teraphyRepository,
+            INotificationRepository notificationRepository,
+            IPhoneNumberRepository phoneNumberRepository
             )
         {
             UserRepository = userRepository;
@@ -23,6 +26,9 @@ namespace DataAccess.Concrete
             PatientRepository = patientRepository;
             PaymentRepository = paymentRepository;
             DoctorRepository = doctorRepository;
+            TherapyRepository = teraphyRepository;
+            NotificationRepository = notificationRepository;
+            PhoneNumberRepository = phoneNumberRepository;
         }
         //private readonly DbEntity dbEntity;
 
@@ -35,6 +41,12 @@ namespace DataAccess.Concrete
         public IPaymentRepository PaymentRepository { get; private set; }
 
         public IDoctorRepository DoctorRepository { get; private set; }
+
+        public ITherapyRepository TherapyRepository { get; private set; }
+        public INotificationRepository NotificationRepository { get; private set; }
+        public IPhoneNumberRepository PhoneNumberRepository { get; private set; }
+
+
 
         //public UnitOfWorkRepository(DbEntity dbentity)
         //{

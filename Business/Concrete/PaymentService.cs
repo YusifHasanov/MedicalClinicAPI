@@ -32,15 +32,15 @@ namespace Business.Concrete
         {
             try
             {
-                Patient patient = _unitOfWorkRepository.PatientRepository.GetById(entity.PatientId)
-                    ?? throw new Exception($"Patient don't exist with Id = {entity.PatientId}");
+                Therapy therapy = _unitOfWorkRepository.TherapyRepository.GetById(entity.TherapyId)
+                    ?? throw new Exception($"Theraphy don't exist with Id = {entity.TherapyId}");
 
                 List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
-                   .GetAll(payment => payment.PatientId == patient.Id).ToList();
+                   .GetAll(payment => payment.TherapyId == therapy.Id).ToList();
 
-                decimal sumOfAmount = allPayments.Sum(payment => payment.Amount) + entity.Amount;
+                decimal sumOfAmount = allPayments.Sum(payment => payment.PaymentAmount) + entity.PaymentAmount;
 
-                if (patient.TotalAmount < sumOfAmount)
+                if (therapy.PaymentAmount < sumOfAmount)
                 {
                     throw new Exception("Patients  payment sum can't be greater than total Amount!");
                 }
@@ -49,8 +49,8 @@ namespace Business.Concrete
                 await _unitOfWorkRepository.PaymentRepository.AddAsync(newPayment);
                 await SaveChangesAsync();
 
-                _logService.Log($"Add new payment for {patient.Name} amount is {newPayment.Amount}");
-                return newPayment;
+                _logService.Log($"Add new payment for {therapy.Patient.Name} amount is {newPayment.PaymentAmount}");
+                return new();
             }
             catch (Exception ex)
             {
@@ -80,8 +80,9 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.PaymentRepository.GetAll(true)
-                    .Include(payment => payment.Patient)
+                var result = _unitOfWorkRepository.PaymentRepository.GetAll()
+                    .Include(payment => payment.Therapy)
+                    .ThenInclude(Therapy => Therapy.Patient)    
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
                 _logService.Log($"All Payments Selected");
 
@@ -123,15 +124,13 @@ namespace Business.Concrete
                 {
                     false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
                      payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)
-                    .Include(payment => payment.Patient)
-                    .ThenInclude(patient => patient.DoctorPatients)
-                    .ThenInclude(doctorPatient => doctorPatient.Doctor)
+                    .Include(payment => payment.Therapy)
+                    .ThenInclude(theraphy=> theraphy.Doctor)  
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
 
                     true => _unitOfWorkRepository.PaymentRepository.GetAll()
-                    .Include(payment => payment.Patient)
-                    .ThenInclude(patient => patient.DoctorPatients)
-                    .ThenInclude(doctorPatient => doctorPatient.Doctor)
+                    .Include(payment => payment.Therapy)
+                    .ThenInclude(theraphy => theraphy.Patient) 
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
                   
                 };  
@@ -154,10 +153,9 @@ namespace Business.Concrete
             try
             {
                 IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
-                        .GetAll(payment => payment.PatientId == patientId)
-                        .Include(payment => payment.Patient)
-                        .ThenInclude(patient => patient.DoctorPatients)
-                        .ThenInclude(doctorPatients => doctorPatients.Doctor)
+                        .GetAll(payment => payment.Therapy.PatientId == patientId)
+                        .Include(payment => payment.Therapy) 
+                        .ThenInclude(theraphy => theraphy.Doctor)
                         .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
 
                 _logService.Log($"All payments selected where patientId = {patientId}");
@@ -183,26 +181,27 @@ namespace Business.Concrete
 
         public async override Task<Payment> UpdateAsync(int id, UpdatePayment entity)
         {
+            //logic deyismelidi
             try
             {
                 Payment dbPayment = IsExist(id);
-                Patient patient = _unitOfWorkRepository.PatientRepository.GetOne(patient => patient.Id == entity.PatientId)
-                     ?? throw new Exception($"Patient don't exist with Id = {entity.PatientId}");
+                Therapy therapy = _unitOfWorkRepository.TherapyRepository.GetOne(therapy => therapy.Id == entity.TherapyId)
+                     ?? throw new Exception($"Therapy don't exist with Id = {entity.TherapyId}");
 
                 List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
-                   .GetAll(payment => payment.PatientId == patient.Id).ToList();
+                   .GetAll(payment => payment.Therapy.PatientId == therapy.PatientId).ToList();
 
                 foreach (var foundPayment in allPayments.Where(payment => payment.Id == entity.Id))
                 {
-                    foundPayment.Amount = entity.Amount;
+                    foundPayment.PaymentAmount = entity.PaymentAmount;
                 }
 
-                decimal sumOfAmount = allPayments.Sum(payment => payment.Amount);
+                decimal sumOfAmount = allPayments.Sum(payment => payment.PaymentAmount);
 
-                if (patient.TotalAmount < sumOfAmount)
-                {
-                    throw new Exception("Patients  payment sum can't be greater than total Amount!");
-                }
+                //if (patient.TotalAmount < sumOfAmount)
+                //{
+                //    throw new Exception("Patients  payment sum can't be greater than total Amount!");
+                //}
 
                 entity.Id = id;
                 var payment = _mapper.Map(entity, dbPayment);

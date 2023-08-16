@@ -3,7 +3,7 @@ using AutoMapper;
 using Business.Abstract;
 using Business.Concrete;
 using Business.Services;
-using Business.Services.Validations;
+using Business.Services.Validations.CreateValidator;
 using Core.Utils.Constants;
 using Core.Validations;
 using DataAccess;
@@ -48,7 +48,7 @@ namespace Core.Utils
             //            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
             //        });
 
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+            //Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 
 
             builder.Services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
@@ -71,6 +71,13 @@ namespace Core.Utils
 
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
+
+            builder.Services.AddScoped<ITherapyRepository, TherapyRepository>();
+            builder.Services.AddScoped<ITherapyService, TherapyService>();
+
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
+            builder.Services.AddScoped<IPhoneNumberRepository, PhoneNumberRepository>();
 
             builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
             builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();

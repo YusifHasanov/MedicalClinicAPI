@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Entities;
-using Entities.Entities;
+using Entities.Entities.Enums;
 
 namespace Entities.Dto.Response
 {

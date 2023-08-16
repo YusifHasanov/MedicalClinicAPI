@@ -32,25 +32,45 @@ namespace Business.Concrete
             {
 
                 var newPatient = _mapper.Map<Patient>(entity);
-                await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
+              
                 //await SaveChangesAsync();
                 _logService.Log($"New Patient Added With id {newPatient.Id}");
-                if (entity.ImageDatas?.Count >= 0)
+                if (entity.Images?.Count >= 0)
                 {
-                    foreach (var image in entity.ImageDatas)
+                   
+                    foreach (var image in entity.Images)
                     {
-                        Image newImage = new()
+                        CreateImage createImage = new()
                         {
-                            PatientId = newPatient.Id,
-                            //ImageData = System.IO.File.ReadAllBytes("D:\\Projects\\VisualStudioProjects\\ecommerce\\Server\\Entities\\house.png")
-                            ImageData =image
+                            ImageData = image,
+                            ImageDate = DateTime.Now,
+                            PatientId = newPatient.Id
                         };
-                        await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
+                        newPatient.Images.Add(_mapper.Map<Image>(createImage));
+                        //var newImage   = _mapper.Map<Image>(createImage);
+                       
+                        
+                        //await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
                     }
                     _logService.Log($"Patients with id = {newPatient.Id} images added succesfully");
-                    await SaveChangesAsync();
+                 
                 }
-
+                if(entity.PhoneNumbers?.Count > 0)
+                {
+                    foreach (var phoneNumber in entity.PhoneNumbers)
+                    {
+                        CreatePhoneNumber phone = new()
+                        {
+                            PatientId = newPatient.Id,
+                            Number = phoneNumber, 
+                        };
+                        newPatient.PhoneNumbers.Add(_mapper.Map<PhoneNumber>(phone));
+                         //var newPhoneNumebr=  _mapper.Map<PhoneNumber>(phone);
+                         //await _unitOfWorkRepository.PhoneNumberRepository.AddAsync(newPhoneNumebr);
+                    }
+                }
+                await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
+                await SaveChangesAsync();
                 return newPatient;
             }
             catch (Exception ex)
@@ -81,7 +101,7 @@ namespace Business.Concrete
         {
             try
             {
-                var result = _unitOfWorkRepository.PatientRepository.GetAll(true).Include(p => p.Images)
+                var result = _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
                 _logService.Log($"All Patients Selected");
@@ -118,7 +138,7 @@ namespace Business.Concrete
             try
             {
                 var patients = _unitOfWorkRepository.PatientRepository
-                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date),true)
+                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date))
                     .Include(patient => patient.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 

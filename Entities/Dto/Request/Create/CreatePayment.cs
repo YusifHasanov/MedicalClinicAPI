@@ -1,4 +1,5 @@
 using Core.Entities;
+using Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Entities.Dto.Request.Create
 {
     public class CreatePayment:BaseDto
     {
-        public decimal Amount { get; set; }
-        public int PatientId { get; set; }
+        public decimal PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; }
+        public int TherapyId { get; set; }
     }
 }

@@ -31,23 +31,15 @@ namespace  DataAccess.Concrete
             dbEntity.Remove(entity);
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter, bool track)
         {
-            return Table.Where(filter);
-        }
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> filter, bool noTrack)
-        {
-            return Table.Where(filter).AsNoTracking();
+            return track ? Table.Where(filter) : Table.Where(filter).AsNoTracking();
         }
 
-        public IQueryable<T> GetAll()
+ 
+        public IQueryable<T> GetAll(bool track)
         {
-            return Table;
-        }
-     
-        public IQueryable<T> GetAll(bool noTrack)
-        {
-            return Table.AsNoTracking();
+            return track ? Table : Table.AsNoTracking();
         }
         public T GetById(int id)
         {

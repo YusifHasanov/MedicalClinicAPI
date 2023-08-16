@@ -32,5 +32,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors("MedicalCors");
-app.UseMiddleware<BasicAuthenticationMiddleware>();
+//app.UseMiddleware<BasicAuthenticationMiddleware>();
 app.Run();

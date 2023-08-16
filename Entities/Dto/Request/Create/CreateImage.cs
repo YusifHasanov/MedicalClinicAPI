@@ -9,8 +9,8 @@ namespace Entities.Dto.Request.Create
 {
     public class CreateImage:BaseDto
     {
- 
-        public byte[] ImageData { get; set; }
+        public DateTime ImageDate { get; set; }
+        public string ImageData { get; set; }
 
         public int PatientId { get; set; }
     }
