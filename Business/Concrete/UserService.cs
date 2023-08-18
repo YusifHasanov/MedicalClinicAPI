@@ -62,8 +62,12 @@ namespace Business.Concrete
             {
                 var authUser = _unitOfWorkRepository.UserRepository
                     .GetOne(user => user.UserName.Equals(loginUser.UserName)
-                    /*&& user.Role.Equals(loginUser.Role)*/) ?? throw new NotFoundException("User Not Found");
+                    /*&& user.Role.Equals(loginUser.Role)*/);
 
+                if (authUser == null)
+                {
+                    throw new NotFoundException("User Not Found");
+                }
                 VerifyPassword(authUser, loginUser.Password);
 
                 var accessToken = GenerateJwtAccessToken(authUser);
@@ -257,7 +261,7 @@ namespace Business.Concrete
                 User user = _unitOfWorkRepository.UserRepository
                     .GetOne(user =>
                         user.UserName.Equals(username) &&
-                        user.AccessToken.Equals(token.AccessToken));
+                        user.AccessToken.Equals(token.AccessToken)  );
 
                 ValidateUserAuthorization(user, false);
 
