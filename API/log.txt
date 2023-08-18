@@ -457,3 +457,30 @@ token: '[PII of type 'System.IdentityModel.Tokens.Jwt.JwtSecurityToken' is hidde
 8/16/2023 8:02:44 PM: Select Patient byId = 1
 8/16/2023 8:03:08 PM: Get Therapies By Patient Id 1
 8/16/2023 8:03:30 PM: All payments selected where patientId = 3
+8/17/2023 9:42:46 AM: All payments selected where patientId = 0
+8/17/2023 9:42:46 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/17/2023 9:42:46 AM: All Dcotors Selected
+8/17/2023 9:42:46 AM: All payments selected where patientId = 0
+8/17/2023 9:42:50 AM: All Dcotors Selected
+8/17/2023 9:42:50 AM: Patients selected where PaymentDate greater than 7/17/2023 5:42:41 AM and less than 9/17/2023 5:42:41 AM
+8/17/2023 9:43:01 AM: All payments selected where patientId = 1
+8/17/2023 9:43:01 AM: Get Therapies By Patient Id 1
+8/17/2023 9:43:01 AM: Select Patient byId = 1
+8/17/2023 9:43:08 AM: Get Therapies By Patient Id 1
+8/17/2023 9:43:14 AM: Get Therapies By Patient Id 4
+8/17/2023 9:43:14 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/17/2023 9:43:15 AM: The process cannot access the file 'C:\Users\Yusif\All\Projects\VisualStudioProjects\Medical\API\log.txt' because it is being used by another process.
+8/17/2023 9:43:21 AM: Patients selected where PaymentDate greater than 7/17/2023 5:42:41 AM and less than 9/17/2023 5:42:41 AM
+8/17/2023 9:43:22 AM: Get Therapies By Patient Id 4
+8/17/2023 9:43:22 AM: Select Patient byId = 4
+8/17/2023 9:43:28 AM: Get Therapies By Patient Id 4
+8/17/2023 9:43:52 AM: Get Therapies By Patient Id 4
+8/17/2023 5:51:48 PM: Patients selected where PaymentDate greater than 7/17/2023 1:50:41 PM and less than 9/17/2023 1:50:41 PM
+8/17/2023 5:51:59 PM: All payments selected where patientId = 0
+8/17/2023 5:52:01 PM: All Dcotors Selected
+8/17/2023 5:52:01 PM: Get Therapies By Patient Id 1
+8/17/2023 5:52:01 PM: All payments selected where patientId = 1
+8/17/2023 5:52:01 PM: Select Patient byId = 1
+8/17/2023 5:53:00 PM: Get Therapies By Patient Id 1
+8/17/2023 5:53:12 PM: Get Therapies By Patient Id 1
+8/17/2023 5:53:32 PM: Get Therapies By Patient Id 1
