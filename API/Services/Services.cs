@@ -1,8 +1,7 @@
-
-using AutoMapper;
 using Business.Abstract;
 using Business.Concrete;
 using Business.Services;
+using Business.Services.BackgroundServices;
 using Business.Services.Validations.CreateValidator;
 using Core.Utils.Constants;
 using Core.Validations;
@@ -13,11 +12,7 @@ using Entities.Dto.Request.Create;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
 using System.Text;
 
 
@@ -47,15 +42,19 @@ namespace Core.Utils
             //            EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
             //            ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
             //        });
+            //builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+            //               .ReadFrom.Configuration(hostingContext.Configuration)
+            //                              .Enrich.FromLogContext().CreateBootstrapLogger());
 
-            //Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
-
-
-            builder.Services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
-            builder.Services.AddAutoMapper(typeof(ModelMapper));
-            builder.Services.AddSingleton<ILogService, LogService>();
+            //Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(_configuration).CreateLogger();
+            //builder.Host.UseSerilog();
 
             builder.Services.AddSingleton<Globals, Globals>();
+            builder.Services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
+            builder.Services.AddAutoMapper(typeof(ModelMapper));
+            builder.Services.AddScoped<ILogService, LogService>();
+
+ 
 
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();
             builder.Services.AddScoped<IPatientService, PatientService>();
@@ -111,6 +110,8 @@ namespace Core.Utils
                           .AllowAnyMethod();
                 });
             });
+            builder.Services.AddHostedService<MonthlyTruncateLogTable>();
         }
+
     }
 }

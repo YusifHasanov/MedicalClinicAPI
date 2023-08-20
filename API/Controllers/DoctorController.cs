@@ -9,6 +9,7 @@ using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace API.Controllers
@@ -28,11 +29,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(_unitOfWorkService.DoctorService.GetAll().ToList());
+                
+                return Ok(await (await _unitOfWorkService.DoctorService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -42,11 +44,11 @@ namespace API.Controllers
  
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var response = _unitOfWorkService.DoctorService.GetById(id);
+                var response = await _unitOfWorkService.DoctorService.GetById(id);
 
                 return Ok(response);
             }

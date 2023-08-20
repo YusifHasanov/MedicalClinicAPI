@@ -4,26 +4,23 @@ using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
 using DataAccess.Abstract;
-using DataAccess.Concrete;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Business.Concrete
 {
     public class PatientService : BaseService<Patient, UpdatePatient, CreatePatient, PatientResponse>, IPatientService
     {
-        public PatientService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
+
+        public PatientService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
+            ;
         }
 
         public async override Task<Patient> AddAsync(CreatePatient entity)
@@ -32,12 +29,12 @@ namespace Business.Concrete
             {
 
                 var newPatient = _mapper.Map<Patient>(entity);
-              
+
                 //await SaveChangesAsync();
-                _logService.Log($"New Patient Added With id {newPatient.Id}");
+                await _logService.InfoAsync($"New Patient Added With id {newPatient.Id}");
                 if (entity.Images?.Count >= 0)
                 {
-                   
+
                     foreach (var image in entity.Images)
                     {
                         CreateImage createImage = new()
@@ -48,25 +45,25 @@ namespace Business.Concrete
                         };
                         newPatient.Images.Add(_mapper.Map<Image>(createImage));
                         //var newImage   = _mapper.Map<Image>(createImage);
-                       
-                        
+
+
                         //await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
                     }
-                    _logService.Log($"Patients with id = {newPatient.Id} images added succesfully");
-                 
+                    await _logService.InfoAsync($"Patients with id = {newPatient.Id} images added succesfully");
+
                 }
-                if(entity.PhoneNumbers?.Count > 0)
+                if (entity.PhoneNumbers?.Count > 0)
                 {
                     foreach (var phoneNumber in entity.PhoneNumbers)
                     {
                         CreatePhoneNumber phone = new()
                         {
                             PatientId = newPatient.Id,
-                            Number = phoneNumber, 
+                            Number = phoneNumber,
                         };
                         newPatient.PhoneNumbers.Add(_mapper.Map<PhoneNumber>(phone));
-                         //var newPhoneNumebr=  _mapper.Map<PhoneNumber>(phone);
-                         //await _unitOfWorkRepository.PhoneNumberRepository.AddAsync(newPhoneNumebr);
+                        //var newPhoneNumebr=  _mapper.Map<PhoneNumber>(phone);
+                        //await _unitOfWorkRepository.PhoneNumberRepository.AddAsync(newPhoneNumebr);
                     }
                 }
                 await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
@@ -75,7 +72,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :75 && PatientService.cs");
                 throw;
             }
         }
@@ -85,55 +82,60 @@ namespace Business.Concrete
             try
             {
                 var exist = IsExist(id);
+
                 _unitOfWorkRepository.PatientRepository.Delete(id);
                 await SaveChangesAsync();
-                _logService.Log($"Patient Deleted With id {id}");
+
+                await _logService.InfoAsync($"Patient Deleted With id {id}");
+
                 return exist;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :95 && PatientService.cs");
                 throw;
             }
         }
 
-        public override IQueryable<PatientResponse> GetAll()
+        public override async Task<IQueryable<PatientResponse>> GetAll()
         {
             try
             {
                 var result = _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
-                _logService.Log($"All Patients Selected");
+                await _logService.InfoAsync($"All Patients Selected");
 
                 return result;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :113 && PatientService.cs");
                 throw;
             }
         }
 
-        public override PatientResponse GetById(int id)
+        public async override Task<PatientResponse> GetById(int id)
         {
             try
             {
                 _ = IsExist(id);
 
-                _logService.Log($"Select Patient byId = {id}");
+                await _logService.InfoAsync($"Select Patient byId = {id}");
+
                 var patient = _unitOfWorkRepository.PatientRepository.GetPatientWithImage(id);
                 var response = _mapper.Map<PatientResponse>(patient);
+
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :133 && PatientService.cs");
                 throw;
             }
         }
 
-        public IQueryable<PatientResponse> GetPatientsByDate(DateTime date)
+        public async Task<IQueryable<PatientResponse>> GetPatientsByDate(DateTime date)
         {
             try
             {
@@ -142,22 +144,22 @@ namespace Business.Concrete
                     .Include(patient => patient.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
-                _logService.Log($"All Patients selected where ArrivalDate = {date}");
+                await _logService.InfoAsync($"All Patients selected where ArrivalDate = {date}");
                 return patients;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :152 && PatientService.cs");
                 throw;
             }
         }
 
-        public IQueryable<PatientResponse> GetPatientsByDateInterval(DateIntervalRequest interval)
+        public async Task<IQueryable<PatientResponse>> GetPatientsByDateInterval(DateIntervalRequest interval)
         {
             try
             {
                 bool isNull = interval.ToDate == null || interval.FromDate == null;
-                var fromDate = interval.FromDate.Value.Date;  
+                var fromDate = interval.FromDate.Value.Date;
                 var toDate = interval.ToDate.Value.Date.AddDays(1);
                 IQueryable<PatientResponse> patients = isNull switch
                 {
@@ -169,16 +171,17 @@ namespace Business.Concrete
                     true => _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
                     .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
                 };
+ 
+                await _logService.InfoAsync(isNull
+                    ? "All Patients selected."
+                    : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
-                _logService.Log(isNull
-                     ? "All Patients selected."
-                     : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
                 return patients;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :190 && PatientService.cs");
                 throw;
             }
         }
@@ -202,15 +205,19 @@ namespace Business.Concrete
             {
                 var exist = IsExist(id);
                 entity.Id = id;
+
                 var patient = _mapper.Map(entity, exist);
+
                 _unitOfWorkRepository.PatientRepository.Update(patient);
                 await SaveChangesAsync();
-                _logService.Log($"Patient updated with id = {id}");
+
+                await _logService.InfoAsync($"Patient updated with id = {id}");
+
                 return patient;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :226 && PatientService.cs");
                 throw;
             }
 

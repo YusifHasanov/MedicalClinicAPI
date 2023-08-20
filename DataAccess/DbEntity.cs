@@ -20,11 +20,16 @@ namespace DataAccess
         public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; } 
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Therapy> Therapies { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         public DbEntity(Globals globals) : base()
         {
             _globals = globals;
         }
+         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_globals.SqlServer, builder =>
@@ -38,17 +43,23 @@ namespace DataAccess
         {
             var datas = ChangeTracker.Entries<BaseEntity>();
 
-            foreach (var data in datas)
+            try
             {
-                _ = data.State switch
+                foreach (var data in datas)
                 {
-                    EntityState.Modified => data.Entity.UpdateDate = DateTime.Now,
-                    EntityState.Added => data.Entity.CreateDate = DateTime.Now,
-                    EntityState.Unchanged => null,
-                    EntityState.Detached => null,
-                    EntityState.Deleted => null,
-                    _ => null
-                };
+                    _ = data.State switch
+                    {
+                        EntityState.Modified => data.Entity.UpdateDate = DateTime.Now,
+                        EntityState.Added => data.Entity.CreateDate = DateTime.Now,
+                        EntityState.Unchanged => null,
+                        EntityState.Detached => null,
+                        EntityState.Deleted => null,
+                        _ => null
+                    };
+                }
+            }
+            catch
+            { 
             }
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }

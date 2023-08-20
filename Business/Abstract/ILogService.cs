@@ -8,6 +8,11 @@ namespace Business.Abstract
 {
     public interface ILogService
     {
-        public void Log(string message);
+        //public void Log(string message);
+
+        public Task InfoAsync(string message);
+        public Task WarnAsync(string message);
+        public Task ErrorAsync(Exception exception , string message);
+        public Task ErrorAsync(string message);
     }
 }

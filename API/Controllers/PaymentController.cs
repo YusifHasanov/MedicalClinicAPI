@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Business.Services.Validations;
 using System.Net;
 using Entities.Dto.Request;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -22,12 +23,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllPayments()
+        public async Task<IActionResult> GetAllPayments()
         {
             try
             {
-                var response = _unitOfWorkService.PaymentService.GetAll().ToList();
-                return Ok(response);
+             
+                return Ok(await (await _unitOfWorkService.PaymentService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             { 
@@ -37,11 +38,11 @@ namespace API.Controllers
 
 
         [HttpPost("byDateInterval")]
-        public IActionResult GetAllByDateInterval([FromBody] DateIntervalRequest interval)
+        public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
             try
             {
-                return Ok(_unitOfWorkService.PaymentService.GetPaymentsByDateInterval(interval).ToList());
+                return Ok(await (await _unitOfWorkService.PaymentService.GetPaymentsByDateInterval(interval)).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -50,11 +51,11 @@ namespace API.Controllers
         }
 
         [HttpGet("byPatientId/{id:int}")]
-        public IActionResult GetAllPaymentsByPatientId(int id)
+        public  async Task<IActionResult> GetAllPaymentsByPatientId(int id)
         {
             try
             {
-                var response = _unitOfWorkService.PaymentService.GetPaymentsByPatientId(id);
+                var response = await _unitOfWorkService.PaymentService.GetPaymentsByPatientId(id);
                 return Ok(response);
             }
             catch (Exception ex)

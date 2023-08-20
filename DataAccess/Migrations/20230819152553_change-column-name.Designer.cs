@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DbEntity))]
-    partial class DbEntityModelSnapshot : ModelSnapshot
+    [Migration("20230819152553_change-column-name")]
+    partial class changecolumnname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,65 +81,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Entities.Entities.Log", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ExceptionMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExceptionStackTrace")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LogDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LogLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("Entities.Entities.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NotificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Entities.Entities.Patient", b =>
@@ -267,7 +211,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("PhoneNumbers");
+                    b.ToTable("PhoneNumber");
                 });
 
             modelBuilder.Entity("Entities.Entities.Therapy", b =>
@@ -314,7 +258,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Therapies");
+                    b.ToTable("Therapy");
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>

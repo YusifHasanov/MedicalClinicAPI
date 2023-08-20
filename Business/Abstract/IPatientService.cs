@@ -13,8 +13,8 @@ namespace Business.Abstract
 {
     public interface IPatientService : IService<Patient, UpdatePatient, CreatePatient,PatientResponse>
     {
-        public IQueryable<PatientResponse> GetPatientsByDate(DateTime date);
-        public IQueryable<PatientResponse> GetPatientsByDateInterval(DateIntervalRequest interval);
+        public Task<IQueryable<PatientResponse>> GetPatientsByDate(DateTime date);
+        public Task<IQueryable<PatientResponse>> GetPatientsByDateInterval(DateIntervalRequest interval);
        
     }
 }

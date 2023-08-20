@@ -27,7 +27,7 @@ namespace DataAccess.Concrete
 
 
             modelBuilder.Entity<Patient>()
-                .Property(p => p.Adress).HasMaxLength(1000)
+                .Property(p => p.Address).HasMaxLength(1000)
                 .IsRequired(false);
 
             modelBuilder.Entity<Patient>()

@@ -11,6 +11,7 @@ using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Business.Concrete
 {
     public class PaymentService : BaseService<Payment, UpdatePayment, CreatePayment, PaymentResponse>, IPaymentService
     {
-        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
+        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
         }
 
@@ -33,7 +34,7 @@ namespace Business.Concrete
             try
             {
                 Therapy therapy = _unitOfWorkRepository.TherapyRepository.GetById(entity.TherapyId)
-                    ?? throw new Exception($"Theraphy don't exist with Id = {entity.TherapyId}");
+                    ?? throw new NotFoundException($"Theraphy don't exist with Id = {entity.TherapyId}");
 
                 List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
                    .GetAll(payment => payment.TherapyId == therapy.Id).ToList();
@@ -49,12 +50,12 @@ namespace Business.Concrete
                 await _unitOfWorkRepository.PaymentRepository.AddAsync(newPayment);
                 await SaveChangesAsync();
 
-                _logService.Log($"Add new payment for {therapy.Patient.Name} amount is {newPayment.PaymentAmount}");
+                await _logService.InfoAsync($"Add new payment ");
                 return new();
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :58 && Paymentservice.cs");
                 throw;
             }
         }
@@ -66,56 +67,61 @@ namespace Business.Concrete
                 var dbPayment = IsExist(id);
                 _unitOfWorkRepository.PaymentRepository.Delete(id);
                 await SaveChangesAsync();
-                _logService.Log($"Paymnet Deleted With id {id}");
+               await _logService.InfoAsync($"Paymnet Deleted With id {id}");
                 return dbPayment;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :75 && Paymentservice.cs");
                 throw;
             }
         }
 
-        public override IQueryable<PaymentResponse> GetAll()
+        public async override Task<IQueryable<PaymentResponse>> GetAll()
         {
             try
             {
                 var result = _unitOfWorkRepository.PaymentRepository.GetAll()
                     .Include(payment => payment.Therapy)
-                    .ThenInclude(Therapy => Therapy.Patient)    
+                    .ThenInclude(Therapy => Therapy.Patient)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
-                _logService.Log($"All Payments Selected");
+
+                await _logService.InfoAsync($"All Payments Selected");
 
                 return result;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                
                 throw;
             }
         }
 
-        public override PaymentResponse GetById(int id)
+        public async override Task<PaymentResponse> GetById(int id)
         {
             try
             {
-                _logService.Log($"Select Payment byId = {id}");
+              
                 IsExist(id);
+                await _logService.InfoAsync($"Select Payment byId = {id}");
                 var payment = _unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
                 var paymentResponse = _mapper.Map<PaymentResponse>(payment);
                 return paymentResponse;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :113 && Paymentservice.cs");
                 throw;
             }
         }
 
-        public IQueryable<PaymentResponse> GetPaymentsByDateInterval(DateIntervalRequest interval)
+        public async Task<IQueryable<PaymentResponse>> GetPaymentsByDateInterval(DateIntervalRequest interval)
         {
             try
             {
+                 
+                string auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+
                 bool isNull = interval.ToDate == null || interval.FromDate == null;
                 var fromDate = interval.FromDate.Value.Date;
                 var toDate = interval.ToDate.Value.Date.AddDays(1);
@@ -125,17 +131,17 @@ namespace Business.Concrete
                     false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
                      payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)
                     .Include(payment => payment.Therapy)
-                    .ThenInclude(theraphy=> theraphy.Doctor)  
+                    .ThenInclude(theraphy => theraphy.Doctor)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
 
                     true => _unitOfWorkRepository.PaymentRepository.GetAll()
                     .Include(payment => payment.Therapy)
-                    .ThenInclude(theraphy => theraphy.Patient) 
+                    .ThenInclude(theraphy => theraphy.Patient)
                     .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
-                  
-                };  
 
-                _logService.Log(isNull
+                };
+
+                await _logService.InfoAsync(isNull
                     ? "All Payments selected."
                     : $"Payments selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
@@ -143,27 +149,27 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :152 && Paymentservice.cs");
                 throw;
             }
         }
 
-        public IQueryable<PaymentResponse> GetPaymentsByPatientId(int patientId)
+        public async Task<IQueryable<PaymentResponse>> GetPaymentsByPatientId(int patientId)
         {
             try
             {
                 IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
                         .GetAll(payment => payment.Therapy.PatientId == patientId)
-                        .Include(payment => payment.Therapy) 
+                        .Include(payment => payment.Therapy)
                         .ThenInclude(theraphy => theraphy.Doctor)
                         .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
 
-                _logService.Log($"All payments selected where patientId = {patientId}");
+               await _logService.InfoAsync($"All payments selected where patientId = {patientId}");
                 return payments;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :173 && Paymentservice.cs");
                 throw;
             }
         }
@@ -212,7 +218,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :221 && Paymentservice.cs");
                 throw;
             }
         }

@@ -3,8 +3,8 @@ using Core.Utils.Exceptions;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace API.Controllers
@@ -22,56 +22,61 @@ namespace API.Controllers
 
         [HttpGet("test")]
         public IActionResult Test()
-        {  
-                return Ok(); 
+        {
+            return Ok();
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                return Ok(_unitOfWorkService.PatientService.GetAll().ToList());
+                
+
+                return Ok(await (await _unitOfWorkService.PatientService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpPost("byDateInterval")]
-        public IActionResult GetAllByDateInterval([FromBody]DateIntervalRequest interval )
+        public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
             try
-                {
-                return Ok(_unitOfWorkService.PatientService.GetPatientsByDateInterval(interval).ToList());
+            {
+                 
+
+                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDateInterval(interval)).ToListAsync());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-         
+
 
         [HttpGet("{date:DateTime}")]
-        public IActionResult Get(DateTime date)
+        public async Task<IActionResult> Get(DateTime date)
         {
             try
-            { 
-                return Ok(_unitOfWorkService.PatientService.GetPatientsByDate(date).ToList());
+            {
+              
+                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDate(date)).ToListAsync());
             }
             catch (Exception ex)
-            { 
+            {
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var result = _unitOfWorkService.PatientService.GetById(id);
+                var result = await _unitOfWorkService.PatientService.GetById(id);
                 return Ok(result);
             }
             catch (NotFoundException ex)
@@ -102,7 +107,7 @@ namespace API.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePatient updatePatient)
-            {
+        {
             try
             {
                 var response = await _unitOfWorkService.PatientService.UpdateAsync(id, updatePatient);

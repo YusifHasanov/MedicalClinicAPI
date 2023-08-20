@@ -14,6 +14,7 @@ using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
 using Entities.Entities.Enums;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -29,7 +30,7 @@ namespace Business.Concrete
 {
     public class UserService : BaseService<User, UpdateUser, CreateUser, UserResponse>, IUserService
     {
-        public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
+        public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
         }
 
@@ -47,12 +48,14 @@ namespace Business.Concrete
                 newUser.AccessToken = accessToken;
                 await _unitOfWorkRepository.UserRepository.AddAsync(newUser);
                 await SaveChangesAsync();
-                _logService.Log($"New user added successfully with username= {newUser.UserName}");
+
+                await _logService.InfoAsync($"New user added successfully with username= {newUser.UserName}");
+
                 return newUser;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :58 && UserService.cs");
                 throw;
             }
         }
@@ -63,7 +66,6 @@ namespace Business.Concrete
                 var authUser = _unitOfWorkRepository.UserRepository
                     .GetOne(user => user.UserName.Equals(loginUser.UserName)
                     /*&& user.Role.Equals(loginUser.Role)*/) ?? throw new NotFoundException("User Not Found");
-
                 VerifyPassword(authUser, loginUser.Password);
 
                 var accessToken = GenerateJwtAccessToken(authUser);
@@ -80,7 +82,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :85 && UserService.cs");
                 throw;
             }
         }
@@ -105,7 +107,7 @@ namespace Business.Concrete
             ); ;
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public User GetUserByAccessToken(string accessToken)
+        public async Task<User> GetUserByAccessToken(string accessToken)
         {
             try
             {
@@ -115,7 +117,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :120 && UserService.cs");
                 throw;
             }
         }
@@ -135,7 +137,7 @@ namespace Business.Concrete
         {
             if (!BCrypt.Net.BCrypt.Verify(password, authUser.Password))
             {
-                _logService.Log($"User not found with username = {authUser.UserName} && password = {password}");
+
                 throw new UnauthorizedException("Username or password is wrong");
             }
         }
@@ -146,44 +148,45 @@ namespace Business.Concrete
                 var exist = IsExist(id);
                 _unitOfWorkRepository.UserRepository.Delete(id);
                 await SaveChangesAsync();
-                _logService.Log($"User Deleted With id {id}");
+                await _logService.InfoAsync($"User Deleted With id {id}");
                 return exist;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :120 && UserService.cs");
                 throw;
             }
         }
-        public override IQueryable<UserResponse> GetAll()
+        public override async Task<IQueryable<UserResponse>> GetAll()
         {
             try
             {
                 var result = _unitOfWorkRepository.UserRepository.GetAll()
                     .ProjectTo<UserResponse>(_mapper.ConfigurationProvider);
-                _logService.Log($"All Users Selected");
+                await _logService.InfoAsync($"All Users Selected");
 
                 return result;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :172 && UserService.cs");
                 throw;
             }
         }
 
-        public override UserResponse GetById(int id)
+        public override async Task<UserResponse> GetById(int id)
         {
             try
             {
-                _logService.Log($"Select User byId = {id}");
+
                 var user = IsExist(id);
+                await _logService.InfoAsync($"Select User byId = {id}");
                 var userResponse = _mapper.Map<UserResponse>(user);
                 return userResponse;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :189 && UserService.cs");
                 throw;
             }
         }
@@ -196,15 +199,8 @@ namespace Business.Concrete
 
         public async override Task SaveChangesAsync()
         {
-            try
-            {
-                await _unitOfWorkRepository.UserRepository.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logService.Log(ex.Message);
-                throw;
-            }
+            await _unitOfWorkRepository.UserRepository.SaveChangesAsync();
+
 
         }
 
@@ -220,12 +216,12 @@ namespace Business.Concrete
                 var user = _mapper.Map(updateUser, authUser);
                 _unitOfWorkRepository.UserRepository.Update(user);
                 await SaveChangesAsync();
-                _logService.Log($"User updated with id = {id}");
+                await _logService.InfoAsync($"User updated with id = {id}");
                 return user;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :224 && UserService.cs");
                 throw;
             }
         }
@@ -253,11 +249,11 @@ namespace Business.Concrete
 
                 string username = jwtToken.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? "";
                 string password = jwtToken.Claims.FirstOrDefault(x => x.Type == "password")?.Value ?? "";
-
+                string role = jwtToken.Claims.FirstOrDefault(x => x.Type == "role")?.Value ?? "";
                 User user = _unitOfWorkRepository.UserRepository
                     .GetOne(user =>
                         user.UserName.Equals(username) &&
-                        user.AccessToken.Equals(token.AccessToken)  );
+                        user.AccessToken.Equals(token.AccessToken));
 
                 ValidateUserAuthorization(user, false);
 
@@ -281,7 +277,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :280 && UserService.cs");
                 throw;
             }
         }

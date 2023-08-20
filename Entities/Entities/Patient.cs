@@ -19,7 +19,7 @@ namespace Entities.Entities
         }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string? Adress { get; set; }
+        public string? Address { get; set; }
         public string Diagnosis { get; set; }
         public string? GeneralStateOfHealth { get; set; }
         public string? DrugAllergy { get; set; }

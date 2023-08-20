@@ -16,7 +16,7 @@ namespace Entities.Dto.Response
         public string Surname { get; set; }
         public string Diagnosis { get; set; }
         public DateTime ArrivalDate { get; set; }
-        public string Adress { get; set; }
+        public string Address { get; set; }
         public string GeneralStateOfHealth { get; set; }
         public string DrugAllergy { get; set; }
         public string ReactionToAnesthesia { get; set; }

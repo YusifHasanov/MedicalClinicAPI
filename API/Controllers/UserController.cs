@@ -5,6 +5,7 @@ using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace API.Controllers
@@ -21,11 +22,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var response =   _unitOfWorkService.UserService.GetAll().ToList();
+                var response = await (await _unitOfWorkService.UserService.GetAll()).ToListAsync();
                 return StatusCode((int)HttpStatusCode.OK, response);
             }
             catch (Exception ex)

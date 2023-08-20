@@ -28,7 +28,7 @@ namespace Business.Services
             CreateMap<UpdatePatient, Patient>();
             CreateMap<Patient, PatientResponse>();
             //.ForMember(p=>p.DoctorName,opt=>opt.MapFrom(src=>src.Do)
-             
+
 
             CreateMap<CreateUser, User>();
             CreateMap<UpdateUser, User>();
@@ -38,7 +38,9 @@ namespace Business.Services
             CreateMap<UpdatePayment, Payment>();
             CreateMap<Payment, PaymentResponse>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Therapy.Patient.Name))
-                .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Therapy.Patient.Surname));
+                .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Therapy.Patient.Surname))
+                .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Therapy.Doctor.Name))
+                .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Therapy.Doctor.Surname));
 
 
 
@@ -56,8 +58,8 @@ namespace Business.Services
                 .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.Name))
                 .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Doctor.Surname))
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments));
-               
-                
+
+
 
         }
     }

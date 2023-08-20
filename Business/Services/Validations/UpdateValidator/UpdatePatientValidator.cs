@@ -15,7 +15,7 @@ namespace Business.Services.Validations.UpdateValidator
             RuleFor(p => p.Id).NotNull().NotEmpty().WithMessage("Xəstə Id boş ola bilməz");
             RuleFor(p => p.Name).MaximumLength(55).NotNull().NotEmpty().WithMessage("Ad bos ola bilməz");
             RuleFor(p => p.Surname).MaximumLength(55).NotNull().NotEmpty().WithMessage("Soyad bos ola bilməz");
-            RuleFor(p => p.Adress).MaximumLength(1000);
+            RuleFor(p => p.Address).MaximumLength(1000);
             RuleFor(p => p.Diagnosis).MaximumLength(1000);
 
             RuleFor(p => p.GeneralStateOfHealth).MaximumLength(500);

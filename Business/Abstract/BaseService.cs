@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Entities.Dto;
 using Core.Utils.Constants;
 using Core.Entities;
- 
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Abstract
 {
@@ -23,20 +23,21 @@ namespace Business.Abstract
         protected readonly IMapper _mapper;
         protected readonly ILogService _logService;
         protected readonly Globals _globals;
+        protected readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public BaseService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals)
+        public BaseService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWorkRepository = unitOfWorkRepository;
             _mapper = mapper;
             _logService = logService;
             _globals = globals;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public abstract Task<T> AddAsync(C entity);
         public abstract Task<T> DeleteAsync(int id);
-        public abstract IQueryable<R> GetAll();
-        public abstract R GetById(int id);
+        public abstract Task<IQueryable<R>> GetAll();
+        public abstract Task<R> GetById(int id);
         public abstract T IsExist(int id);
         public abstract Task SaveChangesAsync();
         public abstract Task<T> UpdateAsync(int id, U entity);

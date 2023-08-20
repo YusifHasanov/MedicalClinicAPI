@@ -12,8 +12,8 @@ namespace Business.Abstract
         where R : BaseDto, new()
 
     { 
-        public IQueryable<R> GetAll(); 
-        public R GetById(int id); 
+        public Task<IQueryable<R>> GetAll(); 
+        public Task<R> GetById(int id); 
         public Task<T> DeleteAsync(int id);
         public T IsExist(int id);
         public Task SaveChangesAsync();

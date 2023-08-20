@@ -3,6 +3,7 @@ using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -16,13 +17,14 @@ namespace API.Controllers
         {
             _unitOfWorkService = unitOfWorkService;
         }
+
         [HttpGet]
-        public IActionResult GetAllTherapies()
+        public async Task<IActionResult> GetAllTherapies()
         {
             try
             {
-                var response = _unitOfWorkService.TherapyService.GetAll().ToList();
-                return Ok(response);
+              
+                return Ok(await( await _unitOfWorkService.TherapyService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -46,11 +48,11 @@ namespace API.Controllers
         }
 
         [HttpPost("byDateInterval")]
-        public IActionResult GetAllByDateInterval([FromBody] DateIntervalRequest interval)
+        public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
             try
             {
-                return Ok(_unitOfWorkService.TherapyService.GetTherapiesByDateInterval(interval).ToList());
+                return Ok(await (await _unitOfWorkService.TherapyService.GetTherapiesByDateInterval(interval)).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -59,11 +61,26 @@ namespace API.Controllers
         }
 
         [HttpGet("byPatientId/{patientId}")]
-        public IActionResult GetAllByPatientId(int patientId)
+        public async Task<IActionResult> GetAllByPatientId(int patientId)
         {
             try
             {
-                return Ok(_unitOfWorkService.TherapyService.GetTherapiesByPatientId(patientId).ToList());
+                return Ok(await (await _unitOfWorkService.TherapyService.GetTherapiesByPatientId(patientId)).ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteTherapy(int id)
+        {
+            try
+            {
+               var response =  await _unitOfWorkService.TherapyService.DeleteAsync(id);
+                return Ok(response);
             }
             catch (Exception ex)
             {

@@ -8,6 +8,7 @@ using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Business.Concrete
 {
     public class TherapyService : BaseService<Therapy, UpdateTeraphy, CreateTherapy, TherapyResponse>, ITherapyService
     {
-        public TherapyService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
+        public TherapyService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
         }
 
@@ -27,13 +28,13 @@ namespace Business.Concrete
             try
             {
                 Therapy theraphy = _mapper.Map<Therapy>(entity);
-               await _unitOfWorkRepository.TherapyRepository.AddAsync(theraphy);
-                await  SaveChangesAsync();
+                await _unitOfWorkRepository.TherapyRepository.AddAsync(theraphy);
+                await SaveChangesAsync();
                 return theraphy;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :37 && DoctorService.cs");
                 throw;
             }
         }
@@ -46,86 +47,94 @@ namespace Business.Concrete
                 var exist = IsExist(id);
                 _unitOfWorkRepository.TherapyRepository.Delete(id);
                 await SaveChangesAsync();
-                _logService.Log($"Patient Deleted With id {id}");
+                await _logService.InfoAsync($"Patient Deleted With id {id}");
                 return exist;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :55 && DoctorService.cs");
                 throw;
             }
         }
 
-        public override IQueryable<TherapyResponse> GetAll()
+        public async override Task<IQueryable<TherapyResponse>> GetAll()
         {
             try
             {
                 var all = _unitOfWorkRepository.TherapyRepository.GetAll();
                 var response = _mapper.ProjectTo<TherapyResponse>(all);
+
+                await _logService.InfoAsync("Select All Therapies");
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :72 && TherapyService.cs");
                 throw;
             }
         }
 
-        public override TherapyResponse GetById(int id)
+        public async override Task<TherapyResponse> GetById(int id)
         {
             try
             {
                 var therapy = IsExist(id);
                 var response = _mapper.Map<TherapyResponse>(therapy);
+
+                await _logService.InfoAsync($"Select Therapy byId = {id}");
+
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :87 && TherapyService.cs");
                 throw;
             }
         }
 
-        public IQueryable<TherapyResponse> GetTherapiesByDateInterval(DateIntervalRequest interval)
+        public async Task<IQueryable<TherapyResponse>> GetTherapiesByDateInterval(DateIntervalRequest interval)
         {
             try
             {
                 var all = _unitOfWorkRepository.TherapyRepository.GetAll();
                 var response = _mapper.ProjectTo<TherapyResponse>(all);
+
+               await _logService.InfoAsync($"Select Therapies by Date Interval {interval.FromDate} - {interval.ToDate}");
+
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :108 && TherapyService.cs");
                 throw;
             }
         }
 
-        public IQueryable<TherapyResponse> GetTherapiesByPatientId(int patientId)
+        public async Task<IQueryable<TherapyResponse>> GetTherapiesByPatientId(int patientId)
         {
             try
             {
                 var therapies = _unitOfWorkRepository.TherapyRepository
                     .GetAll(therapy => therapy.PatientId == patientId);
                 var response = _mapper.ProjectTo<TherapyResponse>(therapies);
-                _logService.Log($"Get Therapies By Patient Id {patientId}");
+               await _logService.InfoAsync($"Get Therapies By Patient Id {patientId}");
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :125 && TherapyService.cs");
                 throw;
             }
         }
 
         public override Therapy IsExist(int id)
         {
-           return _unitOfWorkRepository.TherapyRepository.GetById(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
+            return _unitOfWorkRepository.TherapyRepository.GetById(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
         }
 
         public async override Task SaveChangesAsync()
         {
-           await  _unitOfWorkRepository.TherapyRepository.SaveChangesAsync();
+            await _unitOfWorkRepository.TherapyRepository.SaveChangesAsync();
         }
 
         public async override Task<Therapy> UpdateAsync(int id, UpdateTeraphy entity)
@@ -136,12 +145,15 @@ namespace Business.Concrete
                 entity.Id = id;
                 var therapy = _mapper.Map(entity, exist);
                 _unitOfWorkRepository.TherapyRepository.Update(therapy);
-               await SaveChangesAsync();
+
+                await _logService.InfoAsync($"Therapy Updated with id {id}");
+
+                await SaveChangesAsync();
                 return therapy;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                await _logService.ErrorAsync(ex, "Line :156 && TherapyService.cs");
                 throw;
             }
         }

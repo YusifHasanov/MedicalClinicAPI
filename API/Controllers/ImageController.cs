@@ -6,6 +6,7 @@ using Entities.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace API.Controllers
@@ -47,11 +48,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllImages()
+        public async Task<IActionResult> GetAllImages()
         { 
             try
             {
-                return Ok(_unitOfWorkService.ImageService.GetAll().ToList());
+                return Ok(await (await _unitOfWorkService.ImageService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -61,11 +62,11 @@ namespace API.Controllers
 
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var result = _unitOfWorkService.ImageService.GetById(id);
+                var result = await _unitOfWorkService.ImageService.GetById(id);
                 return Ok(result);
             }
             catch (NotFoundException ex)

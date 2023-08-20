@@ -10,7 +10,7 @@ namespace Business.Abstract
 {
     public interface IPaymentService : IService<Payment, UpdatePayment, CreatePayment, PaymentResponse>
     {
-        public IQueryable<PaymentResponse> GetPaymentsByPatientId(int patientId);
-        public IQueryable<PaymentResponse> GetPaymentsByDateInterval(DateIntervalRequest interval);
+        public Task<IQueryable<PaymentResponse>> GetPaymentsByPatientId(int patientId);
+        public Task<IQueryable<PaymentResponse>> GetPaymentsByDateInterval(DateIntervalRequest interval);
     }
 }

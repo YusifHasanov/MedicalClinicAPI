@@ -8,6 +8,7 @@ using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Business.Concrete
 {
     public class DoctorService : BaseService<Doctor, UpdateDoctor, CreateDoctor, DoctorResponse>, IDoctorService
     {
-        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals) : base(unitOfWorkRepository, mapper, logService, globals)
+        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
         }
 
@@ -38,14 +39,14 @@ namespace Business.Concrete
                 await _unitOfWorkRepository.DoctorRepository.AddAsync(newDoctor);
                 await SaveChangesAsync();
 
-                _logService.Log($"Doctor succesfully added with name = {newDoctor.Name} and username = {newDoctor.Surname}");
+                await _logService.InfoAsync($"Doctor succesfully added with name = {newDoctor.Name} and username = {newDoctor.Surname}");
 
                 return newDoctor;
 
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :49 && DoctorService.cs");
                 throw;
             }
         }
@@ -57,46 +58,48 @@ namespace Business.Concrete
                 var exist = IsExist(id);
                 _unitOfWorkRepository.DoctorRepository.Delete(id);
                 await SaveChangesAsync();
-                _logService.Log($"Doctor Deleted With id {id}");
+                await _logService.InfoAsync($"Doctor Deleted With id {id}");
                 return exist;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :66 && DoctorService.cs");
                 throw;
             }
         }
 
-        public override IQueryable<DoctorResponse> GetAll()
+        public async override Task<IQueryable<DoctorResponse>> GetAll()
         {
             try
             {
-                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll() 
+                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll()
                     .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
 
-                _logService.Log($"All Dcotors Selected");
+               await _logService.InfoAsync($"All Dcotors Selected");
                 return allDoctors;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                await _logService.ErrorAsync(ex, "Line :83 && DoctorService.cs");
                 throw;
             }
         }
 
-        public override DoctorResponse GetById(int id)
+        public override async Task<DoctorResponse> GetById(int id)
         {
             try
             {
                 _ = IsExist(id);
-                var result= _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
+                var result = _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
                 var response = _mapper.Map<DoctorResponse>(result);
-                _logService.Log($"Select Dcotor byId = {id}");
+
+                await _logService.InfoAsync($"Select Dcotor byId = {id}");
+
                 return response;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :100 && DoctorService.cs");
                 throw;
             }
         }
@@ -109,15 +112,9 @@ namespace Business.Concrete
 
         public override async Task SaveChangesAsync()
         {
-            try
-            {
+             
                 await _unitOfWorkRepository.DoctorRepository.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logService.Log(ex.Message);
-                throw;
-            }
+           
         }
 
         public async override Task<Doctor> UpdateAsync(int id, UpdateDoctor entity)
@@ -133,13 +130,13 @@ namespace Business.Concrete
 
                 await SaveChangesAsync();
 
-                _logService.Log($"Dcotor updated with id = {id}");
+                await _logService.InfoAsync($"Dcotor updated with id = {id}");
 
                 return doctor;
             }
             catch (Exception ex)
             {
-                _logService.Log(ex.Message);
+                await _logService.ErrorAsync(ex, "Line :145 && DoctorService.cs");
                 throw;
             }
         }

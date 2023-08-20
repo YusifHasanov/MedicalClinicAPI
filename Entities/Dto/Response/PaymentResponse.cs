@@ -12,13 +12,14 @@ namespace Entities.Dto.Response
     {
         public int Id { get; set; }
         public decimal PaymentAmount { get; set; }
+        public DateTime PaymentDate { get; set; }
         public int TherapyId { get; set; }
         public string PatientName { get; set; }
         public string PatientSurname { get; set; }
         public string PatientId { get; set; }
         public string DoctorName { get; set; }
         public string DoctorSurname { get; set; }
-        public DateTime PaymentDate { get; set; }
+     
         //public Patient Patient { get; set; }
     }
 }
