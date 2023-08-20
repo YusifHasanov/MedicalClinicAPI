@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class TherapyService : BaseService<Therapy, UpdateTeraphy, CreateTherapy, TherapyResponse>, ITherapyService
+    public class TherapyService : BaseService<Therapy, UpdateTherapy, CreateTherapy, TherapyResponse>, ITherapyService
     {
         public TherapyService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
         {
@@ -137,7 +137,7 @@ namespace Business.Concrete
             await _unitOfWorkRepository.TherapyRepository.SaveChangesAsync();
         }
 
-        public async override Task<Therapy> UpdateAsync(int id, UpdateTeraphy entity)
+        public async override Task<Therapy> UpdateAsync(int id, UpdateTherapy entity)
         {
             try
             {

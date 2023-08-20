@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface ITherapyService:IService<Therapy,UpdateTeraphy, CreateTherapy, TherapyResponse>
+    public interface ITherapyService:IService<Therapy,UpdateTherapy, CreateTherapy, TherapyResponse>
     {
         public Task<IQueryable<TherapyResponse>> GetTherapiesByDateInterval(DateIntervalRequest interval);
         public Task<IQueryable<TherapyResponse>> GetTherapiesByPatientId(int patientId);

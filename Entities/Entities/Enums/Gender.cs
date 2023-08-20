@@ -10,6 +10,5 @@ namespace Entities.Entities.Enums
     {
         Male,
         Female,
-
     }
 }

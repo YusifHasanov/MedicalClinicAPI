@@ -110,7 +110,7 @@ namespace Core.Utils
                           .AllowAnyMethod();
                 });
             });
-            builder.Services.AddHostedService<MonthlyTruncateLogTable>();
+            builder.Services.AddHostedService<WeeklyTruncateLogsTable>();
         }
 
     }

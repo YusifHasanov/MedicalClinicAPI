@@ -51,7 +51,7 @@ namespace Business.Services
 
 
             CreateMap<CreateTherapy, Therapy>();
-            //CreateMap<UpdateTherapy, Therapy>();
+            CreateMap<UpdateTherapy, Therapy>();
             CreateMap<Therapy, TherapyResponse>()
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
                 .ForMember(dest => dest.PatientSurname, opt => opt.MapFrom(src => src.Patient.Surname))

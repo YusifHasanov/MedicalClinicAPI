@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Business.Services.Validations.UpdateValidator
 {
-    public class UpdateTeraphyValidator:AbstractValidator<UpdateTeraphy>
+    public class UpdateTeraphyValidator:AbstractValidator<UpdateTherapy>
     {
         public UpdateTeraphyValidator()
         {

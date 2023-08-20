@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
+using Entities.Dto.Request.Update;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,27 +24,27 @@ namespace API.Controllers
         {
             try
             {
-              
-                return Ok(await( await _unitOfWorkService.TherapyService.GetAll()).ToListAsync());
+
+                return Ok(await (await _unitOfWorkService.TherapyService.GetAll()).ToListAsync());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }   
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddTherapyAsync(CreateTherapy createTherapy)
         {
             try
             {
-                var response  = await _unitOfWorkService.TherapyService.AddAsync(createTherapy);
+                var response = await _unitOfWorkService.TherapyService.AddAsync(createTherapy);
                 return Ok(response);
             }
             catch (Exception ex)
             {
 
-                return  BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -79,7 +80,22 @@ namespace API.Controllers
         {
             try
             {
-               var response =  await _unitOfWorkService.TherapyService.DeleteAsync(id);
+                var response = await _unitOfWorkService.TherapyService.DeleteAsync(id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateTherapy( int id, [FromBody] UpdateTherapy updateTeraphy)
+        {
+            try
+            {
+                var response = await _unitOfWorkService.TherapyService.UpdateAsync(id, updateTeraphy);
                 return Ok(response);
             }
             catch (Exception ex)

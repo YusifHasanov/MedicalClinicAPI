@@ -18,49 +18,49 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Business.Services.BackgroundServices
 {
-    public class MonthlyTruncateLogTable : BackgroundService
+    public class WeeklyTruncateLogsTable : BackgroundService
     {
-       
+
         private Timer? _timer = null;
         public IConfiguration Configuration { get; }
-        public MonthlyTruncateLogTable(IConfiguration configuration)
+        public WeeklyTruncateLogsTable(IConfiguration configuration)
         {
             Configuration = configuration;
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromDays(7));
+            _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero, TimeSpan.FromDays(7));
 
             return Task.CompletedTask;
         }
 
-        private void DoWork(object? state)
+        private async void DoWorkAsync(object? state)
         {
-   
+
 
             try
             {
-
                 string connectionString = Configuration["ConnectionStrings:MSSQL"] ?? "";
 
                 using SqlConnection connection = new SqlConnection(connectionString);
-                connection.Open(); 
-                
+                await connection.OpenAsync();
+
                 using SqlCommand command = new SqlCommand("TRUNCATE TABLE Logs", connection);
-                command.ExecuteNonQuery();
-                connection.Close();
+                await command.ExecuteNonQueryAsync();
+                await connection.CloseAsync();
+
             }
-            catch 
-            { 
+            catch
+            {
             }
 
             try
             {
                 using StreamWriter writer = File.AppendText("log.txt");
-                writer.WriteLine($"{DateTime.Now}: dsadasdasdasd");
+                await writer.WriteLineAsync($"{DateTime.Now}: dsadasdasdasd");
             }
-            catch 
-            { 
+            catch
+            {
             }
         }
 
