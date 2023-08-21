@@ -13,8 +13,8 @@ namespace Core.DataAccess
     {
         public IQueryable<T> GetAll(Expression<Func<T, bool>> filter, bool track = false);
         public IQueryable<T> GetAll(bool track = false);
-        public T GetOne(Expression<Func<T, bool>> filter);
-        public T GetById(int id);
+        public Task<T> GetOneAsync(Expression<Func<T, bool>> filter);
+        public Task<T> GetByIdAsync(int id);
         public void Update(T entity);
 
         public void Delete(int id);

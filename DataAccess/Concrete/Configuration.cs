@@ -108,8 +108,9 @@ namespace DataAccess.Concrete
                 .Property(p => p.PaymentAmount)
                 .HasAnnotation("MinValue", 0)
                 .HasColumnType("decimal(18, 2)");
+
             //modelBuilder.Entity<Payment>()
-            //    .Ignore(payment => payment.Patient);
+            //    .Ignore(payment => payment.Therapy);
             #endregion 
 
             #region User

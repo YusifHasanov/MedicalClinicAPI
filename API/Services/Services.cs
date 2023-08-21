@@ -52,9 +52,8 @@ namespace Core.Utils
             builder.Services.AddSingleton<Globals, Globals>();
             builder.Services.AddSingleton<IValidator<CreatePatient>, CreatePatientValidator>();
             builder.Services.AddAutoMapper(typeof(ModelMapper));
-            builder.Services.AddScoped<ILogService, LogService>();
 
- 
+            builder.Services.AddScoped<ILogService, LogService>();
 
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();
             builder.Services.AddScoped<IPatientService, PatientService>();

@@ -38,7 +38,7 @@ namespace Business.Abstract
         public abstract Task<T> DeleteAsync(int id);
         public abstract Task<IQueryable<R>> GetAll();
         public abstract Task<R> GetById(int id);
-        public abstract T IsExist(int id);
+        public abstract Task<T> IsExistAsync(int id);
         public abstract Task SaveChangesAsync();
         public abstract Task<T> UpdateAsync(int id, U entity);
     }

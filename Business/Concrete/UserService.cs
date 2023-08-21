@@ -39,7 +39,7 @@ namespace Business.Concrete
             try
             {
                 var newUser = _mapper.Map<User>(entity);
-                var existUser = _unitOfWorkRepository.UserRepository.GetOne(user => user.UserName.Equals(newUser.UserName));
+                var existUser = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.UserName.Equals(newUser.UserName));
                 if (existUser != null)
                     throw new Exception($"User Is Exist with Username {newUser.UserName}");
 
@@ -63,8 +63,8 @@ namespace Business.Concrete
         {
             try
             {
-                var authUser = _unitOfWorkRepository.UserRepository
-                    .GetOne(user => user.UserName.Equals(loginUser.UserName)
+                var authUser = await _unitOfWorkRepository.UserRepository
+                    .GetOneAsync(user => user.UserName.Equals(loginUser.UserName)
                     /*&& user.Role.Equals(loginUser.Role)*/) ?? throw new NotFoundException("User Not Found");
                 VerifyPassword(authUser, loginUser.Password);
 
@@ -111,7 +111,7 @@ namespace Business.Concrete
         {
             try
             {
-                var user = _unitOfWorkRepository.UserRepository.GetOne(user => user.AccessToken.Equals(accessToken));
+                var user = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.AccessToken.Equals(accessToken));
 
                 return user;
             }
@@ -145,7 +145,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 _unitOfWorkRepository.UserRepository.Delete(id);
                 await SaveChangesAsync();
                 await _logService.InfoAsync($"User Deleted With id {id}");
@@ -179,7 +179,7 @@ namespace Business.Concrete
             try
             {
 
-                var user = IsExist(id);
+                var user =await IsExistAsync(id);
                 await _logService.InfoAsync($"Select User byId = {id}");
                 var userResponse = _mapper.Map<UserResponse>(user);
                 return userResponse;
@@ -191,9 +191,9 @@ namespace Business.Concrete
             }
         }
 
-        public override User IsExist(int id)
+        public override async Task<User> IsExistAsync(int id)
         {
-            var user = _unitOfWorkRepository.UserRepository.GetById(id);
+            var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(id);
             return user ?? throw new NotFoundException($"User not found with id = {id}");
         }
 
@@ -208,7 +208,7 @@ namespace Business.Concrete
         {
             try
             {
-                var authUser = _unitOfWorkRepository.UserRepository.GetOne(user => user.UserName.Equals(updateUser.UserName) && user.Role.Equals(updateUser.Role));
+                var authUser = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.UserName.Equals(updateUser.UserName) && user.Role.Equals(updateUser.Role));
 
                 ValidateUserAuthorization(authUser);
                 VerifyPassword(authUser, updateUser.Password);
@@ -250,8 +250,8 @@ namespace Business.Concrete
                 string username = jwtToken.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? "";
                 string password = jwtToken.Claims.FirstOrDefault(x => x.Type == "password")?.Value ?? "";
                 string role = jwtToken.Claims.FirstOrDefault(x => x.Type == "role")?.Value ?? "";
-                User user = _unitOfWorkRepository.UserRepository
-                    .GetOne(user =>
+                User user = await _unitOfWorkRepository.UserRepository
+                    .GetOneAsync(user =>
                         user.UserName.Equals(username) &&
                         user.AccessToken.Equals(token.AccessToken));
 

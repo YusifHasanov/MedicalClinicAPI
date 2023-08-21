@@ -44,7 +44,7 @@ namespace Business.Concrete
 
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 _unitOfWorkRepository.TherapyRepository.Delete(id);
                 await SaveChangesAsync();
                 await _logService.InfoAsync($"Patient Deleted With id {id}");
@@ -78,7 +78,7 @@ namespace Business.Concrete
         {
             try
             {
-                var therapy = IsExist(id);
+                var therapy = await IsExistAsync(id);
                 var response = _mapper.Map<TherapyResponse>(therapy);
 
                 await _logService.InfoAsync($"Select Therapy byId = {id}");
@@ -127,9 +127,9 @@ namespace Business.Concrete
             }
         }
 
-        public override Therapy IsExist(int id)
+        public async override Task<Therapy> IsExistAsync(int id)
         {
-            return _unitOfWorkRepository.TherapyRepository.GetById(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
+            return await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
         }
 
         public async override Task SaveChangesAsync()
@@ -141,7 +141,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 entity.Id = id;
                 var therapy = _mapper.Map(entity, exist);
                 _unitOfWorkRepository.TherapyRepository.Update(therapy);

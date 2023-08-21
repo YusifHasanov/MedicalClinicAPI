@@ -37,7 +37,6 @@ namespace Business.Services.BackgroundServices
         private async void DoWorkAsync(object? state)
         {
 
-
             try
             {
                 string connectionString = Configuration["ConnectionStrings:MSSQL"] ?? "";

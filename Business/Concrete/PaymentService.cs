@@ -33,7 +33,7 @@ namespace Business.Concrete
         {
             try
             {
-                Therapy therapy = _unitOfWorkRepository.TherapyRepository.GetById(entity.TherapyId)
+                Therapy therapy =await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(entity.TherapyId)
                     ?? throw new NotFoundException($"Theraphy don't exist with Id = {entity.TherapyId}");
 
                 List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
@@ -64,7 +64,7 @@ namespace Business.Concrete
         {
             try
             {
-                var dbPayment = IsExist(id);
+                var dbPayment =await IsExistAsync(id);
                 _unitOfWorkRepository.PaymentRepository.Delete(id);
                 await SaveChangesAsync();
                await _logService.InfoAsync($"Paymnet Deleted With id {id}");
@@ -102,7 +102,7 @@ namespace Business.Concrete
             try
             {
               
-                IsExist(id);
+               _ = await IsExistAsync(id);
                 await _logService.InfoAsync($"Select Payment byId = {id}");
                 var payment = _unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
                 var paymentResponse = _mapper.Map<PaymentResponse>(payment);
@@ -174,9 +174,9 @@ namespace Business.Concrete
             }
         }
 
-        public override Payment IsExist(int id)
+        public override async Task<Payment> IsExistAsync(int id)
         {
-            var payment = _unitOfWorkRepository.PaymentRepository.GetById(id);
+            var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
             return payment ?? throw new NotFoundException($"Payment not found with id = {id}");
         }
 
@@ -190,8 +190,8 @@ namespace Business.Concrete
             //logic deyismelidi
             try
             {
-                Payment dbPayment = IsExist(id);
-                Therapy therapy = _unitOfWorkRepository.TherapyRepository.GetOne(therapy => therapy.Id == entity.TherapyId)
+                Payment dbPayment = await IsExistAsync(id);
+                Therapy therapy =await _unitOfWorkRepository.TherapyRepository.GetOneAsync(therapy => therapy.Id == entity.TherapyId)
                      ?? throw new Exception($"Therapy don't exist with Id = {entity.TherapyId}");
 
                 List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository

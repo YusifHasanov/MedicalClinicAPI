@@ -44,7 +44,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 _unitOfWorkRepository.ImageRepository.Delete(id);
                 await SaveChangesAsync();
              await   _logService.InfoAsync($"Image Deleted With id {id}");
@@ -79,9 +79,9 @@ namespace Business.Concrete
         {
             try
             {
-                _logService.InfoAsync($"Select Image byId = {id}");
-                _= IsExist(id);
-                var image = _unitOfWorkRepository.ImageRepository.GetById(id);
+               await _logService.InfoAsync($"Select Image byId = {id}");
+                _= await IsExistAsync(id);
+                var image = _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
                 var response  = _mapper.Map<ImageResponse>(image);
                 return response;
             }
@@ -92,9 +92,9 @@ namespace Business.Concrete
             }
         }
 
-        public override Image IsExist(int id)
+        public override async Task<Image> IsExistAsync(int id)
         {
-            var image = _unitOfWorkRepository.ImageRepository.GetById(id);
+            var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
             return image ?? throw new NotFoundException($"Image not found with id = {id}");
         }
 
@@ -109,7 +109,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 entity.Id = id;
                 var image = _mapper.Map(entity, exist);
                 _unitOfWorkRepository.ImageRepository.Update(image);

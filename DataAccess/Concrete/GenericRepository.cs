@@ -41,14 +41,14 @@ namespace  DataAccess.Concrete
         {
             return track ? Table : Table.AsNoTracking();
         }
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return Table.Find(id);
+            return await Table.FindAsync(id);
         }
 
-        public T GetOne(Expression<Func<T, bool>> filter)
+        public async Task<T> GetOneAsync(Expression<Func<T, bool>> filter)
         {
-            return Table.FirstOrDefault(filter);
+            return await Table.FirstOrDefaultAsync(filter);
         }
 
 

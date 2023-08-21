@@ -81,7 +81,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
 
                 _unitOfWorkRepository.PatientRepository.Delete(id);
                 await SaveChangesAsync();
@@ -119,7 +119,7 @@ namespace Business.Concrete
         {
             try
             {
-                _ = IsExist(id);
+                _ =await   IsExistAsync(id);
 
                 await _logService.InfoAsync($"Select Patient byId = {id}");
 
@@ -186,9 +186,9 @@ namespace Business.Concrete
             }
         }
 
-        public override Patient IsExist(int id)
+        public async override Task<Patient> IsExistAsync(int id)
         {
-            var patient = _unitOfWorkRepository.PatientRepository.GetById(id);
+            var patient =  await _unitOfWorkRepository.PatientRepository.GetByIdAsync(id);
             return patient ?? throw new NotFoundException($"Patient not found with id = {id}");
         }
 
@@ -203,7 +203,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist = await IsExistAsync(id);
                 entity.Id = id;
 
                 var patient = _mapper.Map(entity, exist);

@@ -28,8 +28,8 @@ namespace Business.Concrete
         {
             try
             {
-                var dbDoctor = _unitOfWorkRepository.DoctorRepository
-                    .GetOne(doctor => doctor.Name.Equals(entity.Name) && doctor.Surname.Equals(entity.Surname));
+                var dbDoctor =  await _unitOfWorkRepository.DoctorRepository
+                    .GetOneAsync(doctor => doctor.Name.Equals(entity.Name) && doctor.Surname.Equals(entity.Surname));
 
                 if (dbDoctor != null)
                     throw new Exception($"Doctor is exist with name= {entity.Name} and surname = {entity.Surname}");
@@ -55,7 +55,7 @@ namespace Business.Concrete
         {
             try
             {
-                var exist = IsExist(id);
+                var exist =  await IsExistAsync(id);
                 _unitOfWorkRepository.DoctorRepository.Delete(id);
                 await SaveChangesAsync();
                 await _logService.InfoAsync($"Doctor Deleted With id {id}");
@@ -89,7 +89,7 @@ namespace Business.Concrete
         {
             try
             {
-                _ = IsExist(id);
+                _ =await IsExistAsync(id);
                 var result = _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
                 var response = _mapper.Map<DoctorResponse>(result);
 
@@ -104,9 +104,9 @@ namespace Business.Concrete
             }
         }
 
-        public override Doctor IsExist(int id)
+        public override async Task<Doctor> IsExistAsync(int id)
         {
-            var doctor = _unitOfWorkRepository.DoctorRepository.GetById(id);
+            var doctor = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id);
             return doctor ?? throw new NotFoundException($"Doctor not found with id = {id}");
         }
 
@@ -121,7 +121,7 @@ namespace Business.Concrete
         {
             try
             {
-                var existDcotor = IsExist(id);
+                var existDcotor = await IsExistAsync(id);
                 entity.Id = id;
 
                 var doctor = _mapper.Map(entity, existDcotor);

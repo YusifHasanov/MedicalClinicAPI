@@ -15,7 +15,7 @@ namespace Business.Abstract
         public Task<IQueryable<R>> GetAll(); 
         public Task<R> GetById(int id); 
         public Task<T> DeleteAsync(int id);
-        public T IsExist(int id);
+        public Task<T> IsExistAsync(int id);
         public Task SaveChangesAsync();
         public Task<T> UpdateAsync(int id, U entity);
         public Task<T> AddAsync(C entity);

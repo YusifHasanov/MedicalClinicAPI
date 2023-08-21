@@ -13,6 +13,8 @@ namespace Entities.Entities
         public decimal PaymentAmount { get; set; } 
         public DateTime PaymentDate { get; set; }
         public int TherapyId { get; set; }
+
+        [JsonIgnore]
         public Therapy Therapy { get; set; }
     }
 }
