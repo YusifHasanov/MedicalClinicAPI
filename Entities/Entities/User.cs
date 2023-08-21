@@ -10,6 +10,10 @@ namespace Entities.Entities
 {
     public class User:BaseEntity
     {
+        public User()
+        {
+              Notifications = new HashSet<Notification>();
+        }
         public string UserName { get; set; }
 
         public string Password { get; set; }
@@ -17,5 +21,9 @@ namespace Entities.Entities
         public string AccessToken { get; set; }
 
         public Role Role { get; set; }  
+
+        public int? NotificationId { get; set; }
+
+        public ICollection<Notification> Notifications { get; set; }
     }
 }

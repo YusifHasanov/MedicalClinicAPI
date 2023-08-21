@@ -16,7 +16,6 @@ namespace Core.DataAccess
         public Task<T> GetOneAsync(Expression<Func<T, bool>> filter);
         public Task<T> GetByIdAsync(int id);
         public void Update(T entity);
-
         public void Delete(int id);
         public void Delete(T entity);
         public Task AddAsync(T entity);

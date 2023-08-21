@@ -50,12 +50,12 @@ namespace Business.Concrete
                 await _unitOfWorkRepository.PaymentRepository.AddAsync(newPayment);
                 await SaveChangesAsync();
 
-                await _logService.InfoAsync($"Add new payment ");
+                await _logService.InfoAsync($"Add new payment AddAsync");
                 return new();
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :58 && Paymentservice.cs");
+                await _logService.ErrorAsync(ex, "Paymentservice.cs");
                 throw;
             }
         }
@@ -72,7 +72,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :75 && Paymentservice.cs");
+                await _logService.ErrorAsync(ex, "Paymentservice.cs DeleteAsync");
                 throw;
             }
         }
@@ -104,13 +104,13 @@ namespace Business.Concrete
               
                _ = await IsExistAsync(id);
                 await _logService.InfoAsync($"Select Payment byId = {id}");
-                var payment = _unitOfWorkRepository.PaymentRepository.GetPaymnetWithPatientAndDoctor(id);
+                var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
                 var paymentResponse = _mapper.Map<PaymentResponse>(payment);
                 return paymentResponse;
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :113 && Paymentservice.cs");
+                await _logService.ErrorAsync(ex, "Paymentservice.cs GetById");
                 throw;
             }
         }
@@ -149,7 +149,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :152 && Paymentservice.cs");
+                await _logService.ErrorAsync(ex, "Paymentservice.cs GetPaymentsByDateInterval");
                 throw;
             }
         }
@@ -218,7 +218,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :221 && Paymentservice.cs");
+                await _logService.ErrorAsync(ex, "Paymentservice.cs UpdateAsync");
                 throw;
             }
         }

@@ -46,7 +46,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :49 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs AddAsync");
                 throw;
             }
         }
@@ -63,7 +63,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :66 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs DeleteAsync");
                 throw;
             }
         }
@@ -80,7 +80,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :83 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs GetAll");
                 throw;
             }
         }
@@ -90,7 +90,7 @@ namespace Business.Concrete
             try
             {
                 _ =await IsExistAsync(id);
-                var result = _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
+                var result =  _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
                 var response = _mapper.Map<DoctorResponse>(result);
 
                 await _logService.InfoAsync($"Select Dcotor byId = {id}");
@@ -99,7 +99,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :100 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs GetById");
                 throw;
             }
         }
@@ -136,7 +136,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :145 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs UpdateAsync");
                 throw;
             }
         }

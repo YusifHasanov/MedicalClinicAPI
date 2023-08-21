@@ -35,7 +35,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :38 && ImageService.cs");
+                await _logService.ErrorAsync(ex, "ImageService.cs AddAsync");
                 throw;
             }
         }
@@ -52,7 +52,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :55 && ImageService.cs");
+                await _logService.ErrorAsync(ex, "ImageService.cs DeleteAsync");
                 throw;
             }
         }
@@ -70,7 +70,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :73 && ImageService.cs");
+                await _logService.ErrorAsync(ex, "ImageService.cs GetAll");
                 throw;
             }
         }
@@ -81,13 +81,13 @@ namespace Business.Concrete
             {
                await _logService.InfoAsync($"Select Image byId = {id}");
                 _= await IsExistAsync(id);
-                var image = _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
+                var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
                 var response  = _mapper.Map<ImageResponse>(image);
                 return response;
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :90 && ImageService.cs");
+                await _logService.ErrorAsync(ex, "ImageService.cs GetById");
                 throw;
             }
         }
@@ -119,7 +119,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :122 && ImageService.cs");
+                await _logService.ErrorAsync(ex, "ImageService.cs UpdateAsync");
                 throw;
             }
 

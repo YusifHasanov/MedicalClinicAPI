@@ -72,7 +72,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :75 && PatientService.cs");
+                await _logService.ErrorAsync(ex, "PatientService.cs AddAsync");
                 throw;
             }
         }
@@ -92,7 +92,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :95 && PatientService.cs");
+                await _logService.ErrorAsync(ex, "PatientService.cs DeleteAsync");
                 throw;
             }
         }
@@ -130,7 +130,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :133 && PatientService.cs");
+                await _logService.ErrorAsync(ex, "PatientService.cs GetById");
                 throw;
             }
         }
@@ -217,7 +217,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :226 && PatientService.cs");
+                await _logService.ErrorAsync(ex, "PatientService.cs UpdateAsync");
                 throw;
             }
 

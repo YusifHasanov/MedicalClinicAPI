@@ -153,7 +153,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :120 && UserService.cs");
+                await _logService.ErrorAsync(ex, "UserService.cs DeleteAsync");
                 throw;
             }
         }
@@ -186,7 +186,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :189 && UserService.cs");
+                await _logService.ErrorAsync(ex, "UserService.cs GetById");
                 throw;
             }
         }
@@ -221,7 +221,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :224 && UserService.cs");
+                await _logService.ErrorAsync(ex, "UserService.cs UpdateAsync");
                 throw;
             }
         }
@@ -277,7 +277,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :280 && UserService.cs");
+                await _logService.ErrorAsync(ex, "UserService.cs RefreshAccessTokenAsync");
                 throw;
             }
         }

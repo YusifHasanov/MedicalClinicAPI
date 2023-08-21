@@ -9,6 +9,7 @@ namespace Entities.Dto.Request.Update
 {
     public class UpdateNotification:BaseDto
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime NotificationDate { get; set; }

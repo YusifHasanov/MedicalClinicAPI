@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Entities.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace Entities.Entities
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime NotificationDate { get; set; }
+        public IsRead IsRead { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
     }
 }

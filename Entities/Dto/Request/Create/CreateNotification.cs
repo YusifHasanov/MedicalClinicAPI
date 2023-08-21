@@ -12,5 +12,6 @@ namespace Entities.Dto.Request.Create
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime NotificationDate { get; set; }
+        public int UserId { get; set; }
     }
 }

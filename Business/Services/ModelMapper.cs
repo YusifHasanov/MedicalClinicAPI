@@ -59,7 +59,9 @@ namespace Business.Services
                 .ForMember(dest => dest.DoctorSurname, opt => opt.MapFrom(src => src.Doctor.Surname))
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments));
 
-
+            CreateMap<CreateNotification, Notification>();
+            CreateMap<UpdateNotification, Notification>();
+            CreateMap<UpdateNotification, NotificationResponse>();
 
         }
     }

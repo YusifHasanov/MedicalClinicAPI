@@ -127,6 +127,12 @@ namespace DataAccess.Concrete
                 .Property(u=>u.Role)
                 .HasColumnType("tinyint");  
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Notifications)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             #endregion
 
             #region Doctor
@@ -135,6 +141,7 @@ namespace DataAccess.Concrete
 
             modelBuilder.Entity<Doctor>()
                 .Property(d => d.Surname).IsRequired(true);
+
             modelBuilder.Entity<Doctor>()
                 .HasMany(doctor=> doctor.Therapies)
                 .WithOne(i => i.Doctor)
@@ -169,6 +176,21 @@ namespace DataAccess.Concrete
             modelBuilder.Entity<Therapy>()
                 .Property(p => p.WorkDone).HasMaxLength(2500)
                 .IsRequired(false);
+            #endregion
+
+            #region Notification
+           modelBuilder.Entity<Notification>()
+                .Property(n=>n.IsRead)
+                .HasColumnType("tinyint");
+
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.Content)
+                .HasMaxLength(1000);
+
+            modelBuilder.Entity<Notification>()
+                .Property(n => n.Title)
+                .HasMaxLength(150);
             #endregion
         }
     }

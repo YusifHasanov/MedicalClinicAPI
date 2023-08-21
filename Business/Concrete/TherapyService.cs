@@ -34,7 +34,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :37 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs AddAsync");
                 throw;
             }
         }
@@ -52,7 +52,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :55 && DoctorService.cs");
+                await _logService.ErrorAsync(ex, "DoctorService.cs DeleteAsync");
                 throw;
             }
         }
@@ -69,7 +69,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :72 && TherapyService.cs");
+                await _logService.ErrorAsync(ex, "TherapyService.cs GetAll");
                 throw;
             }
         }
@@ -87,7 +87,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :87 && TherapyService.cs");
+                await _logService.ErrorAsync(ex, "TherapyService.cs GetById");
                 throw;
             }
         }
@@ -105,7 +105,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :108 && TherapyService.cs");
+                await _logService.ErrorAsync(ex, "TherapyService.cs GetTherapiesByDateInterval");
                 throw;
             }
         }
@@ -122,7 +122,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :125 && TherapyService.cs");
+                await _logService.ErrorAsync(ex, "TherapyService.cs GetTherapiesByPatientId");
                 throw;
             }
         }
@@ -153,7 +153,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :156 && TherapyService.cs");
+                await _logService.ErrorAsync(ex, "TherapyService.cs UpdateAsync");
                 throw;
             }
         }
