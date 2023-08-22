@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Business.Abstract;
 using Core.Utils.Constants;
 using Core.Utils.Exceptions;
@@ -9,6 +10,7 @@ using Entities.Dto.Request.Update;
 using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,12 +98,25 @@ namespace Business.Concrete
         {
             try
             {
-                var all = _unitOfWorkRepository.TherapyRepository.GetAll();
-                var response = _mapper.ProjectTo<TherapyResponse>(all);
+                bool isNull = interval.ToDate == null || interval.FromDate == null;
+                var fromDate = interval.FromDate.Value.Date;
+                var toDate = interval.ToDate.Value.Date.AddDays(1);
 
-               await _logService.InfoAsync($"Select Therapies by Date Interval {interval.FromDate} - {interval.ToDate}");
+                IQueryable<TherapyResponse> therapies = isNull switch
+                {
+                    false => _unitOfWorkRepository.TherapyRepository.GetAll(therapy =>
+                             therapy.TherapyDate.Date >= fromDate && therapy.TherapyDate.Date < toDate)
+                            .ProjectTo<TherapyResponse>(_mapper.ConfigurationProvider),
 
-                return response;
+                    true => _unitOfWorkRepository.TherapyRepository.GetAll()
+                    .ProjectTo<TherapyResponse>(_mapper.ConfigurationProvider),
+                };
+
+                await _logService.InfoAsync(isNull
+                    ? "All Patients selected."
+                    : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
+
+                return therapies;
             }
             catch (Exception ex)
             {
@@ -117,7 +132,7 @@ namespace Business.Concrete
                 var therapies = _unitOfWorkRepository.TherapyRepository
                     .GetAll(therapy => therapy.PatientId == patientId);
                 var response = _mapper.ProjectTo<TherapyResponse>(therapies);
-               await _logService.InfoAsync($"Get Therapies By Patient Id {patientId}");
+                await _logService.InfoAsync($"Get Therapies By Patient Id {patientId}");
                 return response;
             }
             catch (Exception ex)

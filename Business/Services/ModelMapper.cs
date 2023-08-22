@@ -61,7 +61,11 @@ namespace Business.Services
 
             CreateMap<CreateNotification, Notification>();
             CreateMap<UpdateNotification, Notification>();
-            CreateMap<UpdateNotification, NotificationResponse>();
+            CreateMap<Notification, NotificationResponse>();
+
+            CreateMap<CreatePhoneNumber, PhoneNumber>();
+            CreateMap<UpdatePhoneNumber, PhoneNumber>();
+            //CreateMap<PhoneNumber, PhoneNumberResponse>();
 
         }
     }

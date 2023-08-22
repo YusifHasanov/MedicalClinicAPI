@@ -179,10 +179,7 @@ namespace DataAccess.Concrete
             #endregion
 
             #region Notification
-           modelBuilder.Entity<Notification>()
-                .Property(n=>n.IsRead)
-                .HasColumnType("tinyint");
-
+     
 
             modelBuilder.Entity<Notification>()
                 .Property(n => n.Content)

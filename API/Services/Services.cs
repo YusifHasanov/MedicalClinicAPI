@@ -74,6 +74,7 @@ namespace Core.Utils
             builder.Services.AddScoped<ITherapyService, TherapyService>();
 
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
 
             builder.Services.AddScoped<IPhoneNumberRepository, PhoneNumberRepository>();
 

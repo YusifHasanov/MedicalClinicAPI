@@ -12,6 +12,9 @@ namespace Business.Abstract
 {
     public interface INotificationService:IService<Notification,UpdateNotification,CreateNotification,NotificationResponse>
     {
-        public Task<IQueryable<NotificationResponse>> GetByUserId(int userId );    
+        public Task<IQueryable<NotificationResponse>> GetByUserIdAsync(int userId );    
+
+
+   
     }
 }

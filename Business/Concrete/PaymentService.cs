@@ -120,7 +120,7 @@ namespace Business.Concrete
             try
             {
                  
-                string auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                string auth = _httpContextAccessor.HttpContext.Request.Headers["Token"];
 
                 bool isNull = interval.ToDate == null || interval.FromDate == null;
                 var fromDate = interval.FromDate.Value.Date;

@@ -15,5 +15,7 @@ namespace Business.Abstract
         public IPaymentService PaymentService { get; }  
         public IDoctorService DoctorService { get; }  
         public ITherapyService TherapyService { get; }
+
+        public INotificationService NotificationService { get; }
     }
 }

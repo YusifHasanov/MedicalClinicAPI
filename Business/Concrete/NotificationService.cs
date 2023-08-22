@@ -30,10 +30,13 @@ namespace Business.Concrete
             try
             {
                 var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(entity.UserId) ?? throw new NotFoundException($"User not found with id = {entity.UserId}");
+
                 var newNotification = _mapper.Map<Notification>(entity);
                 await _unitOfWorkRepository.NotificationRepository.AddAsync(newNotification);
                 await SaveChangesAsync();
+
                 await _logService.InfoAsync($"New Notification added succesfully for userId = {user.Id}");
+
                 return newNotification;
             }
             catch (Exception ex)
@@ -75,7 +78,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "Line :77 && NotificationService.cs");
+                await _logService.ErrorAsync(ex, "NotificationService.cs GetAll");
                 throw;
             }
         }
@@ -84,7 +87,7 @@ namespace Business.Concrete
         {
             try
             {
-                await _logService.InfoAsync($"Select Image byId = {id}");
+                await _logService.InfoAsync($"Select Notification byId = {id}");
                 _ = await IsExistAsync(id);
                 var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id);
                 var response = _mapper.Map<NotificationResponse>(notification);
@@ -102,7 +105,7 @@ namespace Business.Concrete
         public async override Task<Notification> IsExistAsync(int id)
         {
             var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id);
-            return notification ?? throw new NotFoundException($"User not found with id = {id}");
+            return notification ?? throw new NotFoundException($"Notification not found with id = {id}");
         }
 
         public override async Task SaveChangesAsync()
@@ -119,7 +122,7 @@ namespace Business.Concrete
                 var notification = _mapper.Map(entity, exist);
                 _unitOfWorkRepository.NotificationRepository.Update(notification);
                 await SaveChangesAsync();
-                await _logService.InfoAsync($"Image updated with id = {id}");
+                await _logService.InfoAsync($"Notification updated with id = {id}");
                 return notification;
             }
             catch (Exception ex)
@@ -128,16 +131,18 @@ namespace Business.Concrete
                 throw;
             }
         }
-        public async Task<IQueryable<NotificationResponse>> GetByUserId(int userId)
+        public async Task<IQueryable<NotificationResponse>> GetByUserIdAsync(int userId)
         {
             try
             {
-                var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(userId) ?? throw new NotFoundException($"User not found with id = {userId}");
-
+                var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(userId)
+                    ?? throw new NotFoundException($"User not found with id = {userId}");
+                DateTime currentDate = DateTime.Now.Date;
                 var allNotifications = _unitOfWorkRepository.NotificationRepository
                     .GetAll(not => not.UserId.Equals(userId) &&
-                            not.NotificationDate.Date == DateTime.Now.Date &&
-                            not.IsRead.Equals(IsRead.UnRead))
+                            not.NotificationDate.Year == currentDate.Year &&
+                            not.NotificationDate.Month == currentDate.Month &&
+                            not.NotificationDate.Day == currentDate.Day)
                     .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
 
                 await _logService.InfoAsync($"All Notifications Selected");
@@ -150,5 +155,7 @@ namespace Business.Concrete
                 throw;
             }
         }
+
+
     }
 }

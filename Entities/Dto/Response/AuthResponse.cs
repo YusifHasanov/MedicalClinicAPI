@@ -1,4 +1,5 @@
 using Core.Entities;
+using Entities.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace Entities.Dto.Response
     {
         public string AccessToken { get; set; }
 
- 
+        public int UserId { get; set; }
+        public Role Role { get; set; }
+
     }
 }

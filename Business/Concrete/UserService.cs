@@ -75,7 +75,9 @@ namespace Business.Concrete
 
                 AuthResponse response = new()
                 {
-                    AccessToken = accessToken
+                    AccessToken = accessToken,
+                    UserId = authUser.Id,
+                    Role = authUser.Role,
                 };
                 return response;
 
@@ -102,7 +104,7 @@ namespace Business.Concrete
                 issuer: _globals.Issuer,
                 audience: _globals.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(12),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: credentials
             ); ;
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -226,6 +228,11 @@ namespace Business.Concrete
             }
         }
 
+
+        public async Task<AuthResponse> DescyptJWT()
+        {
+
+        }
         public async Task<AuthResponse> RefreshAccessTokenAsync(RefreshTokenDto token)
         {
             try
@@ -271,7 +278,9 @@ namespace Business.Concrete
 
                 AuthResponse response = new()
                 {
-                    AccessToken = user.AccessToken
+                    AccessToken = user.AccessToken,
+                    Role = user.Role,
+                    UserId = user.Id
                 };
                 return response;
             }

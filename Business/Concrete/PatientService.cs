@@ -32,6 +32,14 @@ namespace Business.Concrete
 
                 //await SaveChangesAsync();
                 await _logService.InfoAsync($"New Patient Added With id {newPatient.Id}");
+                if(entity.Therapies is not null && entity.Therapies.Any() )
+                {
+                    foreach (var therapy in entity.Therapies)
+                    {
+                        therapy.PatientId = newPatient.Id;
+                        newPatient.Therapies.Add(_mapper.Map<Therapy>(therapy));
+                    }
+                }
                 if (entity.Images?.Count >= 0)
                 {
 
