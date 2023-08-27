@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Entities;
 using Core.Utils.Exceptions;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
@@ -30,54 +31,9 @@ namespace API.Controllers
         public async Task<IActionResult> GetAll()
         {
             try
-            {
-                
+            { 
 
-                return Ok(await (await _unitOfWorkService.PatientService.GetAll()).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("byDateInterval")]
-        public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
-        {
-            try
-            {
-                 
-
-                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDateInterval(interval)).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpGet("{date:DateTime}")]
-        public async Task<IActionResult> Get(DateTime date)
-        {
-            try
-            {
-              
-                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDate(date)).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var result = await _unitOfWorkService.PatientService.GetById(id);
-                return Ok(result);
+                return Ok(await  _unitOfWorkService.PatientService.GetAll().ToListAsync());
             }
             catch (NotFoundException ex)
             {
@@ -98,12 +54,16 @@ namespace API.Controllers
                 var response = await _unitOfWorkService.PatientService.AddAsync(createPatient);
                 return StatusCode((int)HttpStatusCode.Created, response);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePatient updatePatient)
@@ -140,5 +100,66 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpPost("byDateInterval")]
+        public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
+        {
+            try
+            {
+                 
+
+                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDateInterval(interval)).ToListAsync());
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("{date:DateTime}")]
+        public async Task<IActionResult> GetByDate(DateTime date)
+        {
+            try
+            {
+              
+                return Ok(await  _unitOfWorkService.PatientService.GetPatientsByDate(date).ToListAsync());
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var result = await _unitOfWorkService.PatientService.GetByIdAsync(id);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+
+
+
+
     }
 }

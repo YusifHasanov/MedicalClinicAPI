@@ -15,24 +15,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Business.Concrete
 {
-    public class PatientService : BaseService<Patient, UpdatePatient, CreatePatient, PatientResponse>, IPatientService
+    public class PatientService : IPatientService
     {
-
-        public PatientService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IMapper _mapper;
+        private readonly ILogService _logService; 
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        public PatientService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService )
         {
-            ;
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
+            _logService = logService; 
         }
 
-        public async override Task<Patient> AddAsync(CreatePatient entity)
+        public async  Task<Patient> AddAsync(CreatePatient entity)
         {
             try
             {
 
                 var newPatient = _mapper.Map<Patient>(entity);
 
-                //await SaveChangesAsync();
+                //await _unitOfWorkRepository.SaveChangesAsync();
                 await _logService.InfoAsync($"New Patient Added With id {newPatient.Id}");
-                if(entity.Therapies is not null && entity.Therapies.Any() )
+                if (entity.Therapies is not null && entity.Therapies.Any())
                 {
                     foreach (var therapy in entity.Therapies)
                     {
@@ -75,7 +79,7 @@ namespace Business.Concrete
                     }
                 }
                 await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
-                await SaveChangesAsync();
+                await _unitOfWorkRepository.SaveChangesAsync();
                 return newPatient;
             }
             catch (Exception ex)
@@ -85,14 +89,14 @@ namespace Business.Concrete
             }
         }
 
-        public async override Task<Patient> DeleteAsync(int id)
+        public async  Task<Patient> DeleteAsync(int id)
         {
             try
             {
-                var exist = await IsExistAsync(id);
+                var exist = await _unitOfWorkRepository.PatientRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Patient not found with id = {id}");
 
                 _unitOfWorkRepository.PatientRepository.Delete(id);
-                await SaveChangesAsync();
+                await _unitOfWorkRepository.SaveChangesAsync();
 
                 await _logService.InfoAsync($"Patient Deleted With id {id}");
 
@@ -105,129 +109,80 @@ namespace Business.Concrete
             }
         }
 
-        public override async Task<IQueryable<PatientResponse>> GetAll()
+        public  IQueryable<PatientResponse> GetAll()
         {
-            try
-            {
-                var result = _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
-                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
-                await _logService.InfoAsync($"All Patients Selected");
+            return _unitOfWorkRepository.PatientRepository
+            .GetAll()
+            .Include(p => p.Images)
+            .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :113 && PatientService.cs");
-                throw;
-            }
         }
 
-        public async override Task<PatientResponse> GetById(int id)
+        public async  Task<PatientResponse> GetByIdAsync(int id)
         {
-            try
-            {
-                _ =await   IsExistAsync(id);
+            var patient = await _unitOfWorkRepository.PatientRepository
+            .GetByIdAsync(id) ?? throw new NotFoundException($"Patient not found with id = {id}");
 
-                await _logService.InfoAsync($"Select Patient byId = {id}");
+            return _mapper.Map<PatientResponse>(patient); ;
 
-                var patient = _unitOfWorkRepository.PatientRepository.GetPatientWithImage(id);
-                var response = _mapper.Map<PatientResponse>(patient);
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "PatientService.cs GetById");
-                throw;
-            }
         }
 
-        public async Task<IQueryable<PatientResponse>> GetPatientsByDate(DateTime date)
+        public IQueryable<PatientResponse> GetPatientsByDate(DateTime date)
         {
-            try
-            {
-                var patients = _unitOfWorkRepository.PatientRepository
-                    .GetAll(p => p.ArrivalDate.Date.Equals(date.Date))
-                    .Include(patient => patient.Images)
-                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
+            var patients = _unitOfWorkRepository.PatientRepository
+                .GetAll(p => p.ArrivalDate.Date.Equals(date.Date))
+                .Include(patient => patient.Images)
+                .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
 
-                await _logService.InfoAsync($"All Patients selected where ArrivalDate = {date}");
-                return patients;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :152 && PatientService.cs");
-                throw;
-            }
+            return patients;
+
         }
 
         public async Task<IQueryable<PatientResponse>> GetPatientsByDateInterval(DateIntervalRequest interval)
         {
-            try
-            {
-                bool isNull = interval.ToDate == null || interval.FromDate == null;
-                var fromDate = interval.FromDate.Value.Date;
-                var toDate = interval.ToDate.Value.Date.AddDays(1);
-                IQueryable<PatientResponse> patients = isNull switch
-                {
-                    false => _unitOfWorkRepository.PatientRepository.GetAll(patient =>
-                             patient.ArrivalDate.Date >= fromDate && patient.ArrivalDate.Date < toDate)
-                            .Include(patient => patient.Images)
-                            .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
 
-                    true => _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
-                    .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
-                };
+            bool isNull = interval.ToDate == null || interval.FromDate == null;
+            var fromDate = interval.FromDate.Value.Date;
+            var toDate = interval.ToDate.Value.Date.AddDays(1);
+
+            IQueryable<PatientResponse> patients = isNull switch
+            {
+                false => _unitOfWorkRepository.PatientRepository.GetAll(patient =>
+                         patient.ArrivalDate.Date >= fromDate && patient.ArrivalDate.Date < toDate)
+                        .Include(patient => patient.Images)
+                        .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
+
+                true => _unitOfWorkRepository.PatientRepository.GetAll().Include(p => p.Images)
+                .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider),
+            };
+
+            await _logService.InfoAsync(isNull
+                ? "All Patients selected."
+                : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
+
+
+            return patients;
+
+
+        }
+
+
  
-                await _logService.InfoAsync(isNull
-                    ? "All Patients selected."
-                    : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
-
-                return patients;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :190 && PatientService.cs");
-                throw;
-            }
-        }
-
-        public async override Task<Patient> IsExistAsync(int id)
+        public  async Task<Patient> UpdateAsync(int id, UpdatePatient entity)
         {
-            var patient =  await _unitOfWorkRepository.PatientRepository.GetByIdAsync(id);
-            return patient ?? throw new NotFoundException($"Patient not found with id = {id}");
-        }
+            var exist = await _unitOfWorkRepository.PatientRepository
+                .GetByIdAsync(id) ?? throw new NotFoundException($"Patient not found with id = {id}");
 
-        public override async Task SaveChangesAsync()
-        {
+            entity.Id = id;
 
-            await _unitOfWorkRepository.PatientRepository.SaveChangesAsync();
+            var patient = _mapper.Map(entity, exist);
 
-        }
+            _unitOfWorkRepository.PatientRepository.Update(patient);
+            await _unitOfWorkRepository.SaveChangesAsync();
 
-        public override async Task<Patient> UpdateAsync(int id, UpdatePatient entity)
-        {
-            try
-            {
-                var exist = await IsExistAsync(id);
-                entity.Id = id;
-
-                var patient = _mapper.Map(entity, exist);
-
-                _unitOfWorkRepository.PatientRepository.Update(patient);
-                await SaveChangesAsync();
-
-                await _logService.InfoAsync($"Patient updated with id = {id}");
-
-                return patient;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "PatientService.cs UpdateAsync");
-                throw;
-            }
+            return patient;
 
         }
     }

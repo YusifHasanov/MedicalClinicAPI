@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdateTherapy:BaseDto
+    public class UpdateTherapy:IDto
     {
         public int Id { get; set; }
         public DateTime TherapyDate { get; set; }

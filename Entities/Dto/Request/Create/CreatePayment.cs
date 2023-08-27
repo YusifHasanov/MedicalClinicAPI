@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreatePayment:BaseDto
+    public class CreatePayment:IDto
     {
         public decimal PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; }

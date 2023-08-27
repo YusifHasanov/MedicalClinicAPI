@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Entities;
 using Core.Utils.Exceptions;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
@@ -22,52 +23,12 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
-        [HttpPost("/test")]
-        public async Task<IActionResult> AddImage()
-        {
-            try
-            { 
-                var imageBytes = System.IO.File.ReadAllBytes("D:\\Projects\\VisualStudioProjects\\ecommerce\\Server\\Entities\\house.png");
-                CreateImage imgg = new()
-                {
-                    ImageData = Convert.ToBase64String(imageBytes), 
-                    PatientId = 5
-                };
-
-               await _unitOfWorkService.ImageService.AddAsync(imgg);
-
-
-                
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAllImages()
         { 
             try
             {
-                return Ok(await (await _unitOfWorkService.ImageService.GetAll()).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var result = await _unitOfWorkService.ImageService.GetById(id);
-                return Ok(result);
+                return Ok(await  _unitOfWorkService.ImageService.GetAll().ToListAsync());
             }
             catch (NotFoundException ex)
             {
@@ -78,7 +39,7 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+         
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateImage create)
@@ -88,31 +49,17 @@ namespace API.Controllers
                 var response = await _unitOfWorkService.ImageService.AddAsync(create);
                 return StatusCode((int)HttpStatusCode.Created, response);
             }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateImage update)
-        {
-            try
-            {
-                var response = await _unitOfWorkService.ImageService.UpdateAsync(id, update);
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
+        } 
+
+      
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
@@ -124,11 +71,11 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
     }

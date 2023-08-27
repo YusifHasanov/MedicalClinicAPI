@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class RefreshTokenDto:BaseDto
+    public class RefreshTokenDto:IDto
     {
         public string AccessToken { get; set; }
     }

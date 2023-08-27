@@ -18,6 +18,8 @@ namespace DataAccess.Abstract
         public ITherapyRepository TherapyRepository { get; }
         public INotificationRepository NotificationRepository { get;  }
         public IPhoneNumberRepository PhoneNumberRepository { get; }
+
+        public Task SaveChangesAsync();
     }
 
 }

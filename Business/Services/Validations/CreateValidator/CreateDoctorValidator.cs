@@ -12,8 +12,8 @@ namespace Business.Services.Validations.CreateValidator
     {
         public CreateDoctorValidator()
         {
-            RuleFor(doctor => doctor.Name).NotNull().NotEmpty().WithMessage("Həkim Adı boş ola bilməz");
-            RuleFor(doctor => doctor.Surname).NotNull().NotEmpty().WithMessage("Həkim Soyadı boş ola bilməz");
+            RuleFor(doctor => doctor.Name).NotEmpty().WithMessage("Həkim Adı boş ola bilməz");
+            RuleFor(doctor => doctor.Surname).NotEmpty().WithMessage("Həkim Soyadı boş ola bilməz");
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdatePhoneNumber:BaseDto
+    public class UpdatePhoneNumber:IDto
     {
         public int Id { get; set; }
 

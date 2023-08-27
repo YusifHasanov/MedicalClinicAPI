@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdateDoctor:BaseDto
+    public class UpdateDoctor:IDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

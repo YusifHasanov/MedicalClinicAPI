@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request
 {
-    public class LoginUser:BaseDto
+    public class LoginUser:IDto
     {
         public string UserName { get; set; }
         public string Password { get; set; }

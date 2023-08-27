@@ -1,5 +1,7 @@
 ﻿using Azure;
 using Business.Abstract;
+using Core.Entities;
+using Core.Utils.Exceptions;
 using Entities.Dto.Request;
 using Entities.Dto.Request.Create;
 using Entities.Dto.Request.Update;
@@ -26,13 +28,20 @@ namespace API.Controllers
         {
             try
             {
-                var response = await (await _unitOfWorkService.UserService.GetAll()).ToListAsync();
+                var response = await  _unitOfWorkService.UserService.GetAll().ToListAsync();
                 return StatusCode((int)HttpStatusCode.OK, response);
+            }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new ErrorResponse { StatusCode = (int)HttpStatusCode.Unauthorized, Message = ex.Message }); 
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
             }
             catch (Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
@@ -44,9 +53,17 @@ namespace API.Controllers
                 var response = await _unitOfWorkService.UserService.AddAsync(createUser);
                 return StatusCode((int)HttpStatusCode.Created, response);
             }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new ErrorResponse { StatusCode = (int)HttpStatusCode.Unauthorized, Message = ex.Message });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
 
         }
@@ -59,10 +76,17 @@ namespace API.Controllers
                 var auth = await _unitOfWorkService.UserService.Login(login);
                 return Ok(auth);
             }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new ErrorResponse { StatusCode = (int)HttpStatusCode.Unauthorized, Message = ex.Message });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
             catch (Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
@@ -74,9 +98,17 @@ namespace API.Controllers
                 var user = await _unitOfWorkService.UserService.UpdateAsync(id, updateUser);
                 return StatusCode((int)HttpStatusCode.OK, user);
             }
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(new ErrorResponse { StatusCode = (int)HttpStatusCode.Unauthorized, Message = ex.Message });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
@@ -87,10 +119,17 @@ namespace API.Controllers
             { 
                 return Ok(await _unitOfWorkService.UserService.RefreshAccessTokenAsync(tokenDto));
             }
-            catch (Exception)
+            catch (UnauthorizedException ex)
             {
-
-                throw;
+                return Unauthorized(new ErrorResponse { StatusCode = (int)HttpStatusCode.Unauthorized, Message = ex.Message });
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
     }

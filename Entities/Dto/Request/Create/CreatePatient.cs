@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreatePatient:BaseDto
+    public class CreatePatient:IDto
     {
 
         public string Name { get; set; }

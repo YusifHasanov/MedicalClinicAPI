@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreatePhoneNumber:BaseDto
+    public class CreatePhoneNumber:IDto
     {
         [RegularExpression(@"^(\+[0-9]{9})$", ErrorMessage = "Telefon nömrəsnin formatı doğru deyil")]
         public int Number { get; set; }

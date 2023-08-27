@@ -10,6 +10,7 @@ using Entities.Dto.Response;
 using Entities.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +19,21 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class DoctorService : BaseService<Doctor, UpdateDoctor, CreateDoctor, DoctorResponse>, IDoctorService
+    public class DoctorService : IDoctorService
     {
-        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper; 
+        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)  
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
-        public override async Task<Doctor> AddAsync(CreateDoctor entity)
+        public   async Task<Doctor> AddAsync(CreateDoctor entity)
         {
             try
             {
-                var dbDoctor =  await _unitOfWorkRepository.DoctorRepository
+                var dbDoctor = await _unitOfWorkRepository.DoctorRepository
                     .GetOneAsync(doctor => doctor.Name.Equals(entity.Name) && doctor.Surname.Equals(entity.Surname));
 
                 if (dbDoctor != null)
@@ -37,108 +42,57 @@ namespace Business.Concrete
                 var newDoctor = _mapper.Map<Doctor>(entity);
 
                 await _unitOfWorkRepository.DoctorRepository.AddAsync(newDoctor);
-                await SaveChangesAsync();
-
-                await _logService.InfoAsync($"Doctor succesfully added with name = {newDoctor.Name} and username = {newDoctor.Surname}");
+                await _unitOfWorkRepository.SaveChangesAsync();
 
                 return newDoctor;
 
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "DoctorService.cs AddAsync");
                 throw;
             }
         }
 
-        public async override Task<Doctor> DeleteAsync(int id)
+        public async   Task<Doctor> DeleteAsync(int id)
         {
-            try
-            {
-                var exist =  await IsExistAsync(id);
+                var exist = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
                 _unitOfWorkRepository.DoctorRepository.Delete(id);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"Doctor Deleted With id {id}");
+                await _unitOfWorkRepository.SaveChangesAsync();
                 return exist;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs DeleteAsync");
-                throw;
-            }
         }
 
-        public async override Task<IQueryable<DoctorResponse>> GetAll()
+        public   IQueryable<DoctorResponse> GetAll()
         {
-            try
-            {
-                var allDoctors = _unitOfWorkRepository.DoctorRepository.GetAll()
-                    .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
-
-               await _logService.InfoAsync($"All Dcotors Selected");
-                return allDoctors;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs GetAll");
-                throw;
-            }
+            return _unitOfWorkRepository.DoctorRepository.GetAll()
+                .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
         }
 
-        public override async Task<DoctorResponse> GetById(int id)
+        public   async Task<DoctorResponse> GetByIdAsync(int id)
         {
-            try
-            {
-                _ =await IsExistAsync(id);
-                var result =  _unitOfWorkRepository.DoctorRepository.GetDoctorWithPatientsPayments(id);
-                var response = _mapper.Map<DoctorResponse>(result);
 
-                await _logService.InfoAsync($"Select Dcotor byId = {id}");
+            _ = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
 
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs GetById");
-                throw;
-            }
+            var result = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id);
+
+            var response = _mapper.Map<DoctorResponse>(result);
+
+            return response;
         }
 
-        public override async Task<Doctor> IsExistAsync(int id)
-        {
-            var doctor = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id);
-            return doctor ?? throw new NotFoundException($"Doctor not found with id = {id}");
-        }
+ 
+        public async   Task<Doctor> UpdateAsync(int id, UpdateDoctor entity)
+        {  
 
-        public override async Task SaveChangesAsync()
-        {
-             
-                await _unitOfWorkRepository.DoctorRepository.SaveChangesAsync();
-           
-        }
-
-        public async override Task<Doctor> UpdateAsync(int id, UpdateDoctor entity)
-        {
-            try
-            {
-                var existDcotor = await IsExistAsync(id);
+                var existDcotor = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
                 entity.Id = id;
 
                 var doctor = _mapper.Map(entity, existDcotor);
 
                 _unitOfWorkRepository.DoctorRepository.Update(doctor);
 
-                await SaveChangesAsync();
+                await _unitOfWorkRepository.SaveChangesAsync();
 
-                await _logService.InfoAsync($"Dcotor updated with id = {id}");
-
-                return doctor;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs UpdateAsync");
-                throw;
-            }
+                return doctor; 
         }
     }
 }

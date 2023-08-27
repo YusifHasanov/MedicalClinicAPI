@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdatePatient:BaseDto
+    public class UpdatePatient:IDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

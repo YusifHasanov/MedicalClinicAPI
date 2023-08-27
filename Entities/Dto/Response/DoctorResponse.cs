@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class DoctorResponse:BaseDto
+    public class DoctorResponse:IDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

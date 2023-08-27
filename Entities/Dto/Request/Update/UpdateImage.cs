@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdateImage:BaseDto
+    public class UpdateImage:IDto
     {
         public int Id { get; set; }
  

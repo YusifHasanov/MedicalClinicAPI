@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreateTherapy : BaseDto
+    public class CreateTherapy : IDto
     {
         public DateTime TherapyDate { get; set; }
         public decimal PaymentAmount { get; set; }

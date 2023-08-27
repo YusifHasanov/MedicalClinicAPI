@@ -8,7 +8,7 @@ using Entities.Entities.Enums;
 
 namespace Entities.Dto.Response
 {
-    public class UserResponse:BaseDto
+    public class UserResponse:IDto
     {
         public int Id { get; set; }
         public string UserName { get; set; }

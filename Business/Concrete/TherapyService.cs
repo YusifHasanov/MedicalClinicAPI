@@ -19,85 +19,69 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class TherapyService : BaseService<Therapy, UpdateTherapy, CreateTherapy, TherapyResponse>, ITherapyService
+    public class TherapyService  : ITherapyService
     {
-        public TherapyService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogService _logService; 
+        public TherapyService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService )  
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
+            _logService = logService; 
         }
 
-        public async override Task<Therapy> AddAsync(CreateTherapy entity)
+        public async  Task<Therapy> AddAsync(CreateTherapy entity)
         {
-            try
-            {
-                Therapy theraphy = _mapper.Map<Therapy>(entity);
-                await _unitOfWorkRepository.TherapyRepository.AddAsync(theraphy);
-                await SaveChangesAsync();
-                return theraphy;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs AddAsync");
-                throw;
-            }
+            Therapy theraphy = _mapper.Map<Therapy>(entity);
+            await _unitOfWorkRepository.TherapyRepository.AddAsync(theraphy);
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return theraphy;
         }
-
-        public async override Task<Therapy> DeleteAsync(int id)
-        {
-
-            try
-            {
-                var exist = await IsExistAsync(id);
+        public async  Task<Therapy> DeleteAsync(int id)
+        { 
+                var exist = await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
                 _unitOfWorkRepository.TherapyRepository.Delete(id);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"Patient Deleted With id {id}");
-                return exist;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "DoctorService.cs DeleteAsync");
-                throw;
-            }
-        }
+                await _unitOfWorkRepository.SaveChangesAsync();
 
-        public async override Task<IQueryable<TherapyResponse>> GetAll()
+                return exist;
+        }
+        public   IQueryable<TherapyResponse> GetAll()
         {
-            try
-            {
+   
                 var all = _unitOfWorkRepository.TherapyRepository.GetAll();
                 var response = _mapper.ProjectTo<TherapyResponse>(all);
 
-                await _logService.InfoAsync("Select All Therapies");
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "TherapyService.cs GetAll");
-                throw;
-            }
-        }
 
-        public async override Task<TherapyResponse> GetById(int id)
+                return response; 
+        }
+        public async  Task<TherapyResponse> GetByIdAsync(int id)
         {
-            try
-            {
-                var therapy = await IsExistAsync(id);
+ 
+                var therapy = await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
                 var response = _mapper.Map<TherapyResponse>(therapy);
 
-                await _logService.InfoAsync($"Select Therapy byId = {id}");
 
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "TherapyService.cs GetById");
-                throw;
-            }
+
+                return response; 
         }
+        public async  Task<Therapy> UpdateAsync(int id, UpdateTherapy entity)
+        {
+ 
+                var exist = await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
+                entity.Id = id;
+                var therapy = _mapper.Map(entity, exist);
+                _unitOfWorkRepository.TherapyRepository.Update(therapy);
 
+
+
+                await _unitOfWorkRepository.SaveChangesAsync();
+                return therapy; 
+        }
+ 
         public async Task<IQueryable<TherapyResponse>> GetTherapiesByDateInterval(DateIntervalRequest interval)
         {
-            try
-            {
+ 
                 bool isNull = interval.ToDate == null || interval.FromDate == null;
                 var fromDate = interval.FromDate.Value.Date;
                 var toDate = interval.ToDate.Value.Date.AddDays(1);
@@ -116,61 +100,16 @@ namespace Business.Concrete
                     ? "All Patients selected."
                     : $"Patients selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
-                return therapies;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "TherapyService.cs GetTherapiesByDateInterval");
-                throw;
-            }
+                return therapies; 
         }
-
-        public async Task<IQueryable<TherapyResponse>> GetTherapiesByPatientId(int patientId)
+        public  IQueryable<TherapyResponse> GetTherapiesByPatientId(int patientId)
         {
-            try
-            {
+ 
                 var therapies = _unitOfWorkRepository.TherapyRepository
                     .GetAll(therapy => therapy.PatientId == patientId);
                 var response = _mapper.ProjectTo<TherapyResponse>(therapies);
-                await _logService.InfoAsync($"Get Therapies By Patient Id {patientId}");
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "TherapyService.cs GetTherapiesByPatientId");
-                throw;
-            }
-        }
 
-        public async override Task<Therapy> IsExistAsync(int id)
-        {
-            return await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(id) ?? throw new NotFoundException("Teraphy Not Found with id" + id);
-        }
-
-        public async override Task SaveChangesAsync()
-        {
-            await _unitOfWorkRepository.TherapyRepository.SaveChangesAsync();
-        }
-
-        public async override Task<Therapy> UpdateAsync(int id, UpdateTherapy entity)
-        {
-            try
-            {
-                var exist = await IsExistAsync(id);
-                entity.Id = id;
-                var therapy = _mapper.Map(entity, exist);
-                _unitOfWorkRepository.TherapyRepository.Update(therapy);
-
-                await _logService.InfoAsync($"Therapy Updated with id {id}");
-
-                await SaveChangesAsync();
-                return therapy;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "TherapyService.cs UpdateAsync");
-                throw;
-            }
+                return response; 
         }
     }
 }

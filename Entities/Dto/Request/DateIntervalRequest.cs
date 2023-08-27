@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request
 {
-    public class DateIntervalRequest:BaseDto
+    public class DateIntervalRequest:IDto
     {
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

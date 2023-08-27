@@ -1,3 +1,4 @@
+using Core.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -15,14 +16,22 @@ namespace Core.Validations
             if (!context.ModelState.IsValid)
             {
                 var error = context.ModelState
-                      .Where(x => x.Value.Errors.Any())
-                      .Select(e => new
-                      {
-                          e.Key,
-                          Message = e.Value.Errors.Select(x => x.ErrorMessage)
-                      }).ToList();
+                    .Where(x => x.Value.Errors.Any())
+                    .Select(e => e.Value.Errors.Select(x => x.ErrorMessage)).ToList()[0];
+                ErrorResponse response = new()
+                {
+                    StatusCode =  400,
+                    Message = string.Join(",", error)
+                };
+                //var error = context.ModelState
+                //      .Where(x => x.Value.Errors.Any())
+                //      .Select(e => new
+                //      {
+                //          e.Key,
+                //          Message = e.Value.Errors.Select(x => x.ErrorMessage)
+                //      }).ToList();
 
-                context.Result = new BadRequestObjectResult(error);
+                context.Result = new BadRequestObjectResult(response);
                 return;
             }
             await next();

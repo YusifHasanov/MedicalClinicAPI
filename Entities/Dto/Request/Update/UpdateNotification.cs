@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdateNotification:BaseDto
+    public class UpdateNotification:IDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

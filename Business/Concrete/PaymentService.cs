@@ -23,204 +23,157 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class PaymentService : BaseService<Payment, UpdatePayment, CreatePayment, PaymentResponse>, IPaymentService
+    public class PaymentService :   IPaymentService
     {
-        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogService _logService;
+        private readonly Globals _globals;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor)
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
+            _logService = logService;
+            _globals = globals;
+            _httpContextAccessor = httpContextAccessor;
+
+
         }
 
-        public override async Task<Payment> AddAsync(CreatePayment entity)
+        public  async Task<Payment> AddAsync(CreatePayment entity)
         {
-            try
+
+            Therapy therapy = await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(entity.TherapyId)
+                ?? throw new NotFoundException($"Theraphy don't exist with Id = {entity.TherapyId}");
+
+            decimal sumOfAmount = _unitOfWorkRepository.PaymentRepository
+                .GetAll(payment => payment.TherapyId == therapy.Id)
+                .Sum(payment => payment.PaymentAmount) + entity.PaymentAmount;
+
+
+            if (therapy.PaymentAmount < sumOfAmount)
             {
-                Therapy therapy =await _unitOfWorkRepository.TherapyRepository.GetByIdAsync(entity.TherapyId)
-                    ?? throw new NotFoundException($"Theraphy don't exist with Id = {entity.TherapyId}");
-
-                List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
-                   .GetAll(payment => payment.TherapyId == therapy.Id).ToList();
-
-                decimal sumOfAmount = allPayments.Sum(payment => payment.PaymentAmount) + entity.PaymentAmount;
-
-                if (therapy.PaymentAmount < sumOfAmount)
-                {
-                    throw new Exception("Patients  payment sum can't be greater than total Amount!");
-                }
-
-                Payment newPayment = _mapper.Map<Payment>(entity);
-                await _unitOfWorkRepository.PaymentRepository.AddAsync(newPayment);
-                await SaveChangesAsync();
-
-                await _logService.InfoAsync($"Add new payment AddAsync");
-                return new();
+                throw new Exception("Patients  payment sum can't be greater than total Amount!");
             }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Paymentservice.cs");
-                throw;
-            }
+
+            Payment newPayment = _mapper.Map<Payment>(entity);
+            await _unitOfWorkRepository.PaymentRepository.AddAsync(newPayment);
+            await _unitOfWorkRepository.SaveChangesAsync();
+
+            return new();
         }
 
-        public async override Task<Payment> DeleteAsync(int id)
+        public async  Task<Payment> DeleteAsync(int id)
         {
-            try
-            {
-                var dbPayment =await IsExistAsync(id);
-                _unitOfWorkRepository.PaymentRepository.Delete(id);
-                await SaveChangesAsync();
-               await _logService.InfoAsync($"Paymnet Deleted With id {id}");
-                return dbPayment;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Paymentservice.cs DeleteAsync");
-                throw;
-            }
+
+            var dbPayment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException($"Payment not found with id = {id}");
+
+            _unitOfWorkRepository.PaymentRepository.Delete(id);
+
+            await _unitOfWorkRepository.SaveChangesAsync();
+
+            return dbPayment;
         }
 
-        public async override Task<IQueryable<PaymentResponse>> GetAll()
+        public  IQueryable<PaymentResponse> GetAll()
         {
-            try
-            {
-                var result = _unitOfWorkRepository.PaymentRepository.GetAll()
-                    .Include(payment => payment.Therapy)
-                    .ThenInclude(Therapy => Therapy.Patient)
-                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
 
-                await _logService.InfoAsync($"All Payments Selected");
+            var result = _unitOfWorkRepository.PaymentRepository.GetAll()
+                .Include(payment => payment.Therapy)
+                .ThenInclude(Therapy => Therapy.Patient)
+                .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                
-                throw;
-            }
+
+            return result;
         }
 
-        public async override Task<PaymentResponse> GetById(int id)
+        public async  Task<PaymentResponse> GetByIdAsync(int id)
         {
-            try
-            {
-              
-               _ = await IsExistAsync(id);
-                await _logService.InfoAsync($"Select Payment byId = {id}");
-                var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
-                var paymentResponse = _mapper.Map<PaymentResponse>(payment);
-                return paymentResponse;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Paymentservice.cs GetById");
-                throw;
-            }
+
+            _ = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Payment not found with id = {id}");
+
+            var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
+            var paymentResponse = _mapper.Map<PaymentResponse>(payment);
+            return paymentResponse;
         }
 
         public async Task<IQueryable<PaymentResponse>> GetPaymentsByDateInterval(DateIntervalRequest interval)
         {
-            try
+            string auth = _httpContextAccessor.HttpContext.Request.Headers["Token"];
+
+            bool isNull = interval.ToDate == null || interval.FromDate == null;
+            var fromDate = interval.FromDate.Value.Date;
+            var toDate = interval.ToDate.Value.Date.AddDays(1);
+
+            IQueryable<PaymentResponse> payments = isNull switch
             {
-                 
-                string auth = _httpContextAccessor.HttpContext.Request.Headers["Token"];
+                false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
+                 payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)
+                .Include(payment => payment.Therapy)
+                .ThenInclude(theraphy => theraphy.Doctor)
+                .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
 
-                bool isNull = interval.ToDate == null || interval.FromDate == null;
-                var fromDate = interval.FromDate.Value.Date;
-                var toDate = interval.ToDate.Value.Date.AddDays(1);
+                true => _unitOfWorkRepository.PaymentRepository.GetAll()
+                .Include(payment => payment.Therapy)
+                .ThenInclude(theraphy => theraphy.Patient)
+                .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
 
-                IQueryable<PaymentResponse> payments = isNull switch
-                {
-                    false => _unitOfWorkRepository.PaymentRepository.GetAll(payment =>
-                     payment.PaymentDate.Date >= fromDate && payment.PaymentDate.Date < toDate)
-                    .Include(payment => payment.Therapy)
-                    .ThenInclude(theraphy => theraphy.Doctor)
-                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
+            };
 
-                    true => _unitOfWorkRepository.PaymentRepository.GetAll()
-                    .Include(payment => payment.Therapy)
-                    .ThenInclude(theraphy => theraphy.Patient)
-                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider),
+            await _logService.InfoAsync(isNull
+                ? "All Payments selected."
+                : $"Payments selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
 
-                };
-
-                await _logService.InfoAsync(isNull
-                    ? "All Payments selected."
-                    : $"Payments selected where PaymentDate greater than {interval?.FromDate} and less than {interval?.ToDate}");
-
-                return payments;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Paymentservice.cs GetPaymentsByDateInterval");
-                throw;
-            }
+            return payments;
         }
 
         public async Task<IQueryable<PaymentResponse>> GetPaymentsByPatientId(int patientId)
         {
-            try
-            {
-                IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
-                        .GetAll(payment => payment.Therapy.PatientId == patientId)
-                        .Include(payment => payment.Therapy)
-                        .ThenInclude(theraphy => theraphy.Doctor)
-                        .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
+            IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
+                    .GetAll(payment => payment.Therapy.PatientId == patientId)
+                    .Include(payment => payment.Therapy)
+                    .ThenInclude(theraphy => theraphy.Doctor)
+                    .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
 
-               await _logService.InfoAsync($"All payments selected where patientId = {patientId}");
-                return payments;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :173 && Paymentservice.cs");
-                throw;
-            }
+
+            return payments;
         }
 
-        public override async Task<Payment> IsExistAsync(int id)
-        {
-            var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
-            return payment ?? throw new NotFoundException($"Payment not found with id = {id}");
-        }
+ 
 
-        public async override Task SaveChangesAsync()
+        public async  Task<Payment> UpdateAsync(int id, UpdatePayment entity)
         {
-            await _unitOfWorkRepository.PaymentRepository.SaveChangesAsync();
-        }
+            //cahnge logic
 
-        public async override Task<Payment> UpdateAsync(int id, UpdatePayment entity)
-        {
-            //logic deyismelidi
-            try
+            Payment dbPayment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException($"Payment not found with id = {id}");
+
+            Therapy therapy = await _unitOfWorkRepository.TherapyRepository.GetOneAsync(therapy => therapy.Id == entity.TherapyId)
+                 ?? throw new Exception($"Therapy don't exist with Id = {entity.TherapyId}");
+
+            IQueryable<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
+               .GetAll(payment => payment.Therapy.PatientId == therapy.PatientId, true);
+
+            foreach (var foundPayment in allPayments.Where(payment => payment.Id == entity.Id))
             {
-                Payment dbPayment = await IsExistAsync(id);
-                Therapy therapy =await _unitOfWorkRepository.TherapyRepository.GetOneAsync(therapy => therapy.Id == entity.TherapyId)
-                     ?? throw new Exception($"Therapy don't exist with Id = {entity.TherapyId}");
-
-                List<Payment> allPayments = _unitOfWorkRepository.PaymentRepository
-                   .GetAll(payment => payment.Therapy.PatientId == therapy.PatientId).ToList();
-
-                foreach (var foundPayment in allPayments.Where(payment => payment.Id == entity.Id))
-                {
-                    foundPayment.PaymentAmount = entity.PaymentAmount;
-                }
-
-                decimal sumOfAmount = allPayments.Sum(payment => payment.PaymentAmount);
-
-                //if (patient.TotalAmount < sumOfAmount)
-                //{
-                //    throw new Exception("Patients  payment sum can't be greater than total Amount!");
-                //}
-
-                entity.Id = id;
-                var payment = _mapper.Map(entity, dbPayment);
-
-                _unitOfWorkRepository.PaymentRepository.Update(payment);
-                await SaveChangesAsync();
-                return payment;
+                foundPayment.PaymentAmount = entity.PaymentAmount;
             }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Paymentservice.cs UpdateAsync");
-                throw;
-            }
+
+            decimal sumOfAmount = allPayments.Sum(payment => payment.PaymentAmount);
+
+            //if (patient.TotalAmount < sumOfAmount)
+            //{
+            //    throw new Exception("Patients  payment sum can't be greater than total Amount!");
+            //}
+
+            entity.Id = id;
+            var payment = _mapper.Map(entity, dbPayment);
+
+            _unitOfWorkRepository.PaymentRepository.Update(payment);
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return payment;
         }
     }
 }

@@ -2,6 +2,7 @@ using Business.Abstract;
 using DataAccess;
 using Entities.Entities;
 using Entities.Entities.Enums;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,14 +38,16 @@ namespace Business.Concrete
         {
             try
          
-            {
+            { 
+                if (exception.Message !=null && !exception.Message.Trim().IsNullOrEmpty())
+                {
+                    message = exception.Message.Trim(); ;
+                }
                 Log log = new()
                 {
                    Message = message,
-                   ExceptionStackTrace = exception.StackTrace?.Trim() ,
                    LogLevel = LogLevel.Error.ToString(),
-                   LogDate = DateTime.Now,
-                   ExceptionMessage = exception.Message?.Trim()
+                   LogDate = DateTime.Now, 
                 };
                 await _dbEntity.Logs.AddAsync(log);
                 await _dbEntity.SaveChangesAsync();
@@ -98,7 +101,6 @@ namespace Business.Concrete
                 Log log = new()
                 {
                     Message = message,
-                    ExceptionMessage = "",
                     LogLevel = LogLevel.Warning.ToString(),
                     LogDate = DateTime.Now
                 };
@@ -109,6 +111,17 @@ namespace Business.Concrete
             {
             }
         }
- 
+
+        public async Task LogAsync(Log log)
+        {
+            try
+            {
+             await  _dbEntity.Logs.AddAsync(log);
+                await  _dbEntity.SaveChangesAsync();
+            }
+            catch 
+            { 
+            }
+        }
     }
 }

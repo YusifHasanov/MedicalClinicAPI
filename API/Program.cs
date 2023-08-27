@@ -1,3 +1,4 @@
+using Business.Services.Middlewares;
 using Core.Utils;
 using Core.Utils.Middleware;
 using DataAccess;
@@ -23,12 +24,32 @@ var app = builder.Build();
 //}
 
 
-app.UseSwagger();
-app.UseSwaggerUI();  
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-app.UseCors("MedicalCors");
+//app.UseSwagger();
+//app.UseSwaggerUI();  
+//app.UseHttpsRedirection();
+//app.MapControllers();
+//app.UseRouting();   
+//app.UseCors("MedicalCors");
+//app.UseAuthentication();
+//app.UseAuthorization();
 //app.UseMiddleware<BasicAuthenticationMiddleware>();
+//app.Run();
+
+
+
+app.UseHttpsRedirection();
+
+app.UseCors("MedicalCors");
+
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization(); 
+
+//app.UseMiddleware<BasicAuthenticationMiddleware>();
+app.MapControllers();
+
 app.Run();

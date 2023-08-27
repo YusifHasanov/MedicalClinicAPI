@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class AuthResponse:BaseDto
+    public class AuthResponse:IDto
     {
         public string AccessToken { get; set; }
 

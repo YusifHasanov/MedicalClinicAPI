@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreateImage:BaseDto
+    public class CreateImage:IDto
     {
         public DateTime ImageDate { get; set; }
         public string ImageData { get; set; }

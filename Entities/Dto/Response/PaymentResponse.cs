@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class PaymentResponse:BaseDto
+    public class PaymentResponse:IDto
     {
         public int Id { get; set; }
         public decimal PaymentAmount { get; set; }

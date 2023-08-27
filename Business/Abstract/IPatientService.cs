@@ -11,10 +11,14 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IPatientService : IService<Patient, UpdatePatient, CreatePatient,PatientResponse>
+    public interface IPatientService  
     {
-        public Task<IQueryable<PatientResponse>> GetPatientsByDate(DateTime date);
+        public IQueryable<PatientResponse> GetPatientsByDate(DateTime date);
         public Task<IQueryable<PatientResponse>> GetPatientsByDateInterval(DateIntervalRequest interval);
-       
+        public IQueryable<PatientResponse> GetAll();
+        public Task<PatientResponse> GetByIdAsync(int id);
+        public Task<Patient> DeleteAsync(int id);
+        public Task<Patient> UpdateAsync(int id, UpdatePatient entity);
+        public Task<Patient> AddAsync(CreatePatient entity);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreateNotification:BaseDto
+    public class CreateNotification:IDto
     {
         public string Title { get; set; }
         public string Content { get; set; }

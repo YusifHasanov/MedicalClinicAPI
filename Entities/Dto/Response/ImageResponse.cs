@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class ImageResponse:BaseDto
+    public class ImageResponse:IDto
     {
         public int Id { get; set; } 
         public string ImageData { get; set; }

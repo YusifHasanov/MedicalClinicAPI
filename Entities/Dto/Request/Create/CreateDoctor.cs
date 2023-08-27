@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreateDoctor:BaseDto
+    public class CreateDoctor:IDto
     {
         public string Name { get; set; }
         public string Surname { get; set; }

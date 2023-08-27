@@ -17,112 +17,61 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class ImageService : BaseService<Image, UpdateImage, CreateImage,ImageResponse>, IImageService
+    public class ImageService :  IImageService
     {
-        public ImageService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+
+        public ImageService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper )
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper; 
         }
 
-        public override async Task<Image> AddAsync(CreateImage entity)
+        public  async Task<Image> AddAsync(CreateImage entity)
         {
-            try
-            {
                 var newImage = _mapper.Map<Image>(entity);
                 await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
-                await SaveChangesAsync();
-                await _logService.InfoAsync("New Image added succesfully");
+                await _unitOfWorkRepository.SaveChangesAsync();
                 return newImage;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "ImageService.cs AddAsync");
-                throw;
-            }
         }
 
-        public async override Task<Image> DeleteAsync(int id)
+        public async  Task<Image> DeleteAsync(int id)
         {
-            try
-            {
-                var exist = await IsExistAsync(id);
+
+                var exist = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}");
                 _unitOfWorkRepository.ImageRepository.Delete(id);
-                await SaveChangesAsync();
-             await   _logService.InfoAsync($"Image Deleted With id {id}");
+                await _unitOfWorkRepository.SaveChangesAsync();
+
                 return exist;
             }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "ImageService.cs DeleteAsync");
-                throw;
-            }
-        }
 
-        public async override Task<IQueryable<ImageResponse>> GetAll()
+        public   IQueryable<ImageResponse> GetAll()
         {
-            try
-            {
                 var allImagesResponse = _unitOfWorkRepository.ImageRepository.GetAll()
                     .ProjectTo<ImageResponse>(_mapper.ConfigurationProvider);
                 //var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
-                 await _logService.InfoAsync($"All Images Selected");
-             
                 return allImagesResponse;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "ImageService.cs GetAll");
-                throw;
-            }
+            
         }
 
-        public async override Task<ImageResponse> GetById(int id)
+        public async  Task<ImageResponse> GetByIdAsync(int id)
         {
-            try
-            {
-               await _logService.InfoAsync($"Select Image byId = {id}");
-                _= await IsExistAsync(id);
-                var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
-                var response  = _mapper.Map<ImageResponse>(image);
+                var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}"); 
+                var response = _mapper.Map<ImageResponse>(image);
                 return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "ImageService.cs GetById");
-                throw;
-            }
         }
 
-        public override async Task<Image> IsExistAsync(int id)
+ 
+        public async  Task<Image> UpdateAsync(int id, UpdateImage entity)
         {
-            var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id);
-            return image ?? throw new NotFoundException($"Image not found with id = {id}");
-        }
-
-        public override async Task SaveChangesAsync()
-        {
-             
-                await _unitOfWorkRepository.ImageRepository.SaveChangesAsync();
-             
-        }
-
-        public async override Task<Image> UpdateAsync(int id, UpdateImage entity)
-        {
-            try
-            {
-                var exist = await IsExistAsync(id);
+                var exist = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}");
                 entity.Id = id;
                 var image = _mapper.Map(entity, exist);
                 _unitOfWorkRepository.ImageRepository.Update(image);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"Image updated with id = {id}");
-                return image;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "ImageService.cs UpdateAsync");
-                throw;
-            }
+                await _unitOfWorkRepository.SaveChangesAsync();
 
+                return image;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Business.Services.BackgroundServices
                 await connection.OpenAsync();
 
                 using SqlCommand command = new SqlCommand("TRUNCATE TABLE Logs", connection);
-                await command.ExecuteNonQueryAsync();
+                //await command.ExecuteNonQueryAsync();
                 await connection.CloseAsync();
 
             }

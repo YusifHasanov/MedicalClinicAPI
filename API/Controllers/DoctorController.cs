@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Entities;
 using Core.Utils.Exceptions;
 using DataAccess.Abstract;
 using Entities.Dto.Request;
@@ -19,49 +20,28 @@ namespace API.Controllers
     public class DoctorController : ControllerBase
     {
         private readonly IUnitOfWorkService _unitOfWorkService;
-        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper;
-        public DoctorController(IUnitOfWorkService unitOfWorkService,IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
+
+        public DoctorController(IUnitOfWorkService unitOfWorkServicer)
         {
-            _unitOfWorkService = unitOfWorkService;
-            _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper;
+                _unitOfWorkService = unitOfWorkServicer;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
-            {
-                
-                return Ok(await (await _unitOfWorkService.DoctorService.GetAll()).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
- 
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var response = await _unitOfWorkService.DoctorService.GetById(id);
-
-                return Ok(response);
+            { 
+                return Ok(await  _unitOfWorkService.DoctorService.GetAll().ToListAsync());
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse {StatusCode=(int) HttpStatusCode.NotFound,Message=ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateDoctor create)
@@ -71,14 +51,15 @@ namespace API.Controllers
                 var response = await _unitOfWorkService.DoctorService.AddAsync(create);
                 return StatusCode((int)HttpStatusCode.Created, response);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
             catch (Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
-
-
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateDoctor update)
         {
@@ -89,11 +70,11 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
             }
         }
 
@@ -114,5 +95,26 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var response = await _unitOfWorkService.DoctorService.GetByIdAsync(id);
+
+                return Ok(response);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
+            }
+        }
+         
     }
 }

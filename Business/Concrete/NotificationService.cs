@@ -19,13 +19,17 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class NotificationService : BaseService<Notification, UpdateNotification, CreateNotification, NotificationResponse>, INotificationService
+    public class NotificationService : INotificationService
     {
-        public NotificationService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+        public NotificationService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper )
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper;
         }
 
-        public async override Task<Notification> AddAsync(CreateNotification entity)
+        public async  Task<Notification> AddAsync(CreateNotification entity)
         {
             try
             {
@@ -33,129 +37,83 @@ namespace Business.Concrete
 
                 var newNotification = _mapper.Map<Notification>(entity);
                 await _unitOfWorkRepository.NotificationRepository.AddAsync(newNotification);
-                await SaveChangesAsync();
+                await _unitOfWorkRepository.SaveChangesAsync();
 
-                await _logService.InfoAsync($"New Notification added succesfully for userId = {user.Id}");
+
 
                 return newNotification;
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "NotificationService.cs AddAsync");
+
                 throw;
             }
         }
 
-        public async override Task<Notification> DeleteAsync(int id)
+        public async  Task<Notification> DeleteAsync(int id)
         {
             try
             {
-                var exist = await IsExistAsync(id);
+                var exist = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Notification not found with id = {id}");
                 _unitOfWorkRepository.NotificationRepository.Delete(id);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"Notification Deleted With id {id}");
+                await _unitOfWorkRepository.SaveChangesAsync();
+
                 return exist;
             }
             catch (Exception ex)
             {
-                await _logService.ErrorAsync(ex, "NotificationService.cs DeleteAsync");
+
                 throw;
             }
 
         }
 
-        public async override Task<IQueryable<NotificationResponse>> GetAll()
+        public  IQueryable<NotificationResponse> GetAll()
         {
+            var allNotifications = _unitOfWorkRepository.NotificationRepository.GetAll()
+                .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
 
-            try
-            {
-                var allNotifications = _unitOfWorkRepository.NotificationRepository.GetAll()
-                    .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
-
-                await _logService.InfoAsync($"All Notifications Selected");
-
-                return allNotifications;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "NotificationService.cs GetAll");
-                throw;
-            }
+            return allNotifications;
         }
 
-        public async override Task<NotificationResponse> GetById(int id)
+        public async  Task<NotificationResponse> GetByIdAsync(int id)
         {
-            try
-            {
-                await _logService.InfoAsync($"Select Notification byId = {id}");
-                _ = await IsExistAsync(id);
-                var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id);
-                var response = _mapper.Map<NotificationResponse>(notification);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "NotificationService.cs GetById");
-                throw;
-            }
+
+            var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Notification not found with id = {id}");
+            var response = _mapper.Map<NotificationResponse>(notification);
+
+            return response;
         }
 
+ 
 
-
-        public async override Task<Notification> IsExistAsync(int id)
+        public async  Task<Notification> UpdateAsync(int id, UpdateNotification entity)
         {
-            var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id);
-            return notification ?? throw new NotFoundException($"Notification not found with id = {id}");
-        }
+            var exist = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Notification not found with id = {id}");
+            entity.Id = id;
+            var notification = _mapper.Map(entity, exist);
+            _unitOfWorkRepository.NotificationRepository.Update(notification);
+            await _unitOfWorkRepository.SaveChangesAsync();
 
-        public override async Task SaveChangesAsync()
-        {
-            await _unitOfWorkRepository.NotificationRepository.SaveChangesAsync();
-        }
-
-        public async override Task<Notification> UpdateAsync(int id, UpdateNotification entity)
-        {
-            try
-            {
-                var exist = await IsExistAsync(id);
-                entity.Id = id;
-                var notification = _mapper.Map(entity, exist);
-                _unitOfWorkRepository.NotificationRepository.Update(notification);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"Notification updated with id = {id}");
-                return notification;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "NotificationService.cs UpdateAsync");
-                throw;
-            }
+            return notification;
         }
         public async Task<IQueryable<NotificationResponse>> GetByUserIdAsync(int userId)
         {
-            try
-            {
-                var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(userId)
-                    ?? throw new NotFoundException($"User not found with id = {userId}");
-                DateTime currentDate = DateTime.Now.Date;
-                var allNotifications = _unitOfWorkRepository.NotificationRepository
-                    .GetAll(not => not.UserId.Equals(userId) &&
-                            not.NotificationDate.Year == currentDate.Year &&
-                            not.NotificationDate.Month == currentDate.Month &&
-                            not.NotificationDate.Day == currentDate.Day)
-                    .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
+            var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(userId)
+                ?? throw new NotFoundException($"User not found with id = {userId}");
 
-                await _logService.InfoAsync($"All Notifications Selected");
+            DateTime currentDate = DateTime.Now.Date;
 
-                return allNotifications;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "NotificationService.cs GetByUserId");
-                throw;
-            }
+            var allNotifications = _unitOfWorkRepository.NotificationRepository
+                .GetAll(not => not.UserId.Equals(userId) &&
+                        not.NotificationDate.Year == currentDate.Year &&
+                        not.NotificationDate.Month == currentDate.Month &&
+                        not.NotificationDate.Day == currentDate.Day)
+                .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
+
+
+            return allNotifications;
         }
-
-
     }
+
 }

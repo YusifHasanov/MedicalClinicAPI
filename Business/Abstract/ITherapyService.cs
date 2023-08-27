@@ -11,10 +11,15 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface ITherapyService:IService<Therapy,UpdateTherapy, CreateTherapy, TherapyResponse>
+    public interface ITherapyService 
     {
         public Task<IQueryable<TherapyResponse>> GetTherapiesByDateInterval(DateIntervalRequest interval);
-        public Task<IQueryable<TherapyResponse>> GetTherapiesByPatientId(int patientId);
+        public  IQueryable<TherapyResponse> GetTherapiesByPatientId(int patientId);
+        public IQueryable<TherapyResponse> GetAll();
+        public Task<TherapyResponse> GetByIdAsync(int id);
+        public Task<Therapy> DeleteAsync(int id);
+        public Task<Therapy> UpdateAsync(int id, UpdateTherapy entity);
+        public Task<Therapy> AddAsync(CreateTherapy entity);
 
     }
 

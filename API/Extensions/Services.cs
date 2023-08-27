@@ -105,9 +105,27 @@ namespace Core.Utils
             {
                 options.AddPolicy(name: "MedicalCors", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5000")
+                    policy.WithOrigins("http://localhost:5556", "https://localhost:5556", "https://medical-clinic-ui-yusifhasanov.vercel.app", "https://medical-clinic-ui-git-main-yusifhasanov.vercel.app", "https://medical-clinic-ui.vercel.app")
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod() 
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+
+                    //policy.WithOrigins("https://medical-clinic-ui.vercel.app")
+                    //       .AllowAnyMethod()
+                    //       .WithExposedHeaders("content-disposition")
+                    //       .SetIsOriginAllowed((host) => true)
+                    //       .AllowAnyHeader()
+                    //       .AllowCredentials()
+                    //       .SetPreflightMaxAge(TimeSpan.FromSeconds(3600));
+                    //policy.AllowAnyOrigin()
+                    //       .AllowAnyMethod()
+                    //       .AllowAnyHeader()
+                    //       .AllowCredentials();
+
+
+
                 });
             });
             builder.Services.AddHostedService<WeeklyTruncateLogsTable>();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdatePayment: BaseDto
+    public class UpdatePayment: IDto
     {
         public int Id { get; set; }
         public decimal PaymentAmount { get; set; }

@@ -28,16 +28,21 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class UserService : BaseService<User, UpdateUser, CreateUser, UserResponse>, IUserService
+    public class UserService :  IUserService
     {
-        public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor) : base(unitOfWorkRepository, mapper, logService, globals, httpContextAccessor)
+        private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly IMapper _mapper;
+        private readonly Globals _globals;
+        public UserService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, Globals globals) 
         {
+            _unitOfWorkRepository = unitOfWorkRepository;
+            _mapper = mapper; 
+            _globals = globals;
         }
 
-        public override async Task<User> AddAsync(CreateUser entity)
+        public  async Task<User> AddAsync(CreateUser entity)
         {
-            try
-            {
+ 
                 var newUser = _mapper.Map<User>(entity);
                 var existUser = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.UserName.Equals(newUser.UserName));
                 if (existUser != null)
@@ -47,22 +52,13 @@ namespace Business.Concrete
                 var accessToken = GenerateJwtAccessToken(newUser);
                 newUser.AccessToken = accessToken;
                 await _unitOfWorkRepository.UserRepository.AddAsync(newUser);
-                await SaveChangesAsync();
-
-                await _logService.InfoAsync($"New user added successfully with username= {newUser.UserName}");
-
+                await _unitOfWorkRepository.SaveChangesAsync();
                 return newUser;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :58 && UserService.cs");
-                throw;
-            }
+           
         }
         public async Task<AuthResponse> Login(LoginUser loginUser)
         {
-            try
-            {
+ 
                 var authUser = await _unitOfWorkRepository.UserRepository
                     .GetOneAsync(user => user.UserName.Equals(loginUser.UserName)
                     /*&& user.Role.Equals(loginUser.Role)*/) ?? throw new NotFoundException("User Not Found");
@@ -71,7 +67,7 @@ namespace Business.Concrete
                 var accessToken = GenerateJwtAccessToken(authUser);
 
                 authUser.AccessToken = accessToken;
-                await SaveChangesAsync();
+                await _unitOfWorkRepository.SaveChangesAsync();
 
                 AuthResponse response = new()
                 {
@@ -81,12 +77,7 @@ namespace Business.Concrete
                 };
                 return response;
 
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :85 && UserService.cs");
-                throw;
-            }
+ 
         }
         private string GenerateJwtAccessToken(User user)
         {
@@ -111,17 +102,11 @@ namespace Business.Concrete
         }
         public async Task<User> GetUserByAccessToken(string accessToken)
         {
-            try
-            {
+ 
                 var user = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.AccessToken.Equals(accessToken));
 
                 return user;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :120 && UserService.cs");
-                throw;
-            }
+ 
         }
         private void ValidateUserAuthorization(User authUser, bool checkRole = true)
         {
@@ -143,73 +128,37 @@ namespace Business.Concrete
                 throw new UnauthorizedException("Username or password is wrong");
             }
         }
-        public async override Task<User> DeleteAsync(int id)
+        public async  Task<User> DeleteAsync(int id)
         {
-            try
-            {
-                var exist = await IsExistAsync(id);
+ 
+                var exist = await _unitOfWorkRepository.UserRepository.GetByIdAsync(id) ?? throw new NotFoundException($"User not found with id = {id}");
                 _unitOfWorkRepository.UserRepository.Delete(id);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"User Deleted With id {id}");
+                await _unitOfWorkRepository.SaveChangesAsync();
                 return exist;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "UserService.cs DeleteAsync");
-                throw;
-            }
+  
         }
-        public override async Task<IQueryable<UserResponse>> GetAll()
+        public   IQueryable<UserResponse> GetAll()
         {
-            try
-            {
                 var result = _unitOfWorkRepository.UserRepository.GetAll()
                     .ProjectTo<UserResponse>(_mapper.ConfigurationProvider);
-                await _logService.InfoAsync($"All Users Selected");
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "Line :172 && UserService.cs");
-                throw;
-            }
+
+                return result; 
         }
 
-        public override async Task<UserResponse> GetById(int id)
+        public  async Task<UserResponse> GetByIdAsync(int id)
         {
-            try
-            {
+  
+                var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(id) ?? throw new NotFoundException($"User not found with id = {id}");
 
-                var user =await IsExistAsync(id);
-                await _logService.InfoAsync($"Select User byId = {id}");
                 var userResponse = _mapper.Map<UserResponse>(user);
-                return userResponse;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "UserService.cs GetById");
-                throw;
-            }
+                return userResponse; 
         }
+ 
 
-        public override async Task<User> IsExistAsync(int id)
+        public async  Task<User> UpdateAsync(int id, UpdateUser updateUser)
         {
-            var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(id);
-            return user ?? throw new NotFoundException($"User not found with id = {id}");
-        }
-
-        public async override Task SaveChangesAsync()
-        {
-            await _unitOfWorkRepository.UserRepository.SaveChangesAsync();
-
-
-        }
-
-        public async override Task<User> UpdateAsync(int id, UpdateUser updateUser)
-        {
-            try
-            {
+ 
                 var authUser = await _unitOfWorkRepository.UserRepository.GetOneAsync(user => user.UserName.Equals(updateUser.UserName) && user.Role.Equals(updateUser.Role));
 
                 ValidateUserAuthorization(authUser);
@@ -217,46 +166,39 @@ namespace Business.Concrete
 
                 var user = _mapper.Map(updateUser, authUser);
                 _unitOfWorkRepository.UserRepository.Update(user);
-                await SaveChangesAsync();
-                await _logService.InfoAsync($"User updated with id = {id}");
-                return user;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "UserService.cs UpdateAsync");
-                throw;
-            }
+                await _unitOfWorkRepository.SaveChangesAsync();
+
+                return user; 
         }
 
-
-        public async Task<AuthResponse> DescyptJWT()
+        public JwtSecurityToken DecryptJWT(RefreshTokenDto token)
         {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _globals.Issuer,
+                ValidAudience = _globals.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_globals.SecretKey)),
+            };
+
+            SecurityToken validatedToken;
+            var principal = tokenHandler.ValidateToken(token.AccessToken, tokenValidationParameters, out validatedToken);
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            return jwtToken;
 
         }
         public async Task<AuthResponse> RefreshAccessTokenAsync(RefreshTokenDto token)
-        {
-            try
-            {
+        { 
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _globals.Issuer,
-                    ValidAudience = _globals.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_globals.SecretKey)),
-                };
-
-                SecurityToken validatedToken;
-                var principal = tokenHandler.ValidateToken(token.AccessToken, tokenValidationParameters, out validatedToken);
-                var jwtToken = (JwtSecurityToken)validatedToken;
-
+                JwtSecurityToken jwtToken = this.DecryptJWT(token);
                 string username = jwtToken.Claims.FirstOrDefault(x => x.Type == "name")?.Value ?? "";
                 string password = jwtToken.Claims.FirstOrDefault(x => x.Type == "password")?.Value ?? "";
                 string role = jwtToken.Claims.FirstOrDefault(x => x.Type == "role")?.Value ?? "";
+
                 User user = await _unitOfWorkRepository.UserRepository
                     .GetOneAsync(user =>
                         user.UserName.Equals(username) &&
@@ -270,9 +212,9 @@ namespace Business.Concrete
                 }
                 if (jwtToken.ValidTo < DateTime.UtcNow)
                 {
-                    var newToken = GenerateJwtAccessToken(user);
+                    string newToken = GenerateJwtAccessToken(user);
                     user.AccessToken = newToken;
-                    await SaveChangesAsync();
+                    await _unitOfWorkRepository.SaveChangesAsync();
 
                 }
 
@@ -283,12 +225,7 @@ namespace Business.Concrete
                     UserId = user.Id
                 };
                 return response;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "UserService.cs RefreshAccessTokenAsync");
-                throw;
-            }
+ 
         }
     }
 }

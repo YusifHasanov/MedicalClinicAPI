@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class NotificationResponse:BaseDto
+    public class NotificationResponse:IDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

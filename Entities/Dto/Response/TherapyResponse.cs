@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.Response
 {
-    public class TherapyResponse : BaseDto
+    public class TherapyResponse : IDto
     {
         public int Id { get; set; }
         public DateTime TherapyDate { get; set; }

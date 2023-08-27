@@ -8,7 +8,7 @@ using Entities.Entities.Enums;
 
 namespace Entities.Dto.Request.Create
 {
-    public class CreateUser:BaseDto
+    public class CreateUser:IDto
     {
         public string UserName { get; set; }
         public string Password { get; set; }

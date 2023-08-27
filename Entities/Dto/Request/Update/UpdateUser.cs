@@ -8,7 +8,7 @@ using Entities.Entities.Enums;
 
 namespace Entities.Dto.Request.Update
 {
-    public class UpdateUser:BaseDto
+    public class UpdateUser:IDto
     {
         public int Id { get; set; }
         public string UserName { get; set; }

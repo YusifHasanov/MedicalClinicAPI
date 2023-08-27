@@ -10,10 +10,10 @@ namespace Entities.Entities
     public class Log
     {
         public int Id { get; set; }
+        public string? Path { get; set; }
         public string? Message { get; set; }
+        public int? ResponseCode { get; set; }
         public DateTime LogDate { get; set; }
         public string LogLevel { get; set; }
-        public string? ExceptionMessage { get; set; }
-        public string? ExceptionStackTrace { get; set; }
     }
 }

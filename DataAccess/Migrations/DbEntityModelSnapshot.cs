@@ -88,12 +88,6 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ExceptionMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExceptionStackTrace")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LogDate")
                         .HasColumnType("datetime2");
 
@@ -103,6 +97,12 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ResponseCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
