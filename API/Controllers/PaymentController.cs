@@ -9,6 +9,7 @@ using Entities.Dto.Request;
 using Microsoft.EntityFrameworkCore;
 using Core.Utils.Exceptions;
 using Core.Entities;
+using Entities.Dto.Response;
 
 namespace API.Controllers
 {
@@ -24,112 +25,38 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllPayments()
-        {
-            try
-            {
-
-                return Ok(await  _unitOfWorkService.PaymentService.GetAll().ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
-        }
-
-
         [HttpPost("byDateInterval")]
         public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
-            try
-            {
-                return Ok(await (await _unitOfWorkService.PaymentService.GetPaymentsByDateInterval(interval)).ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            return Ok(await (await _unitOfWorkService.PaymentService.GetPaymentsByDateInterval(interval)).ToListAsync());
         }
 
         [HttpGet("byPatientId/{id:int}")]
-        public async Task<IActionResult> GetAllPaymentsByPatientId(int id)
+        public IActionResult GetAllPaymentsByPatientId(int id)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PaymentService.GetPaymentsByPatientId(id);
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = _unitOfWorkService.PaymentService.GetPaymentsByPatientId(id);
+            return Ok(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddPayment(CreatePayment createPayment)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PaymentService.AddAsync(createPayment);
-                return StatusCode((int)HttpStatusCode.Created, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.PaymentService.AddAsync(createPayment);
+            return StatusCode((int)HttpStatusCode.Created, response);
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdatePayment(int id, UpdatePayment updatePayment)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PaymentService.UpdateAsync(id, updatePayment);
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.PaymentService.UpdateAsync(id, updatePayment);
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletePayment(int id)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PaymentService.DeleteAsync(id);
-                return StatusCode((int)HttpStatusCode.NoContent, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.PaymentService.DeleteAsync(id);
+            return StatusCode((int)HttpStatusCode.NoContent, response);
         }
     }
 }

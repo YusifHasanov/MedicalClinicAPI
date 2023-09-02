@@ -21,62 +21,19 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
-
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByUserIdAsync(int id)
-        {
-            try
-            {
-                var notifications = await (await _unitOfWorkService.NotificationService.GetByUserIdAsync(id)).ToListAsync();
-                return Ok(notifications);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
-        }
-
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var notifications = await  _unitOfWorkService.NotificationService.GetAll().ToListAsync();
-                return Ok(notifications);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var notifications = await _unitOfWorkService.NotificationService.GetAll().ToListAsync();
+            return Ok(notifications);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Add(CreateNotification notification)
         {
-            try
-            {
-                var response = await _unitOfWorkService.NotificationService.AddAsync(notification);
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.NotificationService.AddAsync(notification);
+            return StatusCode((int)HttpStatusCode.Created, response);
         }
 
 
@@ -100,11 +57,11 @@ namespace API.Controllers
 
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id,[FromBody]UpdateNotification notification)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateNotification notification)
         {
             try
             {
-                var response = await _unitOfWorkService.NotificationService.UpdateAsync( id,notification);
+                var response = await _unitOfWorkService.NotificationService.UpdateAsync(id, notification);
                 return Ok(response);
             }
             catch (NotFoundException ex)

@@ -22,108 +22,39 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllTherapies()
-        {
-            try
-            {
-
-                return Ok(await  _unitOfWorkService.TherapyService.GetAll().ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddTherapyAsync(CreateTherapy createTherapy)
         {
-            try
-            {
-                var response = await _unitOfWorkService.TherapyService.AddAsync(createTherapy);
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.TherapyService.AddAsync(createTherapy);
+            return Ok(response);
         }
 
         [HttpPost("byDateInterval")]
         public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
-            try
-            {
-                return Ok(await (await _unitOfWorkService.TherapyService.GetTherapiesByDateInterval(interval)).ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(await (await _unitOfWorkService.TherapyService.GetTherapiesByDateInterval(interval)).ToListAsync());
         }
 
         [HttpGet("byPatientId/{patientId}")]
         public async Task<IActionResult> GetAllByPatientId(int patientId)
         {
-            try
-            {
-                return Ok(await  _unitOfWorkService.TherapyService.GetTherapiesByPatientId(patientId).ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            return Ok(await _unitOfWorkService.TherapyService.GetTherapiesByPatientId(patientId).ToListAsync());
         }
-
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteTherapy(int id)
         {
-            try
-            {
-                var response = await _unitOfWorkService.TherapyService.DeleteAsync(id);
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+
+            var response = await _unitOfWorkService.TherapyService.DeleteAsync(id);
+            return Ok(response);
 
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateTherapy( int id, [FromBody] UpdateTherapy updateTeraphy)
+        public async Task<IActionResult> UpdateTherapy(int id, [FromBody] UpdateTherapy updateTeraphy)
         {
-            try
-            {
-                var response = await _unitOfWorkService.TherapyService.UpdateAsync(id, updateTeraphy);
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.TherapyService.UpdateAsync(id, updateTeraphy);
+            return Ok(response);
         }
     }
 }

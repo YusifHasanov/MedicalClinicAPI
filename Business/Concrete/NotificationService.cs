@@ -28,7 +28,13 @@ namespace Business.Concrete
             _unitOfWorkRepository = unitOfWorkRepository;
             _mapper = mapper;
         }
+        public IQueryable<NotificationResponse> GetAll()
+        {
+            var allNotifications = _unitOfWorkRepository.NotificationRepository.GetAll()
+                .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
 
+            return allNotifications;
+        }
         public async  Task<Notification> AddAsync(CreateNotification entity)
         {
             try
@@ -49,7 +55,6 @@ namespace Business.Concrete
                 throw;
             }
         }
-
         public async  Task<Notification> DeleteAsync(int id)
         {
             try
@@ -67,26 +72,6 @@ namespace Business.Concrete
             }
 
         }
-
-        public  IQueryable<NotificationResponse> GetAll()
-        {
-            var allNotifications = _unitOfWorkRepository.NotificationRepository.GetAll()
-                .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
-
-            return allNotifications;
-        }
-
-        public async  Task<NotificationResponse> GetByIdAsync(int id)
-        {
-
-            var notification = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Notification not found with id = {id}");
-            var response = _mapper.Map<NotificationResponse>(notification);
-
-            return response;
-        }
-
- 
-
         public async  Task<Notification> UpdateAsync(int id, UpdateNotification entity)
         {
             var exist = await _unitOfWorkRepository.NotificationRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Notification not found with id = {id}");
@@ -97,23 +82,6 @@ namespace Business.Concrete
 
             return notification;
         }
-        public async Task<IQueryable<NotificationResponse>> GetByUserIdAsync(int userId)
-        {
-            var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(userId)
-                ?? throw new NotFoundException($"User not found with id = {userId}");
-
-            DateTime currentDate = DateTime.Now.Date;
-
-            var allNotifications = _unitOfWorkRepository.NotificationRepository
-                .GetAll(not => not.UserId.Equals(userId) &&
-                        not.NotificationDate.Year == currentDate.Year &&
-                        not.NotificationDate.Month == currentDate.Month &&
-                        not.NotificationDate.Day == currentDate.Day)
-                .ProjectTo<NotificationResponse>(_mapper.ConfigurationProvider);
-
-
-            return allNotifications;
-        }
+ 
     }
-
 }

@@ -1,13 +1,17 @@
 ﻿using Business.Abstract;
+using Core.Entities;
 using Entities.Entities;
 using Entities.Entities.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Mime;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Business.Services.Middlewares
@@ -51,7 +55,7 @@ namespace Business.Services.Middlewares
                 await logService.LogAsync(new Log()
                 {
                     LogDate = DateTime.Now,
-                    LogLevel =hasError ? LogLevel.Error.ToString() : LogLevel.Info.ToString(),
+                    LogLevel = hasError ? LogLevel.Error.ToString() : LogLevel.Info.ToString(),
                     ResponseCode = responseCode,
                     Path = $"Request: {context.Request.Method} {context.Request.Path}",
                     Message = hasError ? responseBodyContent : message,
@@ -60,13 +64,8 @@ namespace Business.Services.Middlewares
                 responseBodyCaptureStream.Seek(0, SeekOrigin.Begin);
                 await responseBodyCaptureStream.CopyToAsync(originalResponseBody);
             }
-            catch (Exception ex)
+            catch
             {
-
-            }
-            finally
-            {
-                context.Response.Body = originalResponseBody;
             }
         }
     }

@@ -14,15 +14,13 @@ namespace Business.Abstract
 {
     public interface IUserService 
     {
-        public IQueryable<UserResponse> GetAll();
-        public Task<UserResponse> GetByIdAsync(int id);
+        public IQueryable<UserResponse> GetAll(); 
         public Task<User> DeleteAsync(int id); 
         public Task<User> UpdateAsync(int id, UpdateUser entity);
         public Task<User> AddAsync(CreateUser entity);
-        Task<AuthResponse> Login(LoginUser loginUser);
-        Task<User> GetUserByAccessToken(string accessToken);
+        public Task<AuthResponse> Login(LoginUser loginUser);
         Task<AuthResponse> RefreshAccessTokenAsync(RefreshTokenDto refreshToken);
-        JwtSecurityToken  DecryptJWT(RefreshTokenDto token);
+        public JwtSecurityToken  DecryptJWT(RefreshTokenDto token);
 
     }
 }

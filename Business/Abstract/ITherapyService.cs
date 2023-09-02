@@ -15,7 +15,6 @@ namespace Business.Abstract
     {
         public Task<IQueryable<TherapyResponse>> GetTherapiesByDateInterval(DateIntervalRequest interval);
         public  IQueryable<TherapyResponse> GetTherapiesByPatientId(int patientId);
-        public IQueryable<TherapyResponse> GetAll();
         public Task<TherapyResponse> GetByIdAsync(int id);
         public Task<Therapy> DeleteAsync(int id);
         public Task<Therapy> UpdateAsync(int id, UpdateTherapy entity);

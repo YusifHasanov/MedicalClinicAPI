@@ -22,77 +22,57 @@ namespace Business.Concrete
     public class DoctorService : IDoctorService
     {
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly IMapper _mapper; 
-        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)  
+        private readonly IMapper _mapper;
+        public DoctorService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
             _unitOfWorkRepository = unitOfWorkRepository;
             _mapper = mapper;
         }
 
-        public   async Task<Doctor> AddAsync(CreateDoctor entity)
+        public async Task<Doctor> AddAsync(CreateDoctor entity)
         {
-            try
-            {
-                var dbDoctor = await _unitOfWorkRepository.DoctorRepository
-                    .GetOneAsync(doctor => doctor.Name.Equals(entity.Name) && doctor.Surname.Equals(entity.Surname));
+            var dbDoctor = await _unitOfWorkRepository.DoctorRepository
+                .GetOneAsync(doctor => doctor.Name.Equals(entity.Name) && doctor.Surname.Equals(entity.Surname));
 
-                if (dbDoctor != null)
-                    throw new Exception($"Doctor is exist with name= {entity.Name} and surname = {entity.Surname}");
+            if (dbDoctor != null)
+                throw new Exception($"Doctor is exist with name= {entity.Name} and surname = {entity.Surname}");
 
-                var newDoctor = _mapper.Map<Doctor>(entity);
+            var newDoctor = _mapper.Map<Doctor>(entity);
 
-                await _unitOfWorkRepository.DoctorRepository.AddAsync(newDoctor);
-                await _unitOfWorkRepository.SaveChangesAsync();
+            await _unitOfWorkRepository.DoctorRepository.AddAsync(newDoctor);
+            await _unitOfWorkRepository.SaveChangesAsync();
 
-                return newDoctor;
-
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return newDoctor;
         }
 
-        public async   Task<Doctor> DeleteAsync(int id)
+        public async Task<Doctor> DeleteAsync(int id)
         {
-                var exist = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
-                _unitOfWorkRepository.DoctorRepository.Delete(id);
-                await _unitOfWorkRepository.SaveChangesAsync();
-                return exist;
+            var exist = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id)
+                ?? throw new NotFoundException($"Doctor not found with id = {id}");
+            _unitOfWorkRepository.DoctorRepository.Delete(id);
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return exist;
         }
 
-        public   IQueryable<DoctorResponse> GetAll()
+        public IQueryable<DoctorResponse> GetAll()
         {
             return _unitOfWorkRepository.DoctorRepository.GetAll()
                 .ProjectTo<DoctorResponse>(_mapper.ConfigurationProvider);
         }
 
-        public   async Task<DoctorResponse> GetByIdAsync(int id)
+        public async Task<Doctor> UpdateAsync(int id, UpdateDoctor entity)
         {
 
-            _ = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
+            var existDcotor = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
+            entity.Id = id;
 
-            var result = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id);
+            var doctor = _mapper.Map(entity, existDcotor);
 
-            var response = _mapper.Map<DoctorResponse>(result);
+            _unitOfWorkRepository.DoctorRepository.Update(doctor);
 
-            return response;
-        }
+            await _unitOfWorkRepository.SaveChangesAsync();
 
- 
-        public async   Task<Doctor> UpdateAsync(int id, UpdateDoctor entity)
-        {  
-
-                var existDcotor = await _unitOfWorkRepository.DoctorRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Doctor not found with id = {id}");
-                entity.Id = id;
-
-                var doctor = _mapper.Map(entity, existDcotor);
-
-                _unitOfWorkRepository.DoctorRepository.Update(doctor);
-
-                await _unitOfWorkRepository.SaveChangesAsync();
-
-                return doctor; 
+            return doctor;
         }
     }
 }

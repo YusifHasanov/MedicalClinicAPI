@@ -28,14 +28,13 @@ namespace Business.Concrete
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
         private readonly ILogService _logService;
-        private readonly Globals _globals;
+ 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService, Globals globals, IHttpContextAccessor httpContextAccessor)
+        public PaymentService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper, ILogService logService,   IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWorkRepository = unitOfWorkRepository;
             _mapper = mapper;
-            _logService = logService;
-            _globals = globals;
+            _logService = logService; 
             _httpContextAccessor = httpContextAccessor;
 
 
@@ -76,30 +75,7 @@ namespace Business.Concrete
 
             return dbPayment;
         }
-
-        public  IQueryable<PaymentResponse> GetAll()
-        {
-
-            var result = _unitOfWorkRepository.PaymentRepository.GetAll()
-                .Include(payment => payment.Therapy)
-                .ThenInclude(Therapy => Therapy.Patient)
-                .ProjectTo<PaymentResponse>(_mapper.ConfigurationProvider);
-
-
-            return result;
-        }
-
-        public async  Task<PaymentResponse> GetByIdAsync(int id)
-        {
-
-            _ = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Payment not found with id = {id}");
-
-            var payment = await _unitOfWorkRepository.PaymentRepository.GetByIdAsync(id);
-            var paymentResponse = _mapper.Map<PaymentResponse>(payment);
-            return paymentResponse;
-        }
-
-        public async Task<IQueryable<PaymentResponse>> GetPaymentsByDateInterval(DateIntervalRequest interval)
+        public async   Task<IQueryable<PaymentResponse>> GetPaymentsByDateInterval(DateIntervalRequest interval)
         {
             string auth = _httpContextAccessor.HttpContext.Request.Headers["Token"];
 
@@ -129,7 +105,7 @@ namespace Business.Concrete
             return payments;
         }
 
-        public async Task<IQueryable<PaymentResponse>> GetPaymentsByPatientId(int patientId)
+        public IQueryable<PaymentResponse> GetPaymentsByPatientId(int patientId)
         {
             IQueryable<PaymentResponse> payments = _unitOfWorkRepository.PaymentRepository
                     .GetAll(payment => payment.Therapy.PatientId == patientId)
@@ -141,7 +117,6 @@ namespace Business.Concrete
             return payments;
         }
 
- 
 
         public async  Task<Payment> UpdateAsync(int id, UpdatePayment entity)
         {

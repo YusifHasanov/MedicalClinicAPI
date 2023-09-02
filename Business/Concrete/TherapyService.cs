@@ -46,15 +46,6 @@ namespace Business.Concrete
 
                 return exist;
         }
-        public   IQueryable<TherapyResponse> GetAll()
-        {
-   
-                var all = _unitOfWorkRepository.TherapyRepository.GetAll();
-                var response = _mapper.ProjectTo<TherapyResponse>(all);
-
-
-                return response; 
-        }
         public async  Task<TherapyResponse> GetByIdAsync(int id)
         {
  

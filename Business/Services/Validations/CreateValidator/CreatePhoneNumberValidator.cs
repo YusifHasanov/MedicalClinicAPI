@@ -12,9 +12,12 @@ namespace Business.Services.Validations.CreateValidator
 {
     public class CreatePhoneNumberValidator:AbstractValidator<CreatePhoneNumber>
     {
+        private const string PatientShouldNotBeEmpty = "Xəstə seçilməlidir";
         public CreatePhoneNumberValidator()
         {
-            RuleFor(phoneNumber => phoneNumber.PatientId).NotNull().NotEmpty().WithMessage("Xəstə boş ola bilməz");
+            RuleFor(phoneNumber => phoneNumber.PatientId)
+                .NotNull().WithMessage(PatientShouldNotBeEmpty)
+                .NotEmpty().WithMessage(PatientShouldNotBeEmpty);
         }
     }
 }

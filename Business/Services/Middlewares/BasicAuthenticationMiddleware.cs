@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Core.Utils.Middleware
+namespace Business.Services.Middlewares
 {
    
     public class BasicAuthenticationMiddleware

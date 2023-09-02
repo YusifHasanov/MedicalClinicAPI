@@ -23,98 +23,35 @@ namespace API.Controllers
 
         public DoctorController(IUnitOfWorkService unitOfWorkServicer)
         {
-                _unitOfWorkService = unitOfWorkServicer;
+            _unitOfWorkService = unitOfWorkServicer;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            { 
-                return Ok(await  _unitOfWorkService.DoctorService.GetAll().ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse {StatusCode=(int) HttpStatusCode.NotFound,Message=ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            return Ok(await _unitOfWorkService.DoctorService.GetAll().ToListAsync());
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateDoctor create)
         {
-            try
-            {
-                var response = await _unitOfWorkService.DoctorService.AddAsync(create);
-                return StatusCode((int)HttpStatusCode.Created, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.DoctorService.AddAsync(create);
+            return StatusCode((int)HttpStatusCode.Created, response);
         }
+
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateDoctor update)
         {
-            try
-            {
-                var response = await _unitOfWorkService.DoctorService.UpdateAsync(id, update);
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var response = await _unitOfWorkService.DoctorService.UpdateAsync(id, update);
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var response = await _unitOfWorkService.DoctorService.DeleteAsync(id);
-                return StatusCode((int)HttpStatusCode.NoContent, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _unitOfWorkService.DoctorService.DeleteAsync(id);
+            return StatusCode((int)HttpStatusCode.NoContent, response);
         }
 
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var response = await _unitOfWorkService.DoctorService.GetByIdAsync(id);
-
-                return Ok(response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
-        }
-         
     }
 }

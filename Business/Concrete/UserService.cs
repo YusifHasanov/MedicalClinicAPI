@@ -146,16 +146,6 @@ namespace Business.Concrete
                 return result; 
         }
 
-        public  async Task<UserResponse> GetByIdAsync(int id)
-        {
-  
-                var user = await _unitOfWorkRepository.UserRepository.GetByIdAsync(id) ?? throw new NotFoundException($"User not found with id = {id}");
-
-                var userResponse = _mapper.Map<UserResponse>(user);
-                return userResponse; 
-        }
- 
-
         public async  Task<User> UpdateAsync(int id, UpdateUser updateUser)
         {
  

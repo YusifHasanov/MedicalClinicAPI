@@ -10,12 +10,9 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface INotificationService 
+    public interface INotificationService
     {
-        public Task<IQueryable<NotificationResponse>> GetByUserIdAsync(int userId );
-
         public IQueryable<NotificationResponse> GetAll();
-        public Task<NotificationResponse> GetByIdAsync(int id);
         public Task<Notification> DeleteAsync(int id);
         public Task<Notification> UpdateAsync(int id, UpdateNotification entity);
         public Task<Notification> AddAsync(CreateNotification entity);

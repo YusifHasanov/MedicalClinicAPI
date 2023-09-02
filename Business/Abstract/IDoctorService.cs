@@ -13,8 +13,7 @@ namespace Business.Abstract
 {
     public interface IDoctorService 
     {
-        public IQueryable<DoctorResponse> GetAll();
-        public Task<DoctorResponse> GetByIdAsync(int id);
+        public IQueryable<DoctorResponse> GetAll(); 
         public Task<Doctor> DeleteAsync(int id);
         public Task<Doctor> UpdateAsync(int id, UpdateDoctor entity);
         public Task<Doctor> AddAsync(CreateDoctor entity);

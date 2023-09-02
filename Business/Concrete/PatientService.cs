@@ -28,14 +28,10 @@ namespace Business.Concrete
         }
 
         public async  Task<Patient> AddAsync(CreatePatient entity)
-        {
-            try
-            {
-
+        { 
                 var newPatient = _mapper.Map<Patient>(entity);
 
                 //await _unitOfWorkRepository.SaveChangesAsync();
-                await _logService.InfoAsync($"New Patient Added With id {newPatient.Id}");
                 if (entity.Therapies is not null && entity.Therapies.Any())
                 {
                     foreach (var therapy in entity.Therapies)
@@ -61,7 +57,8 @@ namespace Business.Concrete
 
                         //await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
                     }
-                    await _logService.InfoAsync($"Patients with id = {newPatient.Id} images added succesfully");
+
+
 
                 }
                 if (entity.PhoneNumbers?.Count > 0)
@@ -81,18 +78,12 @@ namespace Business.Concrete
                 await _unitOfWorkRepository.PatientRepository.AddAsync(newPatient);
                 await _unitOfWorkRepository.SaveChangesAsync();
                 return newPatient;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "PatientService.cs AddAsync");
-                throw;
-            }
+    
         }
 
         public async  Task<Patient> DeleteAsync(int id)
         {
-            try
-            {
+ 
                 var exist = await _unitOfWorkRepository.PatientRepository.GetByIdAsync(id) ?? throw new NotFoundException($"Patient not found with id = {id}");
 
                 _unitOfWorkRepository.PatientRepository.Delete(id);
@@ -101,24 +92,8 @@ namespace Business.Concrete
                 await _logService.InfoAsync($"Patient Deleted With id {id}");
 
                 return exist;
-            }
-            catch (Exception ex)
-            {
-                await _logService.ErrorAsync(ex, "PatientService.cs DeleteAsync");
-                throw;
-            }
+   
         }
-
-        public  IQueryable<PatientResponse> GetAll()
-        {
-
-            return _unitOfWorkRepository.PatientRepository
-            .GetAll()
-            .Include(p => p.Images)
-            .ProjectTo<PatientResponse>(_mapper.ConfigurationProvider);
-
-        }
-
         public async  Task<PatientResponse> GetByIdAsync(int id)
         {
             var patient = await _unitOfWorkRepository.PatientRepository
@@ -166,10 +141,6 @@ namespace Business.Concrete
 
 
         }
-
-
- 
-
         public  async Task<Patient> UpdateAsync(int id, UpdatePatient entity)
         {
             var exist = await _unitOfWorkRepository.PatientRepository

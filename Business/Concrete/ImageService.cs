@@ -45,33 +45,7 @@ namespace Business.Concrete
 
                 return exist;
             }
-
-        public   IQueryable<ImageResponse> GetAll()
-        {
-                var allImagesResponse = _unitOfWorkRepository.ImageRepository.GetAll()
-                    .ProjectTo<ImageResponse>(_mapper.ConfigurationProvider);
-                //var allImagesResponse = _mapper.Map<IQueryable<ImageResponse>>(result);
-                return allImagesResponse;
-            
-        }
-
-        public async  Task<ImageResponse> GetByIdAsync(int id)
-        {
-                var image = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}"); 
-                var response = _mapper.Map<ImageResponse>(image);
-                return response;
-        }
-
+         
  
-        public async  Task<Image> UpdateAsync(int id, UpdateImage entity)
-        {
-                var exist = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}");
-                entity.Id = id;
-                var image = _mapper.Map(entity, exist);
-                _unitOfWorkRepository.ImageRepository.Update(image);
-                await _unitOfWorkRepository.SaveChangesAsync();
-
-                return image;
-        }
     }
 }

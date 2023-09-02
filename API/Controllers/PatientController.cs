@@ -21,145 +21,46 @@ namespace API.Controllers
             _unitOfWorkService = unitOfWorkService;
         }
 
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return Ok();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            { 
-
-                return Ok(await  _unitOfWorkService.PatientService.GetAll().ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreatePatient createPatient)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PatientService.AddAsync(createPatient);
-                return StatusCode((int)HttpStatusCode.Created, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _unitOfWorkService.PatientService.AddAsync(createPatient);
+            return StatusCode((int)HttpStatusCode.Created, response);
         }
-
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePatient updatePatient)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PatientService.UpdateAsync(id, updatePatient);
-                return StatusCode((int)HttpStatusCode.OK, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _unitOfWorkService.PatientService.UpdateAsync(id, updatePatient);
+            return StatusCode((int)HttpStatusCode.OK, response);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var response = await _unitOfWorkService.PatientService.DeleteAsync(id);
-                return StatusCode((int)HttpStatusCode.NoContent, response);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _unitOfWorkService.PatientService.DeleteAsync(id);
+            return StatusCode((int)HttpStatusCode.NoContent, response);
         }
 
 
         [HttpPost("byDateInterval")]
         public async Task<IActionResult> GetAllByDateInterval([FromBody] DateIntervalRequest interval)
         {
-            try
-            {
-                 
-
-                return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDateInterval(interval)).ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(await (await _unitOfWorkService.PatientService.GetPatientsByDateInterval(interval)).ToListAsync());
         }
 
 
         [HttpGet("{date:DateTime}")]
         public async Task<IActionResult> GetByDate(DateTime date)
         {
-            try
-            {
-              
-                return Ok(await  _unitOfWorkService.PatientService.GetPatientsByDate(date).ToListAsync());
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(await _unitOfWorkService.PatientService.GetPatientsByDate(date).ToListAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var result = await _unitOfWorkService.PatientService.GetByIdAsync(id);
-                return Ok(result);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { StatusCode = (int)HttpStatusCode.NotFound, Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorResponse { StatusCode = (int)HttpStatusCode.BadRequest, Message = ex.Message });
-            }
+            var result = await _unitOfWorkService.PatientService.GetByIdAsync(id);
+            return Ok(result);
         }
-
-
-
-
     }
 }
