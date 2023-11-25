@@ -29,13 +29,11 @@ namespace Business.Services.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Intercept the response stream
-            var originalResponseBody = context.Response.Body;
-            using var responseBodyCaptureStream = new MemoryStream();
-            context.Response.Body = responseBodyCaptureStream;
-
             try
             {
+                var originalResponseBody = context.Response.Body;
+                using var responseBodyCaptureStream = new MemoryStream();
+                context.Response.Body = responseBodyCaptureStream;
                 await _next(context);
 
                 responseBodyCaptureStream.Seek(0, SeekOrigin.Begin);
@@ -52,7 +50,7 @@ namespace Business.Services.Middlewares
 
                 string? message = hasError ? null : responseBodyContent;
 
-                await logService.LogAsync(new Log()
+                await logService.LogAsync(new()
                 {
                     LogDate = DateTime.Now,
                     LogLevel = hasError ? LogLevel.Error.ToString() : LogLevel.Info.ToString(),

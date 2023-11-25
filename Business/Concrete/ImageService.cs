@@ -17,35 +17,34 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class ImageService :  IImageService
+    public class ImageService : IImageService
     {
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
         private readonly IMapper _mapper;
 
-        public ImageService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper )
+        public ImageService(IUnitOfWorkRepository unitOfWorkRepository, IMapper mapper)
         {
             _unitOfWorkRepository = unitOfWorkRepository;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
-        public  async Task<Image> AddAsync(CreateImage entity)
+        public async Task<Image> AddAsync(CreateImage entity)
         {
-                var newImage = _mapper.Map<Image>(entity);
-                await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
-                await _unitOfWorkRepository.SaveChangesAsync();
-                return newImage;
+            var newImage = _mapper.Map<Image>(entity);
+            await _unitOfWorkRepository.ImageRepository.AddAsync(newImage);
+            await _unitOfWorkRepository.SaveChangesAsync();
+            return newImage;
         }
 
-        public async  Task<Image> DeleteAsync(int id)
+        public async Task<Image> DeleteAsync(int id)
         {
+            var exist = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id) ??
+                        throw new NotFoundException($"Image not found with id = {id}");
+            
+            _unitOfWorkRepository.ImageRepository.Delete(id);
+            await _unitOfWorkRepository.SaveChangesAsync();
 
-                var exist = await _unitOfWorkRepository.ImageRepository.GetByIdAsync(id)  ?? throw new NotFoundException($"Image not found with id = {id}");
-                _unitOfWorkRepository.ImageRepository.Delete(id);
-                await _unitOfWorkRepository.SaveChangesAsync();
-
-                return exist;
-            }
-         
- 
+            return exist;
+        }
     }
 }

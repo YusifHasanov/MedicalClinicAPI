@@ -29,7 +29,7 @@ namespace Core.Utils
 
         public static void AddServices(this WebApplicationBuilder builder)
         {
-
+            
              
             builder.Services.AddDbContext<DbEntity>();
             builder.Services.AddControllers(options => { 

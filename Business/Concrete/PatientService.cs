@@ -99,7 +99,7 @@ namespace Business.Concrete
             var patient = await _unitOfWorkRepository.PatientRepository
             .GetByIdAsync(id) ?? throw new NotFoundException($"Patient not found with id = {id}");
 
-            return _mapper.Map<PatientResponse>(patient); ;
+            return _mapper.Map<PatientResponse>(patient); 
 
         }
 

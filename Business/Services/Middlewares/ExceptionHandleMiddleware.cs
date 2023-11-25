@@ -41,7 +41,6 @@ namespace Business.Services.Middlewares
             catch (Exception ex)
             {
                 await GenerateErrorResponse(context, ex, HttpStatusCode.BadRequest);
-               
             }
         }
 

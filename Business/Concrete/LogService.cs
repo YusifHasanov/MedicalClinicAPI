@@ -39,7 +39,7 @@ namespace Business.Concrete
             try
          
             { 
-                if (exception.Message !=null && !exception.Message.Trim().IsNullOrEmpty())
+                if (!exception.Message.IsNullOrEmpty() && !exception.Message.Trim().IsNullOrEmpty())
                 {
                     message = exception.Message.Trim(); ;
                 }
